@@ -91,6 +91,17 @@ Keep the thread version (it has a thread ID for resolution).
 
 **Exclude already-resolved threads:** If `isResolved` is true, skip it.
 
+**Parse review bodies independently from threads:** Review bodies can contain
+actionable feedback (nitpicks, suggestions, issues) that has NO associated
+review thread. This happens when bots like CodeRabbit put feedback in collapsible
+sections of the review summary rather than as inline code comments. After
+checking thread resolution, separately iterate ALL review bodies from
+`/pulls/{number}/reviews`. Parse each body for actionable sections — look for
+headings like "Nitpick comments", "Suggestions", "Issues", or any structured
+feedback. Do NOT assume "all threads resolved" means "all feedback addressed."
+A review body with actionable content and no matching thread is unresolved
+feedback that must be collected.
+
 **Include bot feedback:** Reviews with state "COMMENTED" that have body text
 with actionable feedback count as real feedback. Bots like CodeRabbit, Greptile,
 Copilot, and Sweep put their analysis here. Don't skip them just because
