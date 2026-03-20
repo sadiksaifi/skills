@@ -77,7 +77,8 @@ start quick, go deeper where needed.
 
 ### Deep dive (when the feature touches complex or unfamiliar areas)
 
-Spawn `Agent` subagents (Explore type) in parallel to investigate:
+Spawn 1-2 `Agent` subagents (Explore type) in parallel, each focused on a
+specific area. Use them to investigate:
 
 - **LSP `documentSymbol`** — understand public interfaces of relevant modules
 - **LSP `findReferences`** — map dependencies and impact surface
@@ -95,7 +96,8 @@ codebase — one per area, running in parallel.
   best practices relevant to the feature
 - Use `WebFetch` to pull specific documentation or references
 - Use `context7` MCP (`resolve-library-id` then `query-docs`) to look up
-  documentation for libraries or frameworks involved
+  documentation for libraries or frameworks involved — this is especially
+  valuable when evaluating technology choices mentioned in the PRD
 
 ### Summarize
 
@@ -233,6 +235,8 @@ values based on what exists in the repo and what fits the PRD content:
 - **Assignees** — ask if the user wants to assign anyone
 
 ### Create the issue
+
+Run via Bash:
 
 ```bash
 gh issue create \

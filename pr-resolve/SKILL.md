@@ -8,7 +8,8 @@ description: >
   like "resolve PR comments", "fix PR feedback", "address the reviews",
   "respond to PR comments", "handle PR reviews", "fix what the reviewers said",
   or any variation where the user wants to resolve, fix, or reply to feedback
-  on a GitHub pull request.
+  on a GitHub pull request. This skill operates in plan mode — it creates a
+  resolution plan, not immediate fixes.
 ---
 
 # PR Resolve
@@ -23,9 +24,8 @@ create an excellent plan for resolving PR feedback.
 
 ## Entry
 
-**Enter plan mode** via `EnterPlanMode`.
-
-Create tasks using `TaskCreate`:
+Call `EnterPlanMode` first to enter plan mode, then create tasks using
+`TaskCreate`:
 
 1. "Fetch PR conversations" — activeForm: "Fetching PR conversations"
 2. "Explore codebase" — activeForm: "Exploring codebase"
@@ -42,7 +42,7 @@ Set dependencies so each task is `addBlockedBy` the previous one.
 
 Mark task "Fetch PR conversations" as `in_progress`.
 
-Fetch ALL feedback on the current branch's PR:
+Fetch ALL feedback on the current branch's PR. Run these via Bash:
 
 ```bash
 # PR details + reviews + comments
@@ -58,7 +58,7 @@ gh api repos/{owner}/{repo}/issues/{number}/comments
 gh api repos/{owner}/{repo}/pulls/{number}/reviews
 ```
 
-Get review thread resolution status via GraphQL:
+Get review thread resolution status. Run via Bash:
 
 ```bash
 gh api graphql -f query='{
@@ -122,7 +122,7 @@ Mark task "Explore codebase" as `in_progress`.
 
 Based on the files and code areas mentioned in the feedback:
 
-- Use `Explore` subagents, `Glob`, `Grep`, `Read` to understand the relevant code
+- Use `Agent` subagents (Explore type), `Glob`, `Grep`, `Read` to understand the relevant code
 - Use `LSP` for precise understanding:
   - `findReferences` to see what depends on code being discussed
   - `goToDefinition` / `goToImplementation` to trace logic
@@ -173,7 +173,8 @@ Mark task "Categorize feedback" as `completed`.
 
 Mark task "Prepare fix plan with TDD" as `in_progress`.
 
-Read `${CLAUDE_SKILL_DIR}/references/tdd-cycle.md` for the TDD cycle reference.
+Use the Read tool on `${CLAUDE_SKILL_DIR}/references/tdd-cycle.md` for the TDD
+cycle reference.
 
 For each `[FIX]` item, prepare a TDD cycle entry:
 
@@ -248,7 +249,7 @@ Hand the following to Claude's built-in plan mode for the final plan:
    all commits at once
 
 5. **Parallel replies** — after push, reply to ALL feedback items in parallel
-   (they're independent of each other):
+   (they're independent of each other). Run each via Bash:
 
    For review thread replies:
    ```bash

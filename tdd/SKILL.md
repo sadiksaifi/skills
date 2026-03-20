@@ -9,7 +9,10 @@ description: >
   software with a testing-first approach. Also activates when executing a plan
   that specifies the /tdd skill. Even if the user doesn't say "TDD" explicitly,
   use this skill when they clearly want tests written before implementation or
-  want a disciplined testing workflow.
+  want a disciplined testing workflow. This skill is also invoked by other
+  skills (like /brainstorm) via the Skill tool — always respond to cross-skill
+  invocations. When in doubt about whether to activate, activate —
+  undertriggering is worse than overtriggering for this skill.
 ---
 
 # TDD — Test-Driven Development
@@ -23,21 +26,23 @@ you're in and load the appropriate reference file.
 
 ## Mode Detection
 
-**Check these signals in order:**
+**Apply these checks in order. Use the first match:**
 
 1. **Plan mode active?** Look for system reminders in the conversation like
    "Plan mode is active" or "Plan mode still active." If present, you're in
-   **plan mode** — read `${CLAUDE_SKILL_DIR}/references/plan-mode.md` and
-   follow its instructions.
+   **plan mode** — use the Read tool on
+   `${CLAUDE_SKILL_DIR}/references/plan-mode.md`, then follow its instructions.
 
 2. **Existing plan mentioning /tdd?** If you're NOT in plan mode, check if
    there's an existing plan file in the conversation context that references
-   `/tdd`. If so, you're in **execute mode** — read
-   `${CLAUDE_SKILL_DIR}/references/execute-mode.md` and follow its instructions.
+   `/tdd`. If so, you're in **execute mode** — use the Read tool on
+   `${CLAUDE_SKILL_DIR}/references/execute-mode.md`, then follow its
+   instructions.
 
-3. **No plan, no plan mode?** Ask the user what they want to build. Then
-   create a TDD plan on the fly (read `${CLAUDE_SKILL_DIR}/references/plan-mode.md`
-   for structure), and once the plan is ready, switch to execute mode (read
+3. **No plan, no plan mode?** Use `AskUserQuestion` to ask what they want to
+   build. Then prepare a TDD blueprint (use the Read tool on
+   `${CLAUDE_SKILL_DIR}/references/plan-mode.md` for structure), and once the
+   blueprint is ready, switch to execute mode (use the Read tool on
    `${CLAUDE_SKILL_DIR}/references/execute-mode.md`).
 
 ---

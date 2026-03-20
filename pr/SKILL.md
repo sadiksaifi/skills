@@ -51,8 +51,10 @@ Gather context about what's being submitted:
 - `git status` — check for uncommitted changes. If there are unstaged or
   uncommitted changes, warn the user and ask if they want to commit first.
 - `git branch --show-current` — get current branch name
-- If on `main` or `master`, ask the user to create a branch or offer to
-  create one with a suggested name based on the changes.
+- If on `main` or `master`, use `AskUserQuestion` to ask the user with options:
+  - **"Create a branch (Recommended)"** — suggest a name based on the changes
+  - **"Stay on main"** — proceed (warn about pushing directly)
+  - **"Something else"** — user specifies
 - Detect the base branch — check if the repo uses `main`, `master`, `develop`,
   or another default. Use `gh repo view --json defaultBranchRef -q .defaultBranchRef.name`.
 - `git log <base>..HEAD --oneline` — all commits on this branch
@@ -66,11 +68,11 @@ Mark task "Analyze changes" as `completed`.
 
 Mark task "Detect PR template" as `in_progress`.
 
-Look for a project PR template:
+Look for a project PR template. Check in this order, use the first found:
 
-- Check `.github/pull_request_template.md`
-- Check `.github/PULL_REQUEST_TEMPLATE/` directory (may have multiple templates)
-- Check `docs/pull_request_template.md`
+1. `.github/pull_request_template.md`
+2. `.github/PULL_REQUEST_TEMPLATE/` directory (may have multiple templates)
+3. `docs/pull_request_template.md`
 
 If found, read it and use it as the structure for the PR body.
 
@@ -127,8 +129,9 @@ Mark task "Create pull request" as `in_progress`.
 
 3. Show the PR URL to the user.
 
-4. Suggest next steps: "You can run `/review-pr` or `/code-review` to review
-   the PR before requesting reviewers."
+4. Present next steps as text (not AskUserQuestion — the PR is done):
+   "You can run `/review-pr` or `/code-review` to review the PR before
+   requesting reviewers."
 
 Mark task "Create pull request" as `completed`.
 

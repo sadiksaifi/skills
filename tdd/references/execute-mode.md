@@ -8,8 +8,8 @@ only pause if something fails (test, lint, format check).
 
 ## Task Tracking
 
-Use the Task tool throughout execution to give the user clear, structured
-progress. Create tasks at two levels:
+Use `TaskCreate` and `TaskUpdate` throughout execution to give the user clear,
+structured progress. Create tasks at two levels:
 
 **Setup tasks** (created on entry):
 1. "Determine context and read plan" — activeForm: "Reading plan"
@@ -34,20 +34,21 @@ the user a live progress view of the entire TDD execution in their terminal.
 Mark task "Determine context and read plan" as `in_progress`.
 
 **If a plan exists** (from a previous planning session or the current context):
-- Read the plan carefully
-- Follow its behavior cycles in order
-- Use its test suite, branch strategy, and other specifications
-- The plan is your roadmap
+1. Use the Read tool on the plan file
+2. Summarize the behavior cycles and test suite from the plan
+3. Proceed to Step 2 (Setup)
 
 **If no plan exists** (user invoked `/tdd` directly with a task):
-- Ask the user briefly what they want to build
-- Detect the test suite (check project files), confirm with user
-- Ask about branch strategy:
-  - **Create a new branch (Recommended)** — suggest a name
-  - **Continue on current branch** — show branch name
-  - **Something else** — user specifies
-- Quickly identify the key behaviors to test (confirm with user)
-- Then start executing cycles immediately — no need to write a formal plan file
+1. Use `AskUserQuestion` to ask: "What do you want to build?"
+2. Use `Glob` and `Read` to detect the test suite (check package.json,
+   pyproject.toml, test directories)
+3. Use `AskUserQuestion` to confirm the detected test suite with the user
+4. Use `AskUserQuestion` for branch strategy with options:
+   - **Create a new branch (Recommended)** — suggest a name
+   - **Continue on current branch** — show branch name
+   - **Something else** — user specifies
+5. Use `AskUserQuestion` to identify key behaviors to test with the user
+6. Start executing cycles immediately — no need for a formal plan file
 
 After reading the plan or identifying behaviors, create all the cycle tasks
 and the wrap-up task now (with dependencies). Mark task "Determine context
@@ -149,7 +150,7 @@ Move to the next behavior and repeat Step 3. Continue until all behaviors
 from the plan (or identified list) are complete.
 
 Run fully autonomously through all cycles. Only pause when:
-- A test fails unexpectedly
+- A test that was previously passing now fails (regression)
 - Lint or format check fails
 - Something fundamentally doesn't work as expected
 

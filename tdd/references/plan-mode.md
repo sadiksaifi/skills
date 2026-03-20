@@ -52,9 +52,11 @@ Mark task "Discuss interfaces and behaviors" as `in_progress`.
 Before writing the plan, have a focused conversation:
 
 1. **Confirm interface changes** — What should the public interface look like?
-   What functions/methods/endpoints are needed? Use `LSP` to inspect existing
-   interfaces: `documentSymbol` to list current exports, `findReferences` to
-   see what depends on them, `hover` to check types.
+   What functions/methods/endpoints are needed?
+   a. Use `AskUserQuestion` to ask what public methods/endpoints are needed
+   b. Use `LSP` `documentSymbol` on relevant files to list current exports
+   c. Use `LSP` `findReferences` to see what depends on existing symbols
+   d. Use `LSP` `hover` to check type signatures
 
 2. **Confirm behaviors to test** — Which behaviors matter most? You can't test
    everything. Focus testing effort on critical paths and complex logic, not
@@ -74,8 +76,8 @@ Before writing the plan, have a focused conversation:
    observable behaviors ("user can log in with valid credentials") not
    implementation details ("create loginUser function").
 
-6. **Get user approval** — Present the behavior list and interface design.
-   Don't proceed until the user confirms.
+6. **Get user approval** — Use `AskUserQuestion` to present the behavior list
+   and interface design. Proceed only after the user confirms.
 
 Mark task "Discuss interfaces and behaviors" as `completed`.
 
@@ -109,9 +111,10 @@ You've done your job. You've gathered:
 - Testability considerations
 - Branch strategy (confirmed with user)
 
-Now hand all of this context to Claude Code's built-in plan mode to write
-the actual plan. Instruct plan mode to structure the plan with these
-constraints:
+You're already in plan mode (either from the original skill invocation or from
+brainstorm's handoff). Provide a detailed briefing describing the test suite,
+behaviors, interface design, branch strategy, and the constraints below. Plan
+mode will write the full TDD-structured plan from this context.
 
 ### Plan must include:
 

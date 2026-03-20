@@ -29,6 +29,8 @@ arrive at a strong approach they feel confident about.
 
 **Immediately enter plan mode** by calling the `EnterPlanMode` tool. This ensures
 no edits or code changes happen during brainstorming — it's a thinking space.
+The `Skill` tool remains available in plan mode — it loads skill prompts, not
+code changes.
 
 Then create the task list using `TaskCreate` so the user can see structured
 progress through the brainstorming phases:
@@ -58,8 +60,9 @@ Ask the user:
 - Why — what motivated this? Is it a user request, a tech debt issue, a new idea?
 - Any constraints they already know about (timeline, compatibility, etc.)
 
-Use `AskUserQuestion` if it helps structure the intake (e.g., choosing between
-"new feature", "refactor", "bug investigation", "architecture decision").
+Use `AskUserQuestion` to structure the intake — this helps anchor the
+conversation early (e.g., choosing between "new feature", "refactor", "bug
+investigation", "architecture decision").
 
 Keep this brief. You need just enough context to know where to look in the codebase.
 
@@ -74,7 +77,7 @@ Mark task "Explore the codebase" as `in_progress`.
 This is what makes the brainstorming actually useful instead of abstract handwaving.
 
 Based on what the user told you, explore the relevant parts of the codebase:
-- Use `Explore` subagents, `Glob`, `Grep`, `Read` to understand existing patterns
+- Use `Agent` subagents (Explore type), `Glob`, `Grep`, `Read` to understand existing patterns
 - Use `LSP` for deeper code intelligence when available:
   - `goToDefinition` / `goToImplementation` to trace how things connect
   - `findReferences` to understand what depends on what
@@ -155,8 +158,8 @@ engineering partner.
 
 ### When to move on
 
-Continue the back-and-forth until you feel the problem space is well-explored.
-Signs you're ready:
+Continue the back-and-forth until you observe at least 3 of these signs, then
+move to Phase 4:
 - The user has a clear direction they're leaning toward
 - Major trade-offs have been discussed
 - You've surfaced and addressed the key risks
@@ -219,17 +222,25 @@ After the user picks an approach, ask whether they want to use Test-Driven
 Development using `AskUserQuestion`:
 
 **Options:**
-1. **"Yes, use TDD (Recommended)"** — Invoke the `/tdd` skill. Since you're
-   in plan mode, the TDD skill will detect this and enter its planning behavior:
-   discussing interfaces, identifying behaviors to test, structuring the plan
-   as vertical RED-GREEN-REFACTOR cycles, and embedding everything the executor
-   needs. Use the Skill tool to invoke `/tdd`.
-2. **"No, standard planning"** — Skip TDD and proceed to Phase 7 (normal
-   plan mode hand off).
+1. **"Yes, use TDD (Recommended)"** — The plan will be structured as vertical
+   RED-GREEN-REFACTOR cycles with test-first development.
+2. **"No, standard planning"** — Skip TDD and proceed to Phase 7.
 3. **"Something else"** — The user can type whatever they want. Act on their
    input and return to this checkpoint if appropriate.
 
-Mark task "TDD checkpoint" as `completed` once the user makes their choice.
+### After the user responds:
+
+**If they chose "Yes, use TDD":** Call the `Skill` tool with skill name `tdd`
+to hand off to the TDD skill. This is a prompt-loading action, not a code
+change — it works in plan mode. The TDD skill will detect plan mode and prepare
+a TDD blueprint (interfaces, behaviors, test structure); then plan mode will
+write the full plan based on that blueprint. Wait for the TDD skill to complete
+before moving to Phase 7.
+
+**If they chose "No" or "Something else":** Proceed directly to Phase 7.
+
+Mark task "TDD checkpoint" as `completed` once the user's choice has been
+fully handled (including TDD skill completion if applicable).
 
 ---
 

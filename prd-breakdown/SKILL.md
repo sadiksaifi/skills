@@ -53,7 +53,7 @@ Get the PRD into context. The user might provide:
 - The PRD text directly in their prompt
 - A reference to a recent conversation where the PRD was created
 
-If the user provided a number or URL, fetch it:
+If the user provided a number or URL, use Bash to fetch it:
 
 ```bash
 gh issue view <number> --json number,title,body,labels,milestone,url
@@ -101,7 +101,8 @@ along architectural seams — which is where the real value is.
 
 ### Deep dive (when the PRD touches complex areas)
 
-Spawn `Agent` subagents (Explore type) in parallel — one per area:
+Spawn 1-2 `Agent` subagents (Explore type) in parallel, each focused on a
+specific area:
 
 - **LSP `documentSymbol`** — understand module public interfaces
 - **LSP `findReferences`** — map what depends on what
@@ -245,7 +246,7 @@ what will be created. Use `AskUserQuestion`:
 
 ### Discover metadata
 
-Run in parallel via `Bash`:
+Run these Bash commands in parallel:
 
 - `gh label list --limit 100 --json name,description` — available labels
 - `gh milestone list --json title,description` — available milestones
@@ -272,7 +273,7 @@ Create issues starting with the ones that have no blockers (foundation
 slices), then work through the dependency graph. This is important because
 each issue's "Blocked by" field needs to reference real issue numbers.
 
-For each slice:
+For each slice, run via Bash:
 
 ```bash
 gh issue create \
