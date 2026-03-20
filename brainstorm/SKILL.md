@@ -29,8 +29,8 @@ arrive at a strong approach they feel confident about.
 
 **Immediately enter plan mode** by calling the `EnterPlanMode` tool. This ensures
 no edits or code changes happen during brainstorming — it's a thinking space.
-The `Skill` tool remains available in plan mode — it loads skill prompts, not
-code changes.
+The `Skill` tool is a read-only action (it loads a skill's prompt into context,
+like using Read on a file) and remains fully available in plan mode.
 
 Then create the task list using `TaskCreate` so the user can see structured
 progress through the brainstorming phases:
@@ -230,14 +230,21 @@ Development using `AskUserQuestion`:
 
 ### After the user responds:
 
-**If they chose "Yes, use TDD":** Call the `Skill` tool with skill name `tdd`
-to hand off to the TDD skill. This is a prompt-loading action, not a code
-change — it works in plan mode. The TDD skill will detect plan mode and prepare
-a TDD blueprint (interfaces, behaviors, test structure); then plan mode will
-write the full plan based on that blueprint. Wait for the TDD skill to complete
+**If affirmative (option 1 selected, or any response indicating they want
+TDD):** Your immediate next action is to call the `Skill` tool with
+`skill: "tdd"`. Do this before anything else — before writing text, before
+moving to Phase 7, before doing anything. This is a read-only action (it loads
+the TDD skill's prompt into context, just like the Read tool loads a file) and
+is fully allowed in plan mode.
+
+Once the TDD skill loads, it will detect plan mode and walk through a TDD
+blueprint (interfaces, behaviors, test structure). Wait for it to complete
 before moving to Phase 7.
 
-**If they chose "No" or "Something else":** Proceed directly to Phase 7.
+Do not attempt to handle TDD planning yourself — the `/tdd` skill contains
+specialized instructions that you don't have without loading it.
+
+**If "No" or non-TDD response:** Proceed directly to Phase 7.
 
 Mark task "TDD checkpoint" as `completed` once the user's choice has been
 fully handled (including TDD skill completion if applicable).
