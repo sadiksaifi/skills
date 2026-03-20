@@ -230,19 +230,11 @@ Development using `AskUserQuestion`:
 
 ### After the user responds:
 
-**If affirmative (option 1 selected, or any response indicating they want
-TDD):** Your immediate next action is to call the `Skill` tool with
-`skill: "tdd"`. Do this before anything else — before writing text, before
-moving to Phase 7, before doing anything. This is a read-only action (it loads
-the TDD skill's prompt into context, just like the Read tool loads a file) and
-is fully allowed in plan mode.
-
-Once the TDD skill loads, it will detect plan mode and walk through a TDD
-blueprint (interfaces, behaviors, test structure). Wait for it to complete
-before moving to Phase 7.
-
-Do not attempt to handle TDD planning yourself — the `/tdd` skill contains
-specialized instructions that you don't have without loading it.
+**If they chose "Yes, use TDD":** Call the `Skill` tool with
+`skill: "tdd-plan"` to hand off to the TDD planning skill. This is a
+prompt-loading action, not a code change — it works in plan mode. The
+tdd-plan skill will walk through a TDD blueprint (interfaces, behaviors,
+test structure). Wait for it to complete before moving to Phase 7.
 
 **If "No" or non-TDD response:** Proceed directly to Phase 7.
 

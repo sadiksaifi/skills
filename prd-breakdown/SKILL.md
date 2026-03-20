@@ -302,7 +302,7 @@ After all issues are created, show the user:
 Suggest next steps:
 - "Assign the unblocked slices to get started"
 - "Resolve the HITL slices first to unblock downstream work"
-- "Run `/brainstorm` or `/tdd` when picking up a slice"
+- "Run `/brainstorm` or `/tdd-plan` when picking up a slice"
 
 Do NOT close or modify the parent PRD issue.
 
