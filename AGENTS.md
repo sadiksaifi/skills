@@ -1,4 +1,6 @@
-# Skills Repo
+# SNAP Skills Repo
+
+SNAP = SNAP's Not A Prompt.
 
 Agent Skills following the [agentskills.io](https://agentskills.io) spec.
 

@@ -54,9 +54,10 @@ Or: **None — can start immediately**
 
 ## Formatting Rules
 
-- **Title prefix** — always use `[Slice]` in the issue title (e.g.,
-  `[Slice] Add skill search endpoint + basic CLI`) so slices are instantly
-  distinguishable from the parent `[PRD]` issue in GitHub lists
+- **Title prefix** — always use `[Slice #N]` where N is the parent PRD issue
+  number (e.g., `[Slice #42] Add skill search endpoint + basic CLI`). This
+  makes slices instantly distinguishable from the parent `[PRD]` issue AND
+  tells you which PRD they belong to at a glance in GitHub issue lists
 - **Acceptance criteria** use `AC-N` prefixes with task list checkboxes —
   they become checkable in GitHub and are easy to reference in PRs
 - **PRD coverage** maps back to the parent PRD's ID scheme (US-N, FR-N, NFR-N)
