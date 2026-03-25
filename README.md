@@ -1,6 +1,6 @@
 # SNAP — SNAP's Not A Prompt
 
-A collection of [Agent Skills](https://agentskills.io) for planning, building, and shipping software with AI agents.
+SNAP is a set of opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: spec it, scope it, test it, ship it, and handle feedback.
 
 ## Skills
 
