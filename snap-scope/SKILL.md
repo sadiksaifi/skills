@@ -125,10 +125,12 @@ Summarize what's been established:
 - Risks acknowledged
 - Codebase patterns and test patterns to follow
 
-Invoke `/snap-forge` via the Skill tool.
+If the user just wanted validation (entered at step 4, says "I'm done"), offer
+the handoff but don't force it. Stop here.
 
-If the user just wanted validation (entered at step 4, says "I'm done"), that's
-fine — offer the handoff but don't force it.
+Otherwise, write the plan. Include this as the first line:
+
+> Invoke `/snap-forge` via the Skill tool.
 
 ---
 
