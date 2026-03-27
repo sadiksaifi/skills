@@ -5,11 +5,12 @@ description: >
   autonomously — fetches feedback, categorizes it, fixes code with TDD, and
   replies to reviewers with minimal ceremony. Use whenever the user wants to
   address PR feedback, resolve review comments, fix issues raised in a pull
-  request, respond to reviewers, or handle bot feedback from CodeRabbit,
-  Greptile, or Copilot. Trigger on "resolve PR comments", "snap-resolve", "fix
-  PR feedback", "address the reviews", "respond to PR comments", "handle PR
-  reviews", "fix what the reviewers said", or any variation where the user wants
-  to resolve feedback on a GitHub pull request.
+  request, respond to reviewers, handle bot feedback from CodeRabbit, Greptile,
+  or Copilot, or fix failing CI checks / GitHub Actions. Trigger on "resolve PR
+  comments", "snap-resolve", "fix PR feedback", "address the reviews", "respond
+  to PR comments", "handle PR reviews", "fix what the reviewers said", "fix CI",
+  "fix failing checks", "fix GitHub Actions", or any variation where the user
+  wants to resolve feedback or failing checks on a GitHub pull request.
 ---
 
 # Snap Resolve — Resolve PR Feedback
@@ -31,6 +32,9 @@ Enter plan mode. Gather everything via `gh`:
 - Review body comments (text from review submissions)
 - PR-level comments (issue comments)
 - Check thread resolution status via GraphQL
+- CI check failures — fetch via `gh pr checks`, wait up to 60s for pending
+  checks, then fetch logs for failures with `gh run view --log-failed`. See
+  `references/ci-checks.md` for detailed procedure.
 
 Exclude already-resolved threads. Deduplicate (same feedback in review body and
 thread — keep the thread version for its thread ID). Include bot feedback
@@ -57,6 +61,9 @@ Split feedback into two categories using your judgment:
   architecture, stylistic preference conflicts with project conventions, concern
   is handled elsewhere, suggestion adds unnecessary complexity.
 
+CI failures are always [FIX]. Use your judgment to determine whether a failure
+is caused by the PR or is a pre-existing issue.
+
 For each [FIX], plan a TDD cycle: RED test that captures the fix → GREEN
 minimal implementation → REFACTOR → VERIFY → COMMIT. Read
 `references/tdd-cycle.md` for the cycle structure.
@@ -69,6 +76,7 @@ replies explain the reasoning.
 Show the user ONE summary:
 - "Here's what I'll fix: [list with brief descriptions]"
 - "Here's what I'll explain: [list with brief descriptions]"
+- "Here are N CI failures I'll fix: [list with check name + failure summary]"
 - "Here are N items I'm unsure about: [list — ask for guidance]"
 
 Get approval once. Then execute everything.
@@ -108,4 +116,7 @@ Mention: "Run `/snap-ship` to update the PR description with these changes."
 - **Tag reviewers explicitly.** Start with `@username` so they get notified.
 - **Commit hashes in fix replies.** Point to the exact commit.
 - **Single push, parallel replies.** Batch commits, fire replies concurrently.
+- **CI fixes need no reply.** Passing checks after push are the response.
+  Deduplicate with reviewer comments that flag the same issue — keep the thread
+  ID so the reviewer gets a reply.
 - **Act, don't ask.** Categorize using judgment. One checkpoint, then execute.
