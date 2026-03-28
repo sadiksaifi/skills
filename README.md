@@ -7,7 +7,7 @@ SNAP is a set of opinionated [Agent Skills](https://agentskills.io) for building
 | Skill | Purpose |
 |-------|---------|
 | `snap-spec` | Write PRDs and break them into vertical slice issues |
-| `snap-scope` | Brainstorm, scope from issues, or stress-test plans |
+| `snap-grill-me` | Interview relentlessly about a plan until every branch is resolved |
 | `snap-forge` | TDD plan + execute RED-GREEN-REFACTOR cycles |
 | `snap-ship` | Create and update GitHub pull requests |
 | `snap-resolve` | Resolve PR feedback with TDD fixes |
@@ -40,7 +40,7 @@ SNAP is a set of opinionated [Agent Skills](https://agentskills.io) for building
                         |
                         v
 +----------------------+
-| snap-scope           |
+| snap-grill-me           |
 | parse issue or idea  |
 | explore code         |
 | brainstorm           |
@@ -80,9 +80,9 @@ SNAP is a set of opinionated [Agent Skills](https://agentskills.io) for building
 **Enter the pipeline wherever your clarity starts:**
 
 ```
-Big feature, vague idea:    snap-spec -> snap-scope -> snap-forge -> snap-ship
-Big feature, have PRD:      snap-spec (breakdown) -> snap-scope -> snap-forge -> snap-ship
-Medium issue from tracker:  snap-scope -> snap-forge -> snap-ship
+Big feature, vague idea:    snap-spec -> snap-grill-me -> snap-forge -> snap-ship
+Big feature, have PRD:      snap-spec (breakdown) -> snap-grill-me -> snap-forge -> snap-ship
+Medium issue from tracker:  snap-grill-me -> snap-forge -> snap-ship
 Small fix, know what to do: snap-forge -> snap-ship
 PR got feedback:            snap-resolve -> snap-ship
 ```
@@ -96,7 +96,7 @@ npx skills add sadiksaifi/skills
 
 **Individual skill:**
 ```bash
-npx skills add sadiksaifi/skills --skill snap-scope
+npx skills add sadiksaifi/skills --skill snap-grill-me
 ```
 
 ## License

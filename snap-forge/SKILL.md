@@ -2,12 +2,12 @@
 name: snap-forge
 description: >
   TDD plan and execute in one skill — strict vertical RED-GREEN-REFACTOR-VERIFY-COMMIT
-  cycles. Adaptive: skips planning if /snap-scope already ran, reads an existing
+  cycles. Adaptive: skips planning if /snap-grill-me already ran, reads an existing
   plan, or does quick self-setup for small fixes. Use when the user wants TDD,
   test-driven development, red-green-refactor, to build or fix something with
   tests first, or when a plan references "/snap-forge" or "/tdd". Trigger on
   "snap-forge", "forge", "TDD", "build this", "start TDD", "execute the plan",
-  "run TDD cycles", "test-driven", or when /snap-scope hands off. Also trigger
+  "run TDD cycles", "test-driven", or when /snap-grill-me hands off. Also trigger
   when the user clearly wants tests before implementation. When in doubt,
   activate — undertriggering is worse than overtriggering.
 ---
@@ -21,7 +21,7 @@ cycles. One test at a time, one implementation at a time, never batching.
 
 Determine your starting point:
 
-- **Post-scope** — conversation contains snap-scope context (issue details,
+- **Post-scope** — conversation contains snap-grill-me context (issue details,
   chosen approach, implementation decisions, requirements). Skip to step 1
   (Detect test suite).
 - **Plan exists** — a plan file references `/snap-forge`, `/tdd-execute`, or
@@ -34,7 +34,7 @@ Determine your starting point:
 Quick codebase scan of the relevant area. Identify the task, existing patterns,
 and test infrastructure.
 
-If the task is complex enough to need a full brainstorm, suggest `/snap-scope`
+If the task is complex enough to need a full brainstorm, suggest `/snap-grill-me`
 first. This setup exists for small, focused tasks where you know what you want
 and just need TDD discipline.
 

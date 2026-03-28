@@ -71,7 +71,7 @@ to the user.
 ### 6. Offer breakdown
 
 Ask the user: "Want to split this into vertical slice issues?" If no, you're
-done — suggest `/snap-scope` or `/snap-forge` as next steps. If yes, continue.
+done — suggest `/snap-grill-me` or `/snap-forge` as next steps. If yes, continue.
 
 ## Breaking into slices
 
@@ -118,5 +118,5 @@ and coverage map.
 
 ## Next steps
 
-- `/snap-scope` to scope and brainstorm implementation of a slice
+- `/snap-grill-me` to scope and brainstorm implementation of a slice
 - `/snap-forge` to start TDD on a slice
