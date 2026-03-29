@@ -14,8 +14,8 @@ description: >
 
 # Snap Slice
 
-Read PRD issue → explore architectural seams → draft slices → create issues.
-Every FR and NFR must map to at least one slice.
+Read PRD issue → explore architectural seams → draft slices → quiz user →
+create issues. Every FR and NFR must map to at least one slice.
 
 ## 1. Locate PRD
 
@@ -48,7 +48,14 @@ Verify coverage: every FR and NFR appears in at least one slice. Flag gaps.
 
 Prefer AFK over HITL. Prefer many thin slices over few thick ones.
 
-## 4. Create slice issues
+## 4. Quiz user
+
+Present breakdown. Per slice: title, type, size, blocked-by, coverage.
+
+Ask: granularity right? Dependencies correct? HITL/AFK assignments accurate?
+Merge or split? Iterate until approved.
+
+## 5. Create slice issues
 
 Read `references/issue-template.md`. Create in dependency order (foundation
 slices first) so blocked-by fields reference real issue numbers.

@@ -1,7 +1,7 @@
 # TDD Cycle for PR Fixes
 
 Each substantive [FIX] follows a strict vertical RED → GREEN → VERIFY → COMMIT
-cycle. Trivial fixes (typos, imports, renames, formatting) skip RED — direct fix → VERIFY →
+cycle. Trivial fixes (typos, imports, renames) skip RED — direct fix → VERIFY →
 COMMIT.
 
 ## Per-Fix Cycle

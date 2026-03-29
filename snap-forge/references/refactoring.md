@@ -1,6 +1,6 @@
 # Refactor Candidates
 
-After ALL behaviors green, single refactor pass. Never refactor while RED or mid-cycle — patterns only emerge once enough implementation exists.
+After each GREEN, look for these opportunities. Never refactor while RED — get to GREEN first, then improve.
 
 - **Duplication** → Extract function/class
 - **Long methods** → Break into private helpers (keep tests on public interface)
