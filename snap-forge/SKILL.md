@@ -31,12 +31,17 @@ headers). If found:
 - Phase list defines the behavior sequence for TDD cycles.
 - If plan specifies a current phase, execute only that phase.
 
-Confirm test runner with user — wrong runner wastes cycles.
+If detected test runner is unambiguous, use it. If multiple runners detected
+or none found, confirm with user.
+
+If input is a direct task (no issue, no plan), decompose into testable
+behaviors before proceeding — list observable outcomes through public
+interfaces, ordered simplest to most complex.
 
 ## 2. Branch strategy
 
-Ask: create new branch (recommend + suggest name), continue on current, or
-other.
+Recommend a new branch (suggest name based on task). Create it unless user
+says otherwise.
 
 ## 3. Verify baseline
 

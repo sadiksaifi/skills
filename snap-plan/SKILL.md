@@ -53,16 +53,11 @@ through ALL layers — never a horizontal slice of one layer.
 - Include durable decisions (routes, schemas, model names) — exclude volatile details (file paths, function names)
 - Order simplest-to-most-complex; first phase is the tracer bullet (thinnest possible end-to-end proof)
 
-## 5. Quiz user
+## 5. Post as issue comment
 
-Present breakdown as numbered list. Per phase: title, what it covers, what it
-builds, acceptance criteria.
-
-Ask: granularity right? Merge or split any phases? Iterate until approved.
-
-## 6. Post as issue comment
-
-Post approved plan as comment on the source issue via `gh issue comment`.
+Post plan as comment on the source issue via `gh issue comment`. Present the
+posted plan to the user — they can request changes (repost with edits) or
+proceed to snap-forge/snap-slice.
 
 ```
 ## Durable Decisions

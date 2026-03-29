@@ -37,6 +37,10 @@ utilities to reuse. Saves the implementing engineer from re-exploring.]
 - `path/to/file.ts` — [what to change and why]
 - `path/to/module/` — [relevant pattern or constraint]
 
+## Type
+
+**AFK** (implement and merge independently) / **HITL** (needs human decision)
+
 ## Blocked by
 
 - #<issue-number> — [brief reason]
@@ -54,5 +58,6 @@ Or: **None — can start immediately**
 - **AC prefixes** with task list checkboxes — checkable in GitHub, easy to reference in PRs
 - **PRD coverage** maps back to parent's ID scheme (US-N, FR-N, NFR-N) — every FR/NFR should appear in at least one slice
 - **Technical hints** — specific file paths, existing patterns, gotchas from exploration
+- **Type** — AFK (implement and merge independently) or HITL (needs human decision). Prefer AFK
 - **Blocked by** — real issue numbers (create in dependency order)
 - **Size** — complexity signal (S = hours, M = 1-2 days, L = multiple days), not a time estimate
