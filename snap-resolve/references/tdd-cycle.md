@@ -1,74 +1,62 @@
 # TDD Cycle for PR Fixes
 
-Each `[FIX]` item follows a strict vertical RED->GREEN->REFACTOR->VERIFY->COMMIT
-cycle. This is not optional — every fix goes through the full cycle.
+Each substantive [FIX] follows a strict vertical RED → GREEN → VERIFY → COMMIT
+cycle. Trivial fixes (typos, imports, renames) skip RED — direct fix → VERIFY →
+COMMIT.
 
-## The Cycle
+## Per-Fix Cycle
 
 ### RED — Write the Test
 
-- Write exactly ONE test that captures the fix
-- The test must describe **observable behavior**, not implementation details
-- Use the public interface only
-- Use `LSP` `documentSymbol` to verify you're testing public symbols
-- The test should FAIL — confirming the bug/issue exists
-- Run the test to confirm it fails
+- Exactly ONE test capturing the fix
+- Describes **observable behavior**, not implementation details
+- Public interface only
+- Must FAIL — confirms the bug/issue exists
 
-### GREEN — Write Minimal Implementation
+### GREEN — Minimal Implementation
 
-- Write the **minimum code** to make the failing test pass
+- **Minimum code** to pass the failing test
 - Don't anticipate other fixes
 - Don't add speculative features
 - Don't refactor yet
-- Run the test to confirm it passes
-
-### REFACTOR (if applicable)
-
-- Now that you're GREEN, look for refactor candidates:
-  - Extract duplication into functions/classes
-  - Deepen modules — move complexity behind simple interfaces
-  - Apply SOLID principles where natural
-  - Move logic to where data lives
-  - Long methods -> private helpers (keep tests on public interface)
-- **Never refactor while RED** — get to GREEN first
-- Run tests after each refactor step
-- Use `LSP` `incomingCalls` before changing signatures
+- Must PASS
 
 ### VERIFY
 
-Run the full verification suite:
-1. **Full test suite** — all tests, not just the new one
-2. **Lint check** — if the project has a linter
-3. **Format check** — if the project has a formatter
+1. Full test suite — all tests, not just the new one
+2. Lint check
+3. Format check
 
-**If anything fails, stop and fix it before proceeding.**
+If anything fails, stop and fix before proceeding.
 
 ### COMMIT
 
-Make one atomic conventional commit:
-
+One atomic conventional commit:
 ```
 fix(scope): [description matching the PR feedback]
 ```
 
-Store the commit hash — it will be referenced in the reply to the reviewer.
+Store the commit hash — referenced in the reply to the reviewer.
+
+## After All Fixes: Refactor
+
+If multiple fixes touched overlapping code, single refactor pass. Candidates:
+- Duplication → extract
+- Shallow modules → deepen
+- What new code reveals about existing code
+
+Run tests after each refactor step. Commit separately:
+```
+refactor(scope): [what was improved]
+```
 
 ## Per-Cycle Checklist
 
 - [ ] Test describes behavior, not implementation
 - [ ] Test uses public interface only
 - [ ] Test would survive internal refactor
-- [ ] Code is minimal for this test
+- [ ] Code is minimal for this fix
 - [ ] No speculative features added
-- [ ] Lint + format check + tests pass
-- [ ] Atomic commit made (conventional commit)
+- [ ] Full suite + lint + format pass
+- [ ] Atomic conventional commit
 - [ ] Commit hash stored for reply
-
-## Rules
-
-- One test at a time
-- Only enough code to pass current test
-- Don't anticipate future fixes
-- Keep tests focused on observable behavior
-- Never proceed past a failing lint, test, or format check
-- One commit per fix — never batch unrelated changes
