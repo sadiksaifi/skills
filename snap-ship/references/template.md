@@ -1,17 +1,21 @@
 ## Summary
 
-<!-- 1-3 bullet points describing what this PR does and why -->
+<!-- 1-3 bullet points: what and why -->
 
 -
 
 ## Changes
 
-<!-- What was changed, added, or removed. Group by area if touching multiple parts of the codebase -->
+<!-- What was changed, added, removed. Group by area if touching multiple parts -->
 
 -
 
 ## Test Plan
 
-<!-- How to verify these changes work correctly -->
+<!-- How to verify correctness -->
 
 - [ ]
+
+## Closes
+
+<!-- Issue references auto-detected from commits/branch -->

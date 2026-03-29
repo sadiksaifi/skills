@@ -1,71 +1,71 @@
 ---
 name: snap-ship
 description: >
-  Create and update GitHub pull requests with intelligent diff analysis. Acts
-  autonomously — analyzes, generates, and creates the PR without unnecessary
-  confirmation steps. Use whenever the user wants to create a PR, open a pull
-  request, update a PR description, push and create a PR, or submit their work.
-  Trigger on "create a PR", "snap-ship", "ship", "ship it", "open a pull
-  request", "make a PR", "update the PR", "push and create PR", "submit a PR",
-  or any variation where the user wants to create or update a GitHub pull
-  request. Even "PR" in the context of submitting work should trigger this.
+  Create and update GitHub PRs with intelligent diff analysis. Acts
+  autonomously — analyzes, generates, creates without confirmation. Use when
+  user wants to create a PR, open a pull request, update PR description, push
+  and create, or ship their work. Trigger on "snap-ship", "ship it", "create
+  a PR", "open PR", "update the PR", "push and create PR", or any context
+  where the user wants to submit work as a pull request.
 ---
 
-# Snap Ship — Create & Update Pull Requests
+# Snap Ship
 
-Create and update PRs based on actual diff analysis. Act autonomously — the user
-invoked this skill because they want a PR, so make it happen without asking
-permission at every step.
+Autonomous PR creation and update from diff analysis. User said "ship" — ship it.
 
 ## Mode detection
 
-Run `gh pr view --json number,title,body,url 2>/dev/null`. If a PR exists for
-the current branch → **update mode**. Otherwise → **create mode**. The user can
-override explicitly.
+`gh pr view --json number,title,body,url 2>/dev/null` — PR exists → update
+mode. Otherwise → create mode.
 
 ## Create mode
 
-### 1. Analyze changes
+### 1. Analyze
 
-- Check for uncommitted changes — warn if any exist
-- Get current branch name. If on main/master, ask for a branch name (this is
-  one of the few times you should ask — you need a name)
+- Uncommitted changes → warn
+- Branch = main/master → ask for branch name (one of few justified questions)
 - Detect base branch via `gh repo view --json defaultBranchRef`
-- Get all commits, diff stats, and full diff since base
+- Full diff, commit log, diff stats since base
 - Check if branch is pushed
 
 ### 2. Detect PR template
 
 Check in order: `.github/pull_request_template.md`,
-`.github/PULL_REQUEST_TEMPLATE/` directory, `docs/pull_request_template.md`.
-If none found, read `references/template.md` as fallback.
+`.github/PULL_REQUEST_TEMPLATE/`, `docs/pull_request_template.md`. None found
+→ read `references/template.md`.
 
 ### 3. Generate and create
 
-Generate a concise title (<70 chars) matching the project's commit style. Fill
-the template with specifics from the diff — reference actual files, functions,
-and behaviors. Don't be vague.
+Title <70 chars matching project commit style. Fill template with specifics
+from the diff — actual files, functions, behaviors. Vague summaries are
+worthless.
 
-Auto-detect issue references from commit messages and branch name. If found,
-add `Closes #N` lines automatically and mention you did.
+Auto-detect issue references from commits and branch name. Found → add
+`Closes #N` lines.
 
-Push the branch if not already pushed. Create the PR. Show the URL.
+Push if not pushed. Create PR. Show URL.
 
-Don't ask "does this look good?" — just create it. The user can edit on GitHub
-or run the skill again to update. Only ask when something is genuinely ambiguous
-(multiple PR templates to choose from, contradictory changes in the diff).
+Don't ask "does this look good?" — create it. User edits on GitHub or reruns
+the skill. Only ask on genuine ambiguity (multiple templates, contradictory
+changes).
 
 ## Update mode
 
 ### 1. Analyze current state
 
-Fetch existing PR details and current diff. Identify what changed since the PR
-was created or last updated.
+Fetch existing PR body and current diff. Identify what changed since last
+update.
 
-### 2. Regenerate and update
+### 2. Preserve and update
 
-Re-detect the PR template. Generate an updated title and body reflecting the
-current diff state. Update via `gh pr edit`. Show confirmation with URL.
+Detect template sections by `## ` headers. For known sections (Summary,
+Changes, Test Plan, Closes) — regenerate from current diff. For unknown
+sections (manually added by user or reviewers) — preserve untouched.
+
+If body structure doesn't match any template (fully hand-written), warn
+before overwriting.
+
+Update via `gh pr edit`. Show URL.
 
 ## After creating or updating
 
@@ -73,6 +73,7 @@ Mention: "Run `/snap-resolve` to address any review feedback."
 
 ## Principles
 
-- **Analyze the actual diff**, not just commit messages. The diff tells the truth.
-- **Match project style.** If existing PRs use conventional commits, follow that.
-- **Act, don't ask.** The user said "create a PR" — create it.
+- **Diff is truth.** Analyze the actual diff, not just commit messages.
+- **Match project style.** Conventional commits → conventional PR title.
+- **Act, don't ask.** User said "ship" — ship.
+- **Preserve intent.** Update mode respects manual edits to PR body.

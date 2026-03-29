@@ -1,131 +1,99 @@
 ---
 name: snap-forge
 description: >
-  TDD plan and execute in one skill — strict vertical RED-GREEN-REFACTOR-VERIFY-COMMIT
-  cycles. Adaptive: skips planning if /snap-grill-me already ran, reads an existing
-  plan, or does quick self-setup for small fixes. Use when the user wants TDD,
-  test-driven development, red-green-refactor, to build or fix something with
-  tests first, or when a plan references "/snap-forge" or "/tdd". Trigger on
-  "snap-forge", "forge", "TDD", "build this", "start TDD", "execute the plan",
-  "run TDD cycles", "test-driven", or when /snap-grill-me hands off. Also trigger
-  when the user clearly wants tests before implementation. When in doubt,
-  activate — undertriggering is worse than overtriggering.
+  Strict TDD execution — vertical RED-GREEN-VERIFY-COMMIT cycles per behavior,
+  single REFACTOR pass at end. Use when user wants to BUILD something with
+  test-driven development: writing actual code and tests, not planning or
+  documenting. Trigger on "snap-forge", "forge this", "TDD", "build with
+  tests", "test-first", "red-green-refactor", "implement with TDD", or when
+  user wants tests written before implementation code. Do NOT use for writing
+  PRDs (snap-prd), planning (snap-plan), or design review (snap-scope).
 ---
 
-# Snap Forge — TDD Plan + Execute
+# Snap Forge — TDD Execute
 
-Plan the behaviors, then execute strict vertical RED-GREEN-REFACTOR-VERIFY-COMMIT
-cycles. One test at a time, one implementation at a time, never batching.
+Strict vertical TDD cycles. One test, one implementation, one commit.
+Refactor only after all behaviors green — premature refactoring reshapes code
+before you see the full picture (Ousterhout: patterns only emerge once enough
+implementation exists to reveal them).
 
-## Detect context
+## 1. Orient
 
-Determine your starting point:
+Determine input: GitHub issue, conversation context, or direct task. Quick
+codebase scan of relevant area — detect test suite (`package.json`,
+`pyproject.toml`, `Cargo.toml`, `go.mod`, test dirs, CI config), existing
+patterns, test infrastructure.
 
-- **Post-scope** — conversation contains snap-grill-me context (issue details,
-  chosen approach, implementation decisions, requirements). Skip to step 1
-  (Detect test suite).
-- **Plan exists** — a plan file references `/snap-forge`, `/tdd-execute`, or
-  `/tdd` with behavior cycles defined. Skip to step 5 (Setup).
-- **Standalone** — direct invocation with no prior context. Start from Quick
-  self-setup.
+Confirm test runner with user — wrong runner wastes cycles.
 
-## Quick self-setup (standalone only)
+## 2. Branch strategy
 
-Quick codebase scan of the relevant area. Identify the task, existing patterns,
-and test infrastructure.
+Ask: create new branch (recommend + suggest name), continue on current, or
+other.
 
-If the task is complex enough to need a full brainstorm, suggest `/snap-grill-me`
-first. This setup exists for small, focused tasks where you know what you want
-and just need TDD discipline.
+## 3. Verify baseline
 
-## Planning
+Create branch if specified. Run existing tests — everything must pass before
+starting. Identify lint/format commands.
 
-### 1. Detect test suite
+## 4. Execute cycles
 
-Check `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, test
-directories, and CI config. Confirm with the user even if you detect something —
-wrong test runner means wasted cycles.
+For each behavior, one complete cycle:
 
-### 2. Discuss interfaces and behaviors
+**RED** — Write exactly ONE test for current behavior. Must describe
+observable behavior through public interface (see `references/tests.md`).
+Run — must fail.
 
-Confirm what public interface changes are needed. List behaviors to test —
-these should describe observable outcomes ("user can log in with valid
-credentials"), not implementation steps ("create loginUser function").
+**GREEN** — Minimum code to pass the failing test. Don't anticipate future
+tests. Don't add speculative features. Run — must pass.
 
-Identify opportunities for deep modules — small interfaces hiding complex
-implementations. See `references/deep-modules.md`.
-
-For testability and mocking decisions, see
-`references/interface-design.md` and
-`references/mocking.md`.
-
-Focus testing effort on critical paths and complex logic, not every edge case.
-Get user approval on the behavior list.
-
-### 3. Branch strategy
-
-Ask: create a new branch (recommended, suggest a name), continue on current
-branch, or something else.
-
-### 4. Write plan and transition
-
-Write a plan file with:
-- Setup: test suite, branch, lint/format commands
-- Behavior cycles ordered simplest to most complex
-- Per-cycle checklist (see `references/tdd-cycle.md`)
-- Manual testing checklist at the end
-
-Exit plan mode and proceed to execution.
-
-## Execution
-
-### 5. Setup
-
-Create branch if specified. Run existing tests to verify everything passes
-before you start. Identify lint and format commands.
-
-### 6. Execute cycles
-
-For each behavior, one complete cycle before starting the next:
-
-**RED** — Write exactly ONE test for the current behavior. It must describe
-observable behavior through the public interface. Run it — it should fail.
-
-**GREEN** — Write the minimum code to make the failing test pass. Don't
-anticipate future tests. Don't add speculative features. Run it — it should
-pass.
-
-**REFACTOR** — Now that you're green, look for improvements. See
-`references/refactoring.md` for candidates. Never refactor
-while red. Run tests after each refactor step.
-
-**VERIFY** — Full test suite + lint + format. If anything fails, stop and fix
-before proceeding.
+**VERIFY** — Full test suite + lint + format. If anything fails, stop and fix.
 
 **COMMIT** — One atomic conventional commit for this cycle.
 
-Run autonomously through all cycles. Only pause when:
-- A previously passing test fails (regression)
-- Lint or format check fails
-- Something fundamentally doesn't work as expected
+Run autonomously. Only pause on:
+- Previously passing test fails (regression)
+- Lint/format failure
+- Fundamental breakage
+
+If a test passes immediately (behavior already implemented by prior cycles),
+commit as a verification test — don't force a RED phase that can't fail.
 
 Vertical cycles respond to what you learn from the previous one. Horizontal
-batching (all tests first, then all implementation) tests imagined behavior
-instead of actual behavior — that's why we never do it.
+batching (all tests first, all impl second) tests imagined behavior, not
+actual behavior. It produces tests coupled to the shape you imagined, not the
+shape that emerged. This is the single most important discipline — never
+batch.
 
-### 7. Wrap up
+## 5. Refactor pass
 
-Run the full test suite one final time. Show the manual testing checklist.
-Summary: cycles completed, behaviors implemented, refactoring done, current
-branch and commit count.
+After ALL behaviors green, single refactor pass. See
+`references/refactoring.md` for candidates:
+- Duplication → extract
+- Shallow modules → deepen (Ousterhout)
+- Feature envy → move logic to where data lives
+- Primitive obsession → value objects
+- What new code reveals about existing code
+
+Run tests after each refactor step. Never refactor while red. Autonomous —
+tests are the guardrail.
+
+**VERIFY** — Full suite + lint + format.
+
+**COMMIT** — Separate refactoring commit(s), clearly labeled.
+
+## 6. Wrap up
+
+Full test suite one final time. Summary: cycles completed, behaviors
+implemented, refactoring done, branch, commit count.
 
 ## Principles
 
-- **Vertical slices, never horizontal.** One complete cycle before the next.
+- **Vertical, never horizontal.** One complete cycle before the next.
 - **Deep modules over shallow.** Small interfaces, deep implementations.
 - **Accept dependencies, don't create them.** Pass externals in.
-- **Return results, don't produce side effects.** Easier to test.
+- **Return results, not side effects.** Easier to test.
 - **Mock at system boundaries only.** Never mock your own code.
-- **Always recommend.** Every decision point gets a recommendation.
 
-See `references/tests.md` for what makes a good vs bad test.
+See `references/deep-modules.md`, `references/interface-design.md`,
+`references/mocking.md`, `references/tests.md`.
