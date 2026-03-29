@@ -24,6 +24,13 @@ codebase scan of relevant area — detect test suite (`package.json`,
 `pyproject.toml`, `Cargo.toml`, `go.mod`, test dirs, CI config), existing
 patterns, test infrastructure.
 
+If input is a GitHub issue, fetch comments via `gh issue view <number>
+--comments`. Look for a plan comment (`## Durable Decisions` or `## Phase`
+headers). If found:
+- Durable decisions are constraints — respect locked routes, schemas, models.
+- Phase list defines the behavior sequence for TDD cycles.
+- If plan specifies a current phase, execute only that phase.
+
 Confirm test runner with user — wrong runner wastes cycles.
 
 ## 2. Branch strategy

@@ -128,6 +128,7 @@ interface EvalResult {
   should_trigger: boolean;
   triggered: boolean;
   pass: boolean;
+  error?: boolean;
 }
 
 async function runEval(description: string, evalSet: typeof allEvals): Promise<EvalResult[]> {
@@ -141,8 +142,8 @@ async function runEval(description: string, evalSet: typeof allEvals): Promise<E
       results.push({ query: item.query, should_trigger: item.should_trigger, triggered, pass });
       console.log(`    ${pass ? "✓" : "✗"} ${item.should_trigger ? "T" : "F"} → ${triggered ? "T" : "F"} ${shortQ}...`);
     } catch (e) {
-      results.push({ query: item.query, should_trigger: item.should_trigger, triggered: false, pass: !item.should_trigger });
-      console.log(`    ✗ ERR ${shortQ}...`);
+      results.push({ query: item.query, should_trigger: item.should_trigger, triggered: false, pass: false, error: true });
+      console.log(`    ✗ ERR (${e instanceof Error ? e.message.slice(0, 80) : "unknown"}) ${shortQ}...`);
     }
   }
 

@@ -56,14 +56,21 @@ changes).
 Fetch existing PR body and current diff. Identify what changed since last
 update.
 
-### 2. Preserve and update
+### 2. Re-detect PR template
 
-Detect template sections by `## ` headers. For known sections (Summary,
-Changes, Test Plan, Closes) — regenerate from current diff. For unknown
-sections (manually added by user or reviewers) — preserve untouched.
+Same lookup as create mode: `.github/pull_request_template.md`,
+`.github/PULL_REQUEST_TEMPLATE/`, `docs/pull_request_template.md`. None found
+→ read `references/template.md`. Extract its `## ` headings as "template
+sections."
 
-If body structure doesn't match any template (fully hand-written), warn
-before overwriting.
+### 3. Preserve and update
+
+For sections matching the template — regenerate from current diff. For
+sections NOT in the template (manually added by user or reviewers) — preserve
+untouched.
+
+If body has no `## ` headers at all (fully hand-written), warn before
+overwriting.
 
 Update via `gh pr edit`. Show URL.
 
