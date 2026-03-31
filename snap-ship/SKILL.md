@@ -43,6 +43,10 @@ worthless.
 Auto-detect issue references from commits and branch name. Found → add
 `Closes #N` lines.
 
+Always append `## QA` — even with project's own template. Manual human
+verification steps only: UI flows, edge cases, behavior checks. No CLI
+commands, no CI-validated checks (lint, typecheck, test suite).
+
 Push if not pushed. Create PR. Show URL.
 
 Don't ask "does this look good?" — create it. User edits on GitHub or reruns
@@ -67,7 +71,8 @@ sections."
 
 For sections matching the template — regenerate from current diff. For
 sections NOT in the template (manually added by user or reviewers) — preserve
-untouched.
+untouched. Always ensure a `## QA` section exists — regenerate it from the
+current diff if missing or stale.
 
 If body has no `## ` headers at all (fully hand-written), warn before
 overwriting.
