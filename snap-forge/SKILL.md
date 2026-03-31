@@ -35,13 +35,45 @@ Confirm test runner with user — wrong runner wastes cycles.
 
 ## 2. Branch strategy
 
-Ask: create new branch (recommend + suggest name), continue on current, or
-other.
+Parse ARGUMENTS for optional flags. Syntax uses `=` for explicit values:
+
+- `--branch=name` → use exact branch name
+- `--branch` → derive autonomously, no user approval
+- `--worktree=name` → use exact name for worktree dir and branch
+- `--worktree` → derive autonomously, no user approval
+- No flag → ask user: create new branch (recommend + suggest name), continue
+  on current, or other
+
+`--branch` and `--worktree` are mutually exclusive — if both present, error
+immediately.
+
+**Autonomous naming convention** (when flag has no value):
+`{prefix}/{issue-number-if-available}/{ai-slug}` — prefix is `feat/`, `fix/`,
+`refactor/`, etc. based on work type. Pick and go — yolo mode, no approval.
 
 ## 3. Verify baseline
 
-Create branch if specified. Run existing tests — everything must pass before
-starting. Identify lint/format commands.
+Execute the resolved strategy from §2.
+
+**`--branch`:**
+1. Dirty working tree → error. Uncommitted changes + new branch is ambiguous.
+2. Branch already exists (local or remote) → error.
+3. `git checkout -b {branch-name}`.
+
+**`--worktree`:**
+1. Auto-detect base branch (`git branch -l main master`).
+2. Project name: `basename $(git rev-parse --show-toplevel)`.
+3. Worktree dir name: branch name with `/` replaced by `-`.
+4. Worktree path: `~/.worktrees/{project-name}/{worktree-dir-name}`.
+5. Path already exists → error. Branch already exists → error.
+6. `git worktree add {path} -b {branch-name} {base-branch}`.
+7. `cd` into worktree — all subsequent work happens there.
+   Dirty state in original repo is fine — worktree gets clean checkout.
+
+**No flag:** Create branch if user specified. Stay on current if they chose that.
+
+Run existing tests — everything must pass before starting. Identify lint/format
+commands.
 
 ## 4. Execute cycles
 
@@ -93,6 +125,8 @@ tests are the guardrail.
 
 Full test suite one final time. Summary: cycles completed, behaviors
 implemented, refactoring done, branch, commit count.
+
+If `--worktree` was used, include worktree path and branch name in summary.
 
 ## Principles
 
