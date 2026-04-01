@@ -23,7 +23,8 @@ Gather via `gh`:
 - Review threads (inline comments + replies)
 - Review body comments (submission text)
 - PR-level comments (issue comments)
-- Thread resolution status via GraphQL
+- Thread node IDs + resolution status via GraphQL (store IDs for Step 7).
+  See `references/thread-resolution.md`.
 - CI failures — `gh pr checks`, wait up to 60s for pending, then
   `gh run view --log-failed`. See `references/ci-checks.md` for procedure.
 
@@ -83,13 +84,19 @@ Reply to all items:
 - [FIX]: "@reviewer — Fixed in `COMMIT_HASH`. [Brief description]"
 - [EXPLAIN]: "@reviewer — [Reasoning referencing architecture/conventions]"
 
-Resolve threads via GraphQL mutation where applicable.
-
 CI fixes need no reply — passing checks are the response. Exception:
 deduplicated items where a reviewer also flagged the issue → reply via kept
 thread ID.
 
-## 7. Suggest PR update
+## 7. Resolve threads
+
+Resolve every thread that received a [FIX] or [EXPLAIN] reply —
+`resolveReviewThread` mutation with node IDs stored from Step 1. No exceptions.
+See `references/thread-resolution.md` for commands.
+
+Verify: re-query unresolved threads. Only uncategorized threads remain open.
+
+## 8. Suggest PR update
 
 Mention: "Run `/snap-ship` to update the PR description with these changes."
 
@@ -101,3 +108,5 @@ Mention: "Run `/snap-ship` to update the PR description with these changes."
 - **Single push, parallel replies.** Batch commits, fire replies concurrently.
 - **Judgment over ceremony.** TDD for substance, direct fix for trivia.
 - **Act, don't ask.** One checkpoint catches edge cases. Then execute.
+- **Resolve what you address.** Unresolved replied threads force manual
+  re-checking. Resolution is not optional.
