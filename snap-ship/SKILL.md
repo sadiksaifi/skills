@@ -13,14 +13,16 @@ description: >
 
 Autonomous PR creation and update from diff analysis. User said "ship" — ship it.
 
-## Mode detection
+## Mode detection (sequential — run before parallel gather)
 
-`gh pr view --json number,title,body,url 2>/dev/null` — PR exists → update
-mode. Otherwise → create mode.
+`gh pr view --json number,title,body,url 2>/dev/null || true` — non-empty →
+update, else → create. Run alone first: mode determines which gather steps
+follow. `|| true` prevents exit 1 from cancelling parallel siblings if ever
+batched.
 
 ## Create mode
 
-### 1. Analyze
+### 1. Analyze (parallel)
 
 - Uncommitted changes → warn
 - Branch = main/master → ask for branch name (one of few justified questions)
