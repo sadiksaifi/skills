@@ -1,14 +1,14 @@
 # Issue Template
 
-Each issue represents one vertical slice — a thin, end-to-end path through the
-system that is independently demoable or verifiable.
+One vertical slice — thin end-to-end path, independently demoable.
 
 ## Template
 
 ```markdown
 ## Parent PRD
 
-#<prd-issue-number>
+#<prd-issue-number> — Read the parent PRD first for full architectural context
+and the [dependency graph](<prd-comment-url>) to understand where this slice fits.
 
 ## Slice overview
 
@@ -17,25 +17,22 @@ not a layer-by-layer breakdown. Reference the parent PRD for full context.]
 
 ## Acceptance criteria
 
-- [ ] **AC-1:** [Criterion — specific, testable, tied to FR/NFR from parent PRD]
+- [ ] **AC-1:** [Specific, testable, tied to FR/NFR]
 - [ ] **AC-2:** ...
 
 ## PRD coverage
 
-User stories addressed:
-- **US-N** — [brief reminder]
+User stories:
+- **US-N** — [brief]
 
-Requirements implemented:
+Requirements:
 - **FR-X**, **FR-Y** — [brief description]
 - **NFR-Z** — [brief description]
 
 ## Technical hints
 
-[Files to modify, relevant patterns, architectural considerations, existing
-utilities to reuse. Saves the implementing engineer from re-exploring.]
-
-- `path/to/file.ts` — [what to change and why]
-- `path/to/module/` — [relevant pattern or constraint]
+- `path/to/file.ts` — [what and why]
+- `path/to/module/` — [pattern or constraint]
 
 ## Type
 
@@ -54,10 +51,11 @@ Or: **None — can start immediately**
 
 ## Formatting Rules
 
-- **Title prefix** — `[Slice #N]` where N is parent PRD issue number
-- **AC prefixes** with task list checkboxes — checkable in GitHub, easy to reference in PRs
-- **PRD coverage** maps back to parent's ID scheme (US-N, FR-N, NFR-N) — every FR/NFR should appear in at least one slice
-- **Technical hints** — specific file paths, existing patterns, gotchas from exploration
-- **Type** — AFK (implement and merge independently) or HITL (needs human decision). Prefer AFK
+- **Parent PRD** — deep-link to breakdown comment (URL captured in Step 5)
+- **Title** — `[#N/S<i>] <name>` (N = PRD issue number, i = slice ordinal)
+- **AC** — task-list checkboxes, referenceable in PRs
+- **PRD coverage** — parent's ID scheme (US-N, FR-N, NFR-N); every FR/NFR in at least one slice
+- **Technical hints** — file paths, patterns, gotchas from exploration
+- **Type** — AFK (autonomous) or HITL (human decision). Prefer AFK
 - **Blocked by** — real issue numbers (create in dependency order)
-- **Size** — complexity signal (S = hours, M = 1-2 days, L = multiple days), not a time estimate
+- **Size** — complexity signal, not time estimate (S=hours, M=1-2d, L=multi-day)
