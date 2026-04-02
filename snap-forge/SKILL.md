@@ -48,7 +48,7 @@ Parse ARGUMENTS for optional flags. Syntax uses `=` for explicit values:
 immediately.
 
 **Autonomous naming convention** (when flag has no value):
-`{prefix}/{issue-number-if-available}/{ai-slug}` — prefix is `feat/`, `fix/`,
+`{prefix}/{issue-number-if-available}-{ai-slug}` — prefix is `feat/`, `fix/`,
 `refactor/`, etc. based on work type. Pick and go — yolo mode, no approval.
 
 ## 3. Verify baseline
