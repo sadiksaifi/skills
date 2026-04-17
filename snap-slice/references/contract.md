@@ -42,5 +42,7 @@ Meanings:
 
 - Mermaid only for dependency graph
 - Bullets and label lines everywhere else
+- Dense technical phrasing over narrative glue
+- Minimal grammar acceptable; ambiguity is not
 - Coverage lines use parent ids verbatim
 - Acceptance uses task-list checkboxes

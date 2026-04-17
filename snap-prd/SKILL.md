@@ -30,7 +30,8 @@ branch-by-branch until ambiguity is explicit, not hidden.
 
 4. Draft
 Read `references/contract.md`, then draft with `references/template.md`.
-Adapt depth to complexity. Keep prose dense. Keep ids stable.
+Adapt depth to complexity. Apply repo artifact style: terse, technical-dense,
+label-first. Keep ids stable.
 
 ## Contract
 
@@ -57,6 +58,7 @@ Create GitHub issue with `[PRD]` title prefix. Show URL.
 
 - Product doc, not tech spec.
 - Specificity beats adjectives.
+- Artifact prose stays token-thin: dense nouns, low glue.
 - Deep modules beat shallow sprawl.
 - Explore first. Interview on gaps, not on discoverable facts.
 - Shape for downstream handoff: `snap-plan`, `snap-slice`, `snap-forge`.

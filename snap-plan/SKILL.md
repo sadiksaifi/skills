@@ -28,6 +28,7 @@ Read `references/contract.md`, then draft with `references/template.md`.
 Prefer `1-5` phases. Phase 1 = tracer bullet. Keep phase shape fixed.
 Shape phases for downstream `snap-forge`: smallest end-to-end behaviors that
 fit vertical `RED -> GREEN -> VERIFY -> COMMIT` work.
+Write the artifact in repo style: terse, technical-dense, label-first.
 
 ## Contract
 
@@ -52,6 +53,7 @@ per issue.
 - Forge-ready phases over milestone blobs.
 - Durable nouns over volatile file names.
 - Fixed shape, light prose.
+- Artifact prose stays token-thin: dense nouns, low glue.
 - `Acceptance` describes public-interface behavior, not internal tasks.
 - Requirement coverage when source ids exist; otherwise `Covers: inferred`.
 - Thin plan, not slice explosion.

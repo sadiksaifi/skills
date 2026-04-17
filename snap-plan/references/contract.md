@@ -48,6 +48,8 @@ Per phase:
 ## Shape
 
 - Headings + label lines + bullets
+- Dense technical phrasing over connective prose
+- Minimal grammar acceptable; ambiguity is not
 - `Build:` = end-to-end slice, not layer checklist
 - `Acceptance:` = public-interface behavior checkboxes
 - `Blockers:` = `none`, prior phases, or external dependency

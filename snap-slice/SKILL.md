@@ -26,6 +26,7 @@ architecture, not by layer.
 3. Draft
 Read `references/contract.md`, then draft with `references/template.md`.
 Prefer AFK slices. Keep titles stable. Cover every `FR-*` and `NFR-*`.
+Write artifacts in repo style: terse, technical-dense, label-first.
 
 ## Contract
 
@@ -49,5 +50,6 @@ Update breakdown with issue refs.
 - Vertical slices only.
 - Coverage complete: every `FR-*` and `NFR-*` lands somewhere.
 - AFK by default.
+- Artifact prose stays token-thin: dense nouns, low glue.
 - Thin over thick.
 - Parent PRD remains source of truth.

@@ -17,6 +17,8 @@ One PR body. Dense, specific, reviewable.
 - `Test Plan` = automated verification already run or intended
 - `QA` = manual reviewer flows only
 - `Closes` = issue refs when found
+- Dense technical phrasing over broad explanation
+- Minimal grammar acceptable; ambiguity is not
 
 ## Title
 

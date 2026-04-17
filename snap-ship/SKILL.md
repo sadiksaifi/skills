@@ -24,6 +24,7 @@ Use repo PR template when present; otherwise use local refs.
 
 4. Write
 Generate concise, specific PR body from actual behavior and touched systems.
+Apply repo artifact style: terse, technical-dense, label-first.
 
 ## Contract
 
@@ -47,5 +48,6 @@ current diff, then edit PR.
 
 - Diff is truth.
 - Manual QA only in `## QA`.
+- Artifact prose stays token-thin: dense nouns, low glue.
 - Preserve user-added intent outside template sections.
 - Ask only on real ambiguity.

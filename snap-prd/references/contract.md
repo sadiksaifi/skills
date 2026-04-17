@@ -58,6 +58,8 @@ Use label lines, not tables:
 
 - Bullets over paragraphs where possible
 - Specific nouns over vague adjectives
+- Dense technical phrasing over tutorial prose
+- Minimal grammar acceptable; ambiguity is not
 - No file paths
 - No code snippets
 - One requirement per bullet
