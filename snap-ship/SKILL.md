@@ -1,93 +1,51 @@
 ---
 name: snap-ship
 description: >
-  Create and update GitHub PRs with intelligent diff analysis. Acts
-  autonomously — analyzes, generates, creates without confirmation. Use when
-  user wants to create a PR, open a pull request, update PR description, push
-  and create, or ship their work. Trigger on "snap-ship", "ship it", "create
-  a PR", "open PR", "update the PR", "push and create PR", or any context
-  where the user wants to submit work as a pull request.
+  Create or update a GitHub PR from the actual diff. Use when user wants to
+  ship work, open a PR, refresh PR body, or generate a reviewable summary from
+  current changes. Trigger on "snap-ship", "ship it", "create a PR", "open
+  PR", "update the PR", "push and create PR".
 ---
 
 # Snap Ship
 
-Autonomous PR creation and update from diff analysis. User said "ship" — ship it.
+Shipping manifest from diff truth.
 
-## Mode detection (sequential — run before parallel gather)
+## Workflow
 
-`gh pr view --json number,title,body,url 2>/dev/null || true` — non-empty →
-update, else → create. Run alone first: mode determines which gather steps
-follow. `|| true` prevents exit 1 from cancelling parallel siblings if ever
-batched.
+1. Detect mode
+Check whether PR already exists for the branch.
 
-## Create mode
+2. Analyze
+Read diff, commits, stats, base branch, and push state.
 
-### 1. Analyze (parallel)
+3. Template
+Use repo PR template when present; otherwise use local refs.
 
-- Uncommitted changes → warn
-- Branch = main/master → ask for branch name (one of few justified questions)
-- Detect base branch via `gh repo view --json defaultBranchRef`
-- Full diff, commit log, diff stats since base
-- Check if branch is pushed
+4. Write
+Generate concise, specific PR body from actual behavior and touched systems.
 
-### 2. Detect PR template
+## Contract
 
-Check in order: `.github/pull_request_template.md`,
-`.github/PULL_REQUEST_TEMPLATE/`, `docs/pull_request_template.md`. None found
-→ read `references/template.md`.
+Artifact = PR title + PR body shaped by `references/contract.md` and
+`references/template.md`.
 
-### 3. Generate and create
+Required sections:
+- `## Summary`
+- `## Changes`
+- `## Test Plan`
+- `## QA`
+- `## Closes`
 
-Title <70 chars matching project commit style. Fill template with specifics
-from the diff — actual files, functions, behaviors. Vague summaries are
-worthless.
+## Lifecycle
 
-Auto-detect issue references from commits and branch name. Found → add
-`Closes #N` lines.
-
-Always append `## QA` — even with project's own template. Manual human
-verification steps only: UI flows, edge cases, behavior checks. No CLI
-commands, no CI-validated checks (lint, typecheck, test suite).
-
-Push if not pushed. Create PR. Show URL.
-
-Don't ask "does this look good?" — create it. User edits on GitHub or reruns
-the skill. Only ask on genuine ambiguity (multiple templates, contradictory
-changes).
-
-## Update mode
-
-### 1. Analyze current state
-
-Fetch existing PR body and current diff. Identify what changed since last
-update.
-
-### 2. Re-detect PR template
-
-Same lookup as create mode: `.github/pull_request_template.md`,
-`.github/PULL_REQUEST_TEMPLATE/`, `docs/pull_request_template.md`. None found
-→ read `references/template.md`. Extract its `## ` headings as "template
-sections."
-
-### 3. Preserve and update
-
-For sections matching the template — regenerate from current diff. For
-sections NOT in the template (manually added by user or reviewers) — preserve
-untouched. Always ensure a `## QA` section exists — regenerate it from the
-current diff if missing or stale.
-
-If body has no `## ` headers at all (fully hand-written), warn before
-overwriting.
-
-Update via `gh pr edit`. Show URL.
-
-## After creating or updating
-
-Mention: "Run `/snap-resolve` to address any review feedback."
+Create mode: push if needed, then create PR.
+Update mode: preserve non-template sections, refresh template sections from the
+current diff, then edit PR.
 
 ## Principles
 
-- **Diff is truth.** Analyze the actual diff, not just commit messages.
-- **Match project style.** Conventional commits → conventional PR title.
-- **Act, don't ask.** User said "ship" — ship.
-- **Preserve intent.** Update mode respects manual edits to PR body.
+- Diff is truth.
+- Manual QA only in `## QA`.
+- Preserve user-added intent outside template sections.
+- Ask only on real ambiguity.

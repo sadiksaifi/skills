@@ -1,81 +1,62 @@
 ---
 name: snap-prd
 description: >
-  Write a structured PRD through user interview, codebase exploration, and deep
-  module identification — publish as GitHub issue with numbered US/FR/NFR
-  identifiers. Use when user wants to write a PRD, spec out a feature, document
-  requirements, create a product spec, or formalize what to build. Trigger on
-  "snap-prd", "write a PRD", "spec this out", "product spec", "I need a PRD",
-  "document the requirements", "feature proposal". This produces a GitHub issue
-  — do NOT use for challenging a design (snap-scope), planning implementation
-  phases (snap-plan), or breaking a PRD into task issues (snap-slice).
+  Write a product-grade PRD as a GitHub issue with stable `US/FR/NFR` ids.
+  Use when user wants to spec a feature, formalize requirements, or turn a
+  rough idea into an implementation-ready product document. Trigger on
+  "snap-prd", "write a PRD", "spec this out", "product spec", "document the
+  requirements", "feature proposal".
 ---
 
 # Snap PRD
 
-Interview → explore → draft → publish. Skip steps when context already exists.
+Blueprint first. Explore architecture, interview for intent, publish a PRD
+another agent can plan from without guesswork.
 
-## 1. Intake
+## Workflow
 
-Extract the rough idea. If vague, ask just enough to identify the product area
-and where to look in the codebase. Save depth for the interview.
+1. Intake
+Infer product area from conversation. Ask only for missing intent that
+exploration cannot recover.
 
-## 2. Explore codebase
+2. Explore
+Read relevant code, tests, routes, schemas, contracts, prior art. Find deep
+modules, seams, constraints, and test patterns.
 
-Understand the technical landscape before interviewing — questions must be
-grounded in architectural reality. A PRD divorced from architecture is fantasy.
+3. Interview
+Resolve problem, users, outcomes, scope, requirements, metrics, and durable
+implementation decisions. Recommend an answer with each question. Keep moving
+branch-by-branch until ambiguity is explicit, not hidden.
 
-Specifically look for:
-- **Existing patterns** the feature should follow or extend (route conventions,
-  DB migration patterns, component structure, API contracts)
-- **Module boundaries** — where the new feature touches existing modules and
-  where new ones are needed
-- **Deep modules** (Ousterhout): small interface, large implementation. Identify
-  where they exist and where the new feature should create them. Name them
-  explicitly in Implementation Decisions
-- **Test infrastructure** — existing test patterns, frameworks, prior art for
-  similar features
-- **Constraints** — what the architecture makes easy or hard
+4. Draft
+Read `references/contract.md`, then draft with `references/template.md`.
+Adapt depth to complexity. Keep prose dense. Keep ids stable.
 
-Use subagents for complex or unfamiliar areas. Research externally (web,
-library docs) when it adds value.
+## Contract
 
-## 3. Interview relentlessly
+Artifact = one GitHub issue shaped by `references/contract.md` and
+`references/template.md`.
 
-Walk each branch of the design tree, resolving dependencies one-by-one.
-Provide a recommended answer for every question — reduces cognitive load,
-keeps momentum.
+Required:
+- Stable ids: `US-*`, `FR-*`, `NFR-*`
+- Explicit `Implementation Decisions`
+- Explicit `Out of Scope`
+- Explicit `Open Questions`
 
-When the codebase can answer a question, explore instead of asking.
+Default syntax:
+- Headings
+- Label lines
+- Bullets
 
-Cover: problem statement, proposed solution, user stories, functional
-requirements, non-functional requirements, implementation decisions (modules,
-interfaces, schemas, API contracts, architectural choices), testing decisions
-(what to test, which modules, prior art), success metrics, scope boundaries,
-open questions.
+## Lifecycle
 
-Natural conversation first, structured document second. Follow the thread;
-don't march through sections rigidly. Continue until every branch is resolved
-or explicitly deferred — the PRD must be handoff-ready to an engineer with
-zero clarifying questions.
-
-## 4. Draft the PRD
-
-Read `references/prd-template.md`. Adapt section depth to complexity — simple
-features don't need every section. Show complete draft for approval; iterate
-on feedback.
-
-## 5. Publish as GitHub issue
-
-Discover labels/milestones via `gh label list`, `gh milestone list`. Create
-issue with `[PRD]` title prefix. Show URL to user.
+Draft in chat first. Iterate until approved. Discover labels and milestones.
+Create GitHub issue with `[PRD]` title prefix. Show URL.
 
 ## Principles
 
-- **Specificity over vagueness.** "API < 200ms at p95" is a requirement; "fast" is not.
-- **Deep modules over shallow.** Small interfaces hiding significant implementation.
-- **Interview then organize.** Natural conversation first, structure second.
-- **Always recommend.** Every question gets a recommended answer.
-- **PRD, not tech spec.** Implementation Decisions describe architectural choices
-  and rationale — never include code snippets, file contents, or implementation
-  details that go stale. The PRD is a product document that survives refactors.
+- Product doc, not tech spec.
+- Specificity beats adjectives.
+- Deep modules beat shallow sprawl.
+- Explore first. Interview on gaps, not on discoverable facts.
+- Shape for downstream handoff: `snap-plan`, `snap-slice`, `snap-forge`.
