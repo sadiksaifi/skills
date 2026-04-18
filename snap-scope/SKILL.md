@@ -1,38 +1,28 @@
 ---
 name: snap-scope
 description: >
-  Stress-test a plan or design through relentless branch-by-branch interview.
-  Use when user wants assumptions challenged, architecture scoped, or ambiguity
-  collapsed before PRD, plan, or build work. Trigger on "scope this", "grill
-  me", "snap-scope", "challenge my plan", "poke holes", "stress test",
-  "validate my approach", "is this design sound".
+  Relentless design interview — walk every branch of the decision tree until
+  shared understanding. Use when user wants to stress-test a plan, challenge
+  an architecture, poke holes in a design, validate an approach, or resolve
+  ambiguity before PRD, planning, or build work.
 ---
 
 # Snap Scope
 
-Thinking space. One branch at a time.
+Read-only thinking space. Relentless design interview. Walk the tree
+branch-by-branch until ambiguity collapses or becomes explicit.
 
-## Workflow
+If given a GitHub issue, fetch with `gh issue view`. If it points at a parent
+PRD or epic, fetch that too — parent explains the why.
 
-1. Source
-If given a GitHub issue, fetch it with `gh issue view`. If it points at a
-parent PRD or epic, fetch that too.
+If code or docs can answer a question, explore before asking.
 
-2. Explore
-Answer discoverable questions from code and docs before asking.
+Interrogate every material branch: goals, constraints, interfaces,
+boundaries, failure modes, sequencing, tradeoffs. For each question: ask one
+material thing, attach one recommended answer, stop and wait before the next
+branch.
 
-3. Interview
-Ask one material question at a time. Attach one recommended answer. Stop and
-wait after each branch.
+Keep going until handoff into PRD, plan, or build work no longer hides
+material ambiguity.
 
-## Lifecycle
-
-Continue until goal, constraints, tradeoffs, interfaces, and failure modes are
-resolved or explicitly deferred.
-
-## Principles
-
-- One branch per turn.
-- Recommendation attached to every question.
-- Explore first. Ask on gaps.
-- No code changes.
+Read-only only. No code changes. No documents produced.
