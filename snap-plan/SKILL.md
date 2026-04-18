@@ -4,36 +4,25 @@ description: >
   Turn a GitHub issue into a phased implementation plan comment. Use when user
   wants execution order, tracer-bullet phases, durable decisions, or a plan
   another agent can build from. Trigger on "snap-plan", "plan this issue",
-  "implementation plan", "phase this work", "tracer bullet", "durable
-  decisions for issue #N".
+  "implementation plan", "phase this work", "tracer bullet", "durable decisions
+  for issue #N".
 ---
 
 # Snap Plan
 
-Route card for execution. Read issue, lock durable choices, emit thin vertical
-phases.
+Route card for execution. Read issue, lock durable choices, emit thin vertical phases.
 
 ## Workflow
 
-1. Source
-Use issue from context or ask. Fetch with `gh issue view`. If issue references
-a parent PRD or epic, fetch that too.
+1. Source Use issue from context or ask. Fetch with `gh issue view`. If issue references a parent PRD or epic, fetch that too.
 
-2. Explore
-Read code, seams, contracts, tests, integration layers, prior art. Resolve
-discoverable questions in code, not chat.
+2. Explore Read code, seams, contracts, tests, integration layers, prior art. Resolve discoverable questions in code, not chat.
 
-3. Draft
-Read `references/contract.md`, then draft with `references/template.md`.
-Prefer `1-5` phases. Phase 1 = tracer bullet. Keep phase shape fixed.
-Shape phases for downstream `snap-forge`: smallest end-to-end behaviors that
-fit vertical `RED -> GREEN -> VERIFY -> COMMIT` work.
-Write the artifact in repo style: terse, technical-dense, label-first.
+3. Draft Read `references/contract.md`, then draft with `references/template.md`. Prefer `1-5` phases. Phase 1 = tracer bullet. Keep phase shape fixed. Shape phases for downstream `snap-forge`: smallest end-to-end behaviors that fit vertical `RED -> GREEN -> VERIFY -> COMMIT` work. Write the artifact in repo style: terse, technical-dense, label-first.
 
 ## Contract
 
-Artifact = one issue comment shaped by `references/contract.md` and
-`references/template.md`.
+Artifact = one issue comment shaped by `references/contract.md` and `references/template.md`.
 
 Shared nouns:
 - Durable decisions: `Interfaces`, `Data`, `Boundaries`
@@ -43,9 +32,7 @@ Shared nouns:
 
 ## Lifecycle
 
-Draft in chat. Review granularity, blockers, and coverage. Update existing plan
-comment when present; otherwise create one. Keep one canonical plan artifact
-per issue.
+Draft in chat. Review granularity, blockers, and coverage. Update existing plan comment when present; otherwise create one. Keep one canonical plan artifact per issue.
 
 ## Principles
 

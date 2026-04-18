@@ -10,28 +10,19 @@ description: >
 
 # init-agents-md
 
-Bootstrap repo intelligence. Explore first. Interview on gaps. Emit a dense,
-low-noise AGENTS.md future agents can work from.
+Bootstrap repo intelligence. Explore first. Interview on gaps. Emit a dense, low-noise AGENTS.md future agents can work from.
 
 ## Workflow
 
-1. Explore
-Read manifests, task runners, lockfiles, top-level docs, existing agent files,
-repo layout, tests, and deploy/tooling seams. Derive as much as code can tell.
-Use subagents for large repos.
+1. Explore Read manifests, task runners, lockfiles, top-level docs, existing agent files, repo layout, tests, and deploy/tooling seams. Derive as much as code can tell. Use subagents for large repos.
 
-2. Interview
-Ask only for missing philosophy, contradictory signals, or intent code cannot
-reveal. Recommend defaults from evidence.
+2. Interview Ask only for missing philosophy, contradictory signals, or intent code cannot reveal. Recommend defaults from evidence.
 
-3. Draft
-Read `references/contract.md`, then draft with `references/template.md`.
-Write the artifact in repo style: terse, technical-dense, label-first.
+3. Draft Read `references/contract.md`, then draft with `references/template.md`. Write the artifact in repo style: terse, technical-dense, label-first.
 
 ## Contract
 
-Artifact = one project-level AGENTS.md shaped by `references/contract.md` and
-`references/template.md`.
+Artifact = one project-level AGENTS.md shaped by `references/contract.md` and `references/template.md`.
 
 Default sections:
 - `## Commands`
@@ -43,8 +34,7 @@ Use fewer when repo is tiny. Use more only for a truly orthogonal concern.
 
 ## Lifecycle
 
-Show draft in chat first. Iterate until right. If project already has AGENTS,
-show diff before overwrite.
+Show draft in chat first. Iterate until right. If project already has AGENTS, show diff before overwrite.
 
 ## Principles
 

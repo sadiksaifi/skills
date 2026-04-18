@@ -7,8 +7,7 @@ One comment. One canonical plan. Thin vertical phases.
 - `## Durable Decisions`
 - `## Plan`
 - `## Risks / Unknowns`
-
-`## Validation` is optional. Use only when it adds signal.
+- `## Validation` — optional; use only when it adds signal
 
 ## Durable Decisions
 
@@ -53,7 +52,6 @@ Per phase:
 - `Build:` = end-to-end slice, not layer checklist
 - `Acceptance:` = public-interface behavior checkboxes
 - `Blockers:` = `none`, prior phases, or external dependency
-- Each acceptance item should fit one or a few vertical
-  `RED -> GREEN -> VERIFY -> COMMIT` cycles
+- Each acceptance item should fit one or a few vertical `RED -> GREEN -> VERIFY -> COMMIT` cycles
 - Prefer one coherent behavior cluster per phase, not bundled unrelated work
 - Prefer `1-5` phases

@@ -73,5 +73,4 @@ Only uncategorized threads should remain. Unexpected open threads = missed reply
 
 ## Permissions
 
-If `resolveReviewThread` fails on a thread (permissions), log and continue.
-Don't fail the step.
+If `resolveReviewThread` fails on a thread (permissions), log and continue. Don't fail the step.

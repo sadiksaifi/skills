@@ -1,42 +1,30 @@
 ---
 name: snap-prd
 description: >
-  Write a product-grade PRD as a GitHub issue with stable `US/FR/NFR` ids.
-  Use when user wants to spec a feature, formalize requirements, or turn a
-  rough idea into an implementation-ready product document. Trigger on
-  "snap-prd", "write a PRD", "spec this out", "product spec", "document the
-  requirements", "feature proposal".
+  Write a product-grade PRD as a GitHub issue with stable `US/FR/NFR` ids. Use
+  when user wants to spec a feature, formalize requirements, or turn a rough
+  idea into an implementation-ready product document. Trigger on "snap-prd",
+  "write a PRD", "spec this out", "product spec", "document the requirements",
+  "feature proposal".
 ---
 
 # Snap PRD
 
-Blueprint first. Explore architecture, interview for intent, publish a PRD
-another agent can plan from without guesswork.
+Blueprint first. Explore architecture, interview for intent, publish a PRD another agent can plan from without guesswork.
 
 ## Workflow
 
-1. Intake
-Infer product area from conversation. Ask only for missing intent that
-exploration cannot recover.
+1. Intake Infer product area from conversation. Ask only for missing intent that exploration cannot recover.
 
-2. Explore
-Read relevant code, tests, routes, schemas, contracts, prior art. Find deep
-modules, seams, constraints, and test patterns.
+2. Explore Read relevant code, tests, routes, schemas, contracts, prior art. Find deep modules, seams, constraints, and test patterns.
 
-3. Interview
-Resolve problem, users, outcomes, scope, requirements, metrics, and durable
-implementation decisions. Recommend an answer with each question. Keep moving
-branch-by-branch until ambiguity is explicit, not hidden.
+3. Interview Resolve problem, users, outcomes, scope, requirements, metrics, and durable implementation decisions. Recommend an answer with each question. Keep moving branch-by-branch until ambiguity is explicit, not hidden.
 
-4. Draft
-Read `references/contract.md`, then draft with `references/template.md`.
-Adapt depth to complexity. Apply repo artifact style: terse, technical-dense,
-label-first. Keep ids stable.
+4. Draft Read `references/contract.md`, then draft with `references/template.md`. Adapt depth to complexity. Apply repo artifact style: terse, technical-dense, label-first. Keep ids stable.
 
 ## Contract
 
-Artifact = one GitHub issue shaped by `references/contract.md` and
-`references/template.md`.
+Artifact = one GitHub issue shaped by `references/contract.md` and `references/template.md`.
 
 Required:
 - Stable ids: `US-*`, `FR-*`, `NFR-*`
@@ -51,8 +39,7 @@ Default syntax:
 
 ## Lifecycle
 
-Draft in chat first. Iterate until approved. Discover labels and milestones.
-Create GitHub issue with `[PRD]` title prefix. Show URL.
+Draft in chat first. Iterate until approved. Discover labels and milestones. Create GitHub issue with `[PRD]` title prefix. Show URL.
 
 ## Principles
 

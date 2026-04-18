@@ -33,5 +33,4 @@ Three sections by default. Dense. Field-oriented. No preamble.
 - [unsafe path, hidden invariant, or flaky flow]
 ```
 
-Use actual commands only. Omit empty lines. Collapse irrelevant bullets.
-Use `## Sharp Edges` only when the repo has real traps worth front-loading.
+Use actual commands only. Omit empty lines. Collapse irrelevant bullets. Use `## Sharp Edges` only when the repo has real traps worth front-loading.

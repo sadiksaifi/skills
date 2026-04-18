@@ -1,8 +1,6 @@
 # TDD Cycle
 
-Each behavior follows a strict vertical RED → GREEN → VERIFY → COMMIT cycle.
-Refactoring happens once after all behaviors pass — not per-cycle. Premature
-refactoring reshapes code before patterns emerge.
+Each behavior follows a strict vertical RED → GREEN → VERIFY → COMMIT cycle. Refactoring happens once after all behaviors pass — not per-cycle. Premature refactoring reshapes code before patterns emerge.
 
 ## Per-Behavior Cycle
 

@@ -1,11 +1,10 @@
 # PRD Comment Template
 
-Two-phase: post with slice titles (Step 5), edit to swap in real issue refs
-(Step 7) via `gh issue comment <prd-number> --edit-last`.
+Two-phase: post with slice titles (Step 5), edit to swap in real issue refs (Step 7) via `gh issue comment <prd-number> --edit-last`.
 
 ## Initial Template (Step 5)
 
-```markdown
+````markdown
 ## Slice Breakdown
 
 ### Dependency graph
@@ -32,14 +31,13 @@ graph TD
 | NFR-1 | Slice title B |
 
 All FRs and NFRs assigned.
-```
+````
 
 ## Final Form (Step 7)
 
-Replace slice titles with `#<number> title` everywhere — mermaid nodes, slice
-table, coverage table. Example after edit:
+Replace slice titles with `#<number> title` everywhere — mermaid nodes, slice table, coverage table. Example after edit:
 
-```markdown
+````markdown
 ### Dependency graph
 
 ```mermaid
@@ -54,7 +52,7 @@ graph TD
 |-------|------|------|------------|----------|
 | #10 Slice title A | AFK | S | None | Yes |
 | #11 Slice title B | HITL | M | #10 | No |
-```
+````
 
 ## Formatting Rules
 

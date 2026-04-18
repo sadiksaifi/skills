@@ -18,28 +18,23 @@ If any checks have `bucket: "pending"`, wait briefly:
 timeout 60 gh pr checks <number> --watch --fail-fast --interval 10
 ```
 
-If the timeout expires, proceed with available results. Pending checks that
-haven't completed are not blockers — note them in the checkpoint summary.
+If the timeout expires, proceed with available results. Pending checks that haven't completed are not blockers — note them in the checkpoint summary.
 
 ## Fetch failed logs
 
-Extract the run ID from each failed check's `link` field (the numeric segment
-after `/actions/runs/`), then:
+Extract the run ID from each failed check's `link` field (the numeric segment after `/actions/runs/`), then:
 
 ```bash
 gh run view <run-id> --log-failed
 ```
 
-Use the most recent run only per workflow — ignore superseded runs from earlier
-pushes. If log output is very large, focus on the first failure in each job
-rather than ingesting everything.
+Use the most recent run only per workflow — ignore superseded runs from earlier pushes. If log output is very large, focus on the first failure in each job rather than ingesting everything.
 
 ## Parse failure types
 
 Look for these patterns in the log output:
 
-- **Test failures**: assertion errors, `FAIL` markers, test function names,
-  file:line references from stack traces
+- **Test failures**: assertion errors, `FAIL` markers, test function names, file:line references from stack traces
 - **Lint failures**: rule names (e.g., `no-unused-vars`), file:line references
 - **Type errors**: type checker output (`TS2345`, `mypy`), file:line references
 - **Build failures**: compilation errors, missing module/import errors
@@ -54,13 +49,8 @@ Each distinct failure becomes one [FIX] item:
 
 ## Deduplication with review feedback
 
-A reviewer comment flagging the same issue as a CI failure should be merged into
-one [FIX] item. Keep the review thread ID so the reviewer gets a reply when
-fixed. The CI log provides the precise error; the reviewer comment provides
-the thread to respond to.
+A reviewer comment flagging the same issue as a CI failure should be merged into one [FIX] item. Keep the review thread ID so the reviewer gets a reply when fixed. The CI log provides the precise error; the reviewer comment provides the thread to respond to.
 
 ## After fixes
 
-CI fixes don't get review replies — passing checks after push are the response.
-The exception is deduplicated items where a reviewer also flagged the issue —
-those get a reply via the kept thread ID.
+CI fixes don't get review replies — passing checks after push are the response. The exception is deduplicated items where a reviewer also flagged the issue — those get a reply via the kept thread ID.

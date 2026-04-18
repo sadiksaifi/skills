@@ -10,28 +10,19 @@ description: >
 
 # Snap Slice
 
-Work-packet generator. Read PRD, cut thin vertical slices, map every
-requirement.
+Work-packet generator. Read PRD, cut thin vertical slices, map every requirement.
 
 ## Workflow
 
-1. Source
-Read PRD issue with `gh issue view`. Pull parent context from conversation when
-available.
+1. Source Read PRD issue with `gh issue view`. Pull parent context from conversation when available.
 
-2. Explore
-Read seams, module boundaries, integration points, and prior art. Slice along
-architecture, not by layer.
+2. Explore Read seams, module boundaries, integration points, and prior art. Slice along architecture, not by layer.
 
-3. Draft
-Read `references/contract.md`, then draft with `references/template.md`.
-Prefer AFK slices. Keep titles stable. Cover every `FR-*` and `NFR-*`.
-Write artifacts in repo style: terse, technical-dense, label-first.
+3. Draft Read `references/contract.md`, then draft with `references/template.md`. Prefer AFK slices. Keep titles stable. Cover every `FR-*` and `NFR-*`. Write artifacts in repo style: terse, technical-dense, label-first.
 
 ## Contract
 
-Artifacts = PRD breakdown comment + slice issues shaped by
-`references/contract.md` and `references/template.md`.
+Artifacts = PRD breakdown comment + slice issues shaped by `references/contract.md` and `references/template.md`.
 
 Shared nouns:
 - `US-*`, `FR-*`, `NFR-*`
@@ -41,9 +32,7 @@ Shared nouns:
 
 ## Lifecycle
 
-Draft slice set in chat first. Review merges, splits, blockers, and HITL edges.
-Post canonical PRD breakdown comment. Create slice issues in dependency order.
-Update breakdown with issue refs.
+Draft slice set in chat first. Review merges, splits, blockers, and HITL edges. Post canonical PRD breakdown comment. Create slice issues in dependency order. Update breakdown with issue refs.
 
 ## Principles
 
