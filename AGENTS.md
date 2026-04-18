@@ -17,6 +17,7 @@ SNAP = SNAP's Not A Prompt. Repo holds self-contained agent units.
 - Heavy nouns over filler.
 - Positive protocol: define right shape; skip anti-shape prose.
 - Headings, label lines, bullets over paragraph mass.
+- Wrap frontmatter at about 80 chars. Do not force 80-char wrapping elsewhere.
 
 ## Artifact Style
 
