@@ -19,7 +19,7 @@ Executor. One behavior, one cycle, one commit.
 
 3. Baseline Run current tests. Identify lint and format commands. Start only from a green baseline.
 
-4. Execute For each behavior: `RED -> GREEN -> VERIFY -> COMMIT`.
+4. Execute For each behavior: `RED -> GREEN -> VERIFY -> COMMIT(conventional commit v1)`.
 
 5. Refactor After all behaviors green, run one refactor pass with tests between steps.
 
