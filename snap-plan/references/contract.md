@@ -7,11 +7,11 @@ One comment. One canonical plan. Thin vertical phases.
 - `## Durable Decisions`
 - `## Plan`
 - `## Risks / Unknowns`
-- `## Validation` — optional; use only when it adds signal
+- `## Validation` optional; use only when it adds signal
 
 ## Durable Decisions
 
-Core fields:
+Core:
 - `Interfaces:`
 - `Data:`
 - `Boundaries:`
@@ -49,8 +49,15 @@ Per phase:
 - Headings + label lines + bullets
 - Dense technical phrasing over connective prose
 - Minimal grammar acceptable; ambiguity is not
+- Phase 1 title should include `Tracer Bullet`
 - `Build:` = end-to-end slice, not layer checklist
 - `Acceptance:` = public-interface behavior checkboxes
+- `Acceptance:` avoids docs/tests/README commands, filenames, helper names, refactor chores
+- Docs/tests/refactors belong in `Build:`, not `Acceptance:`, unless the doc artifact is itself the externally reviewed behavior
+- Tracer bullet phases usually defer README/doc work to the later phase that finalizes the user-facing surface
+- Ordinary usage/docs refresh still belongs in `Build:`; do not promote it to `Acceptance:`
+- Missing thresholds, derivation rules, `total` semantics belong in `Risks / Unknowns`, not `Durable Decisions`
+- `Durable Decisions` may say where derivation lives, not what unresolved derivation formula is
 - `Blockers:` = `none`, prior phases, or external dependency
 - Each acceptance item should fit one or a few vertical `RED -> GREEN -> VERIFY -> COMMIT` cycles
 - Prefer one coherent behavior cluster per phase, not bundled unrelated work

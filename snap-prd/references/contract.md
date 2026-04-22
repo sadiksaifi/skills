@@ -22,11 +22,16 @@ One artifact. One issue. Stable ids. Dense prose. Product-first.
 
 - `US-1: ...`
 - `US-2: ...`
+- Outcome-led user capability only; docs/tests/maintainer chores stay out
 
 ### Functional Requirements
 
 - `FR-1: ...`
 - `FR-2: ...`
+- Only requested or repo-grounded public behavior; leave missing policy in `Open Questions`
+- Do not turn inferred operational properties into `FR-*` without source proof
+- Avoid speculative semantics for totals, output shape, zero buckets, setup assumptions, or derived-state mapping
+- Avoid inferred absence/presence rules for opt-in params unless source states them
 
 ### Non-Functional Requirements
 
@@ -62,5 +67,7 @@ Use label lines, not tables:
 - Minimal grammar acceptable; ambiguity is not
 - No file paths
 - No code snippets
+- No exact shell commands unless the command is product surface under specification
 - One requirement per bullet
+- Unresolved policy branches go to `Open Questions` or `Out of Scope`, not invented `FR-*`
 - Keep ids stable after publish
