@@ -11,7 +11,7 @@ description: >
 
 Read-only thinking space. Relentless design interview. Walk the tree branch-by-branch until ambiguity collapses or becomes explicit.
 
-If given GitHub issue, fetch with `gh issue view`. If it points at parent PRD/epic, fetch that too; parent explains the why.
+If given GitHub issue/comment/PR, fetch body and all comments/review threads. Extract refs/URLs from body + comments. Read parent PRD/epic, breakdown comments, plan comments, referenced issues/PRs/discussions/docs that affect goals, scope, acceptance, blockers, or decisions. Recurse through material links; normalize + dedupe canonical refs; keep inaccessible/conflicting context as explicit ambiguity.
 If code or docs can answer a question, explore before asking.
 
 Interrogate every material branch: goals, constraints, interfaces, boundaries, failure modes, sequencing, tradeoffs. For each question: ask one material thing, attach one recommended answer, stop and wait before the next branch.

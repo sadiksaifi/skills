@@ -9,24 +9,26 @@ description: >
 
 # Snap Forge
 
-Executor. One behavior. One cycle. One commit.
+Executor. One scoped slice. Many small TDD cycles when needed. One commit per completed behavior.
 
 ## Workflow
 
-1. `Orient:` Resolve issue, plan comment, or direct task. Read code, tests, CI, existing patterns. Detect test stack before writing.
-2. `Branch:` Parse `--branch` / `--worktree`. Derive names when user delegates naming.
-3. `Baseline:` Run current tests. Identify lint + format commands. Start green.
-4. `Execute:` Per behavior: `RED -> GREEN -> VERIFY -> COMMIT` with Conventional Commits v1.
-5. `Refactor:` After all behaviors green, run one pass with tests between steps.
+1. `Orient:` Resolve issue, plan comment, or direct task. For issue input, fetch issue body and all issue comments before scoping. Extract refs/URLs from body + comments. Read parent PRD/epic, plan/breakdown comments, referenced issues/PRs/discussions/docs that affect scope, acceptance, blockers, or implementation constraints. Recurse through material links; normalize + dedupe canonical refs; keep inaccessible/conflicting context as explicit blockers or unknowns. Read enough linked artifacts to reconstruct the full epic context before selecting the behavior. Read code, tests, CI, existing patterns. Detect test stack before writing.
+2. `Scope ledger:` Extract acceptance items, explicit non-goals, blockers, and linked-slice boundaries. Keep a visible Done / In progress / Not done ledger. If user asked for an issue/slice, the selected scope is the whole issue/slice unless they explicitly narrowed it.
+3. `Branch:` Parse `--branch` / `--worktree`. Derive names when user delegates naming.
+4. `Baseline:` Run current tests. Identify lint + format commands. Start green.
+5. `Execute:` Per behavior: `RED -> GREEN -> VERIFY -> COMMIT` with Conventional Commits v1. Continue cycles until the selected scope ledger is complete or a blocker stops execution.
+6. `Refactor:` After all selected-scope behaviors are green, run one pass with tests between steps.
 
 ## Contract
 
-If input includes `snap-plan` comment, read `references/contract.md` first. Treat `Interfaces`, `Data`, `Boundaries`, ordered phases as execution constraints.
+If input includes `snap-plan` comment, read `references/contract.md` first. Treat `Interfaces`, `Data`, `Boundaries`, ordered phases as execution constraints. If the plan lives on an issue, inspect the full issue comment thread for later clarifications, amendments, review notes, and scope changes. If that thread points at a parent PRD/epic issue or breakdown comment, read those artifacts and their materially linked issues/comments before execution.
 
 ## Lifecycle
 
-Respect plan order when present. If plan selects one phase, execute only that phase. Finish with full-suite verify + terse execution summary.
+Respect plan order when present. If plan selects one phase, execute only that phase. Finish with full-suite verify + terse execution summary against the scope ledger.
 Completed behavior stays committed. Do not leave finished forge work only in working tree unless user forbids commits.
+Do not claim `Implemented #N`, `completed slice`, or equivalent unless every selected-scope acceptance item is Done. If execution stops after one behavior or partial coverage, label the result `Partial`, list remaining acceptance items, and state the blocker or continuation plan.
 
 ## Principles
 

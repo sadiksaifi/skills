@@ -14,7 +14,7 @@ Route card for execution. Read issue, lock durable choices, emit thin vertical p
 
 ## Workflow
 
-1. `Source:` Use issue from context or ask. Fetch with `gh issue view`. If issue references parent PRD/epic, fetch that too.
+1. `Source:` Use issue from context or ask. Fetch issue body and all comments. Extract refs/URLs from body + comments. Read parent PRD/epic, breakdown comments, plan comments, referenced issues/PRs/discussions/docs that affect scope. Recurse through material scope/acceptance/blocker links; normalize + dedupe canonical refs; route inaccessible/conflicting context to `Risks / Unknowns`.
 2. `Explore:` Read code, seams, contracts, tests, integration layers, prior art. Resolve discoverable questions in code, not chat.
 3. `Draft:` Read `references/contract.md`, then draft with `references/template.md`. Prefer `1-5` phases. Phase 1 = tracer bullet. Keep phase shape fixed. Shape for downstream `snap-forge`: smallest end-to-end behaviors that fit vertical `RED -> GREEN -> VERIFY -> COMMIT` work. Write in repo style: terse, technical-dense, label-first.
 

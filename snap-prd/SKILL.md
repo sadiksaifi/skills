@@ -14,7 +14,7 @@ Blueprint first. Explore architecture, interview for intent, publish a PRD anoth
 
 ## Workflow
 
-1. `Intake:` Infer product area from conversation. Ask only for missing intent exploration cannot recover.
+1. `Intake:` Infer product area from conversation. If source includes an existing issue/comment/PR/doc, fetch body and all comments/review threads where available. Extract refs/URLs from body + comments. Read parent PRD/epic, related issues/PRs/discussions/docs that affect product intent, scope, users, requirements, blockers, or open questions. Recurse through material links; normalize + dedupe canonical refs. Ask only for missing intent exploration cannot recover.
 2. `Explore:` Read relevant code, tests, routes, schemas, contracts, prior art. Find deep modules, seams, constraints, test patterns.
 3. `Interview:` Resolve problem, users, outcomes, scope, requirements, metrics, durable implementation decisions. Recommend an answer with each question. Keep moving branch-by-branch until ambiguity is explicit, not hidden.
 4. `Draft:` Read `references/contract.md`, then draft with `references/template.md`. Adapt depth to complexity. Apply repo artifact style: terse, technical-dense, label-first. Keep ids stable.

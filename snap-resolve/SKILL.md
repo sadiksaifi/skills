@@ -13,7 +13,7 @@ Triage, fix, explain, close loop.
 
 ## Workflow
 
-1. `Fetch:` Gather PR title, PR body, linked issue refs from PR body, linked issue title/body for each resolvable ref, review threads, review bodies, PR comments, unresolved thread ids, CI failures. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and closing-keyword forms like `closes`, `fixes`, `resolves`. Normalize + dedupe issue refs by canonical issue identity. Route unreadable, invalid, or conflicting refs to `Unsure`.
+1. `Fetch:` Gather PR title, PR body, PR comments, review threads, review bodies, unresolved thread ids, CI failures. Extract linked refs/URLs from PR body + comments/reviews. For each resolvable issue ref, fetch title/body/comments. Read parent PRD/epic, breakdown comments, plan comments, and referenced issues/PRs/discussions/docs that affect fix scope. Recurse through material scope/acceptance/blocker links. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and closing-keyword forms like `closes`, `fixes`, `resolves`. Normalize + dedupe refs by canonical identity. Route unreadable, invalid, or conflicting refs to `Unsure`.
 2. `Explore:` Read fetched PR/issue context first, then affected code, tests, patterns before touching fixes.
 3. `Categorize:` Split into `[FIX]` and `[EXPLAIN]`. Scope decisions against PR intent + linked issue context. Use TDD for substantive fixes. Use direct fixes for trivia.
 
@@ -38,7 +38,7 @@ After approval: execute fixes, push once, reply to every reviewer, resolve addre
 - Every reviewer gets a reply
 - Commit hashes in fix replies
 - Fetch PR/issue context before categorization. No blind review triage.
-- Linked issue discovery comes from PR body refs. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and closing-keyword forms like `closes`, `fixes`, `resolves`.
+- Linked issue discovery comes from PR body, PR comments, review bodies, review threads, and closing-keyword forms. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and forms like `closes`, `fixes`, `resolves`.
 - Normalize + dedupe linked issues by canonical `owner/repo#number`.
 - Invalid, unreadable, or conflicting linked issue context goes to `Unsure`, not silent skip.
 - `[EXPLAIN]` replies stay rationale-only. No fix hash, file path, docs/code change claim, or "updated X" language unless code actually changed for that thread.

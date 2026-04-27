@@ -4,6 +4,7 @@ import { mkdir, writeFile, cp, rm } from "node:fs/promises";
 export type FixtureName =
   | "clean-scaffold"
   | "greeting-cli-diff"
+  | "testing-repo-review-diff"
   | "inventory-api-base"
   | "inventory-api-feature-diff"
   | "inventory-api-review-packet"
@@ -1456,6 +1457,113 @@ async function applyInventoryFeatureDiff(repoDir: string) {
   await writeFiles(repoDir, inventoryFeatureFiles());
 }
 
+async function applyTestingRepoReviewDiff(repoDir: string, fixtureDir: string) {
+  await writeFiles(repoDir, {
+    "package.json": JSON.stringify(
+      {
+        name: "testing-repo",
+        type: "module",
+        private: true,
+        scripts: {
+          test: "bun test",
+          start: "bun run index.ts",
+        },
+      },
+      null,
+      2,
+    ),
+    "index.ts": [
+      "const args = process.argv.slice(2);",
+      "const name = args.join(\" \") || \"world\";",
+      "",
+      "console.log(`Hello, ${name}!`);",
+      "",
+    ].join("\n"),
+    "index.test.ts": [
+      "import { expect, test } from \"bun:test\";",
+      "import { resolve } from \"node:path\";",
+      "",
+      "const decoder = new TextDecoder();",
+      "const entry = resolve(import.meta.dir, \"index.ts\");",
+      "",
+      "function runCli(args: string[] = []) {",
+      "  return Bun.spawnSync({",
+      "    cmd: [\"bun\", entry, ...args],",
+      "    stdout: \"pipe\",",
+      "    stderr: \"pipe\",",
+      "    env: process.env,",
+      "  });",
+      "}",
+      "",
+      "test(\"prints default greeting\", () => {",
+      "  const result = runCli();",
+      "  expect(result.exitCode).toBe(0);",
+      "  expect(decoder.decode(result.stdout).trim()).toBe(\"Hello, world!\");",
+      "});",
+      "",
+      "test(\"prints named greeting\", () => {",
+      "  const result = runCli([\"Ada\"]);",
+      "  expect(result.exitCode).toBe(0);",
+      "  expect(decoder.decode(result.stdout).trim()).toBe(\"Hello, Ada!\");",
+      "});",
+      "",
+    ].join("\n"),
+    "README.md": [
+      "# testing-repo",
+      "",
+      "## Greeting CLI",
+      "",
+      "```bash",
+      "bun run index.ts",
+      "bun run index.ts Ada",
+      "bun run index.ts Ada Lovelace",
+      "```",
+      "",
+      "The CLI prints `Hello, <name>!`. Multiple words are joined into one name.",
+      "",
+      "## Test",
+      "",
+      "```bash",
+      "bun test",
+      "```",
+      "",
+    ].join("\n"),
+  });
+
+  await writeFiles(fixtureDir, {
+    "pr-body.md": [
+      "# Add greeting CLI",
+      "",
+      "Adds a Bun greeting CLI with default and named greetings.",
+      "",
+      "Closes #42",
+      "",
+    ].join("\n"),
+    "issue-42.md": [
+      "# Greeting CLI contract",
+      "",
+      "Acceptance:",
+      "- No args prints `Hello, world!` to stdout and exits 0.",
+      "- One positional name prints `Hello, <name>!` to stdout and exits 0.",
+      "- More than one positional arg exits 2, writes `Usage: bun run index.ts [name]` to stderr, and writes nothing to stdout.",
+      "- Implementation follows repo Bun-first rules in `CLAUDE.md`; use `Bun.argv` for CLI args rather than Node-style `process.argv`.",
+      "",
+    ].join("\n"),
+    "pr-metadata.json": JSON.stringify(
+      {
+        title: "Add greeting CLI",
+        body_file: "pr-body.md",
+        linked_issues: ["#42"],
+        base: "main",
+        head: "feature/greeting-cli",
+        changed_files: ["package.json", "index.ts", "index.test.ts", "README.md"],
+      },
+      null,
+      2,
+    ),
+  });
+}
+
 async function applyInventoryReviewPacket(repoDir: string, fixtureDir: string) {
   await writeFiles(repoDir, inventoryBuggyReviewFiles());
   await run("git add .", repoDir);
@@ -1622,6 +1730,10 @@ export async function prepareFixture({
           "",
         ].join("\n"),
       });
+      return;
+    case "testing-repo-review-diff":
+      await copyProvidedRepo(providedRepoPath, repoDir);
+      await applyTestingRepoReviewDiff(repoDir, fixtureDir);
       return;
     case "inventory-api-base":
       await buildInventoryBase(repoDir);

@@ -14,7 +14,7 @@ Shipping manifest from diff truth.
 ## Workflow
 
 1. `Detect:` Check whether PR already exists for the branch.
-2. `Analyze:` Read diff, commits, stats, base branch, push state.
+2. `Analyze:` Read diff, commits, stats, base branch, push state. Extract issue/PR refs from commits, branch name, existing PR body, and diff-adjacent docs when present. For any `Closes` target or scope claim, fetch linked issue body + comments and material parent PRD/epic/breakdown links. Recurse through material scope/acceptance/blocker links; normalize + dedupe canonical refs. Diff remains truth; linked context only bounds title/body/closure claims.
 3. `Template:` Use repo PR template when present; otherwise use local refs.
 4. `Write:` Generate concise, specific PR body from actual behavior and touched systems. Apply repo artifact style: terse, technical-dense, label-first.
 

@@ -14,7 +14,7 @@ Work-packet generator. Read PRD, cut thin vertical slices, map every requirement
 
 ## Workflow
 
-1. `Source:` Read PRD issue with `gh issue view`. Pull parent context from conversation when available.
+1. `Source:` Read PRD issue body and all comments. Pull parent context from conversation when available. Extract refs/URLs from body + comments. Read parent PRD/epic, breakdown comments, plan comments, referenced issues/PRs/discussions/docs that affect slicing, coverage, blockers, or acceptance. Recurse through material scope/acceptance/blocker links; normalize + dedupe canonical refs; route inaccessible/conflicting context to `Open Questions` or explicit blockers.
 2. `Explore:` Read seams, module boundaries, integration points, prior art. Slice along architecture, not by layer. Recover implied semantics from current code, fixtures, tests before declaring ambiguity.
 3. `Draft:` Read `references/contract.md`, then draft with `references/template.md`. Prefer AFK slices. Keep titles stable. Cover every `FR-*` and `NFR-*`. Write in repo style: terse, technical-dense, label-first.
 
