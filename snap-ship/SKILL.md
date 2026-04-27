@@ -33,6 +33,12 @@ Required sections:
 
 Create mode: push if needed, then create PR. Update mode: preserve non-template sections, refresh template sections from the current diff, then edit PR.
 
+## GitHub Hash Links
+
+- Any Git commit hash/SHA shown to the user or written to GitHub comments, issues, PR bodies, review bodies, or durable artifacts must be clickable in GitHub.
+- Use Markdown `[abcdef0](https://github.com/<owner>/<repo>/commit/<full-sha>)`; if Markdown is unsupported, paste the commit URL.
+- Resolve short hashes to full SHAs before linking. Derive `<owner>/<repo>` from `gh repo view --json nameWithOwner`, PR context, or `origin` remote.
+
 ## Principles
 
 - Diff is truth

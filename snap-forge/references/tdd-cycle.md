@@ -34,6 +34,8 @@ One atomic conventional commit:
 feat(scope): [behavior description]
 ```
 
+If the commit is shown in chat or written to GitHub, use a GitHub commit link.
+
 ## After All Behaviors Pass: Refactor
 
 Single pass over the full implementation. Candidates:

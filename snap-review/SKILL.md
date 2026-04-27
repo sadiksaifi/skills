@@ -16,11 +16,12 @@ Deep reviewer pass from diff truth. Read-only. Findings first. Bias toward negat
 1. `Source:` Use PR from context, current branch, or ask. Prefer `gh pr view` for title, body, base/head refs, changed files, commits, status checks, review state, comments, review bodies, and review threads. Use `gh pr diff` or `git diff base...head` for patch truth. Parse linked refs/URLs from PR body + comments/reviews, including `#123`, `owner/repo#123`, full GitHub issue URLs, and closing-keyword forms like `closes`, `fixes`, `resolves`. Fetch linked issue bodies + comments; parent PRD/epic links count too. Recurse through material scope/acceptance/blocker links; normalize + dedupe canonical refs; route inaccessible/conflicting context to `Risks / Unknowns`.
 2. `Explore:` Read PR/issue intent first, then changed code, adjacent contracts, tests, fixtures, docs, and runtime seams. Run read-only validation commands only when they sharpen review confidence.
 3. `Review:` Run an in-depth negative review, not a skim. Hunt defects, regressions, bad patterns, missing tests, brittle seams, architectural drift, security/privacy risk, performance risk, and maintainability debt with concrete impact. Check behavior against PR intent + linked issues + existing contracts + repo instructions (`AGENTS.md`, `CLAUDE.md`, local conventions). Trace changed paths through callers, data shape, validation, errors, persistence, concurrency, auth, compatibility, deployment/runtime behavior, and tests.
-4. `Report:` Output findings first. No code edits. No commits. No pushes. No GitHub review submission unless explicitly requested.
+4. `Report:` Output findings first. No code edits. No commits. No pushes. After the review is complete, ask: `Post this review to the PR?`
+5. `Post:` If user approves, read `references/template.md`, self-detect harness identity, append attribution, then post the same review body to the GitHub PR. Capture the posted review/comment URL and return it to the user. Do not change findings while posting.
 
 ## Output
 
-Findings-first review shape:
+Findings-first review shape. For GitHub posting, use `references/template.md`.
 
 - `Findings` — ordered by severity. Each item includes `Severity`, `Location`, `Issue`, `Impact`, `Evidence`, `Recommendation`.
 - `Missing Tests` — only coverage gaps that would catch a material regression.
@@ -33,9 +34,15 @@ Severity vocab:
 - `Medium` = edge-case regression, missing validation, brittle behavior with plausible production impact.
 - `Low` = minor risk worth noting; never style-only.
 
+## GitHub Hash Links
+
+- Any Git commit hash/SHA shown to the user or written to GitHub comments, issues, PR bodies, review bodies, or durable artifacts must be clickable in GitHub.
+- Use Markdown `[abcdef0](https://github.com/<owner>/<repo>/commit/<full-sha>)`; if Markdown is unsupported, paste the commit URL.
+- Resolve short hashes to full SHAs before linking. Derive `<owner>/<repo>` from `gh repo view --json nameWithOwner`, PR context, or `origin` remote.
+
 ## Principles
 
-- Read-only means no file edits, no commits, no pushes, no thread resolution.
+- Read-only means no file edits, no commits, no pushes, no thread resolution. GitHub PR review/comment posting is allowed only after explicit user approval.
 - Findings first. No summary before defects.
 - Depth over speed. Treat the PR as guilty until evidence clears the changed surface.
 - Negative findings over balance. Do not add praise, pros, or neutral observations unless needed to explain scope.
@@ -49,4 +56,5 @@ Severity vocab:
 - Verify before accusing when a quick read-only command can settle it.
 - Existing tests passing does not neutralize a contract violation.
 - If no findings, say so directly; do not pad with praise.
-- Do not post review comments unless explicitly asked. If asked to fix findings, hand off to `snap-resolve`.
+- After presenting the review, ask whether to post it to the PR. If approved, post with the attribution footer from `references/template.md` and return the posted review/comment link.
+- If asked to fix findings, hand off to `snap-resolve`.

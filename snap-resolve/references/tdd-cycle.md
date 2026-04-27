@@ -34,7 +34,7 @@ One atomic conventional commit:
 fix(scope): [description matching the PR feedback]
 ```
 
-Store the commit hash — referenced in the reply to the reviewer.
+Store the GitHub commit link — referenced in the reply to the reviewer.
 
 ## After All Fixes: Refactor
 
@@ -57,4 +57,4 @@ refactor(scope): [what was improved]
 - [ ] No speculative features added
 - [ ] Full suite + lint + format pass
 - [ ] Atomic conventional commit
-- [ ] Commit hash stored for reply
+- [ ] GitHub commit link stored for reply

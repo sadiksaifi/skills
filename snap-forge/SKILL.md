@@ -30,6 +30,12 @@ Respect plan order when present. If plan selects one phase, execute only that ph
 Completed behavior stays committed. Do not leave finished forge work only in working tree unless user forbids commits.
 Do not claim `Implemented #N`, `completed slice`, or equivalent unless every selected-scope acceptance item is Done. If execution stops after one behavior or partial coverage, label the result `Partial`, list remaining acceptance items, and state the blocker or continuation plan.
 
+## GitHub Hash Links
+
+- Any Git commit hash/SHA shown to the user or written to GitHub comments, issues, PR bodies, review bodies, or durable artifacts must be clickable in GitHub.
+- Use Markdown `[abcdef0](https://github.com/<owner>/<repo>/commit/<full-sha>)`; if Markdown is unsupported, paste the commit URL.
+- Resolve short hashes to full SHAs before linking. Derive `<owner>/<repo>` from `gh repo view --json nameWithOwner`, PR context, or `origin` remote.
+
 ## Principles
 
 - Vertical TDD only

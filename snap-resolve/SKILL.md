@@ -33,10 +33,16 @@ Checkpoint shape:
 
 After approval: execute fixes, push once, reply to every reviewer, resolve addressed threads, suggest `/snap-ship`.
 
+## GitHub Hash Links
+
+- Any Git commit hash/SHA shown to the user or written to GitHub comments, issues, PR bodies, review bodies, or durable artifacts must be clickable in GitHub.
+- Use Markdown `[abcdef0](https://github.com/<owner>/<repo>/commit/<full-sha>)`; if Markdown is unsupported, paste the commit URL.
+- Resolve short hashes to full SHAs before linking. Derive `<owner>/<repo>` from `gh repo view --json nameWithOwner`, PR context, or `origin` remote.
+
 ## Principles
 
 - Every reviewer gets a reply
-- Commit hashes in fix replies
+- Commit hashes in fix replies must use GitHub commit links
 - Fetch PR/issue context before categorization. No blind review triage.
 - Linked issue discovery comes from PR body, PR comments, review bodies, review threads, and closing-keyword forms. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and forms like `closes`, `fixes`, `resolves`.
 - Normalize + dedupe linked issues by canonical `owner/repo#number`.

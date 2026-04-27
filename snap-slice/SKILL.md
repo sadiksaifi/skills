@@ -38,6 +38,12 @@ Shared nouns:
 
 Draft slice set in chat first. Review merges, splits, blockers, and HITL edges. Post canonical PRD breakdown comment. Create slice issues in dependency order. Update breakdown with issue refs.
 
+## GitHub Hash Links
+
+- Any Git commit hash/SHA shown to the user or written to GitHub comments, issues, PR bodies, review bodies, or durable artifacts must be clickable in GitHub.
+- Use Markdown `[abcdef0](https://github.com/<owner>/<repo>/commit/<full-sha>)`; if Markdown is unsupported, paste the commit URL.
+- Resolve short hashes to full SHAs before linking. Derive `<owner>/<repo>` from `gh repo view --json nameWithOwner`, PR context, or `origin` remote.
+
 ## Principles
 
 - Vertical slices only
