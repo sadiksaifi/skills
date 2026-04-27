@@ -16,7 +16,7 @@ Work-packet generator. Read PRD, cut thin vertical slices, map every requirement
 
 1. `Source:` Read PRD issue body and all comments. Pull parent context from conversation when available. Extract refs/URLs from body + comments. Read parent PRD/epic, breakdown comments, plan comments, referenced issues/PRs/discussions/docs that affect slicing, coverage, blockers, or acceptance. Recurse through material scope/acceptance/blocker links; normalize + dedupe canonical refs; route inaccessible/conflicting context to `Open Questions` or explicit blockers.
 2. `Explore:` Read seams, module boundaries, integration points, prior art. Slice along architecture, not by layer. Recover implied semantics from current code, fixtures, tests before declaring ambiguity.
-3. `Draft:` Read `references/contract.md`, then draft with `references/template.md`. Prefer AFK slices. Keep titles stable. Cover every `FR-*` and `NFR-*`. Write in repo style: terse, technical-dense, label-first.
+3. `Draft:` Read `references/contract.md`, then draft with `references/template.md`. Prefer AFK slices. Keep titles stable. Assign stable `Slice N` staging ids. Cover every `FR-*` and `NFR-*`. Write in repo style: terse, technical-dense, label-first.
 
 ## Decision Gate
 
@@ -33,10 +33,11 @@ Shared nouns:
 - `Type: AFK | HITL`
 - `Size: S | M | L`
 - `Blocked by:`
+- `Best after:`
 
 ## Lifecycle
 
-Draft slice set in chat first. Review merges, splits, blockers, and HITL edges. Post canonical PRD breakdown comment. Create slice issues in dependency order. Update breakdown with issue refs.
+Draft slice set in chat first. Review merges, splits, blockers, and HITL edges. Post initial PRD breakdown with `Slice N` staging ids. Create slice issues in dependency order. Validate blockers before each publish: planned issue `Blocked By` refs must equal dependency-graph incoming edges after mapping staged `Slice N` blockers to created `#N` refs. Stop on hard mismatch; warn only for `Best after` soft sequencing differences. Update breakdown to final canonical form: `Slice N - [#<issue>](<issue-url>) <title>`.
 
 ## GitHub Hash Links
 
@@ -57,6 +58,10 @@ Draft slice set in chat first. Review merges, splits, blockers, and HITL edges. 
 - When filter and summary share only an upstream classifier/contract seam, block both on that seam. Do not make summary wait for filter implementation
 - Do not create standalone AFK seam/foundation slices. Fold seam work into the earliest user-visible behavior slice unless the slice is `HITL` or itself the user-visible deliverable
 - `Blocked by:` means real execution dependency, not shared file touch. Independent query params and orthogonal behaviors stay parallel
+- `Best after:` means sequencing preference only. Never treat it as a blocker or graph edge
+- `Slice N` ids are staging/display metadata. After issue creation, GitHub issue refs are canonical dependency identifiers
+- Slice issue `Blocked By` uses only `#N`/issue links or `none`; never `Slice N`, title-only labels, or stale parent graph prose
+- Before publishing final slice issues or breakdown edits, compare every issue-local `Blocked By` set against the final PRD dependency graph by issue ref. Fail on mismatch
 - Use label lines + bullets. No markdown tables
 - Put shared derivation/contract guardrails in earliest slice; downstream slices block on that seam
 - Do not invent contract-ratification slices for standard cases with no open questions
