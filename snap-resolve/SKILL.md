@@ -31,7 +31,7 @@ Checkpoint shape:
 - `[EXPLAIN]` = rationale-only decisions, scope calls, or reviewer answers with no code-change promise. May cite PR or linked issue scope.
 - `Unsure` = unreadable/invalid/conflicting issue refs, linked issues with inaccessible bodies, PR↔issue scope conflicts, or reviewer asks whose fit cannot be resolved from fetched context.
 
-After approval: execute fixes, push once, reply to every reviewer, resolve addressed threads, suggest `/snap-ship`.
+After approval: execute fixes, push once, reply to every reviewer using the fix/explain reply patterns, resolve addressed threads, suggest `/snap-ship`.
 
 ## GitHub Hash Links
 
@@ -39,9 +39,32 @@ After approval: execute fixes, push once, reply to every reviewer, resolve addre
 - Use Markdown `[abcdef0](https://github.com/<owner>/<repo>/commit/<full-sha>)`; if Markdown is unsupported, paste the commit URL.
 - Resolve short hashes to full SHAs before linking. Derive `<owner>/<repo>` from `gh repo view --json nameWithOwner`, PR context, or `origin` remote.
 
+## Fix Reply Pattern
+
+For every `[FIX]` reviewer reply, use this shape:
+
+```md
+Addressed <specific defect/scope> from <source comment/review/CI link> in [abcdef0](https://github.com/<owner>/<repo>/commit/<full-sha>):
+
+- <observable outcome, behavior, or guard added>
+- <test/coverage detail when material>
+
+Verified:
+- `<command>`
+- `<command>`
+```
+
+Rules:
+- Lead with `Addressed ... from ... in ...:`. Link the source review/comment when possible; use `this thread` only when replying inline and no stable URL is available.
+- Link every material fix commit. If the fix spans commits, write `in [sha1](...), [sha2](...):`.
+- Bullets state shipped outcomes, not implementation diary.
+- `Verified:` lists commands actually run against the final pushed state. Omit commands not run.
+- If multiple threads share one fix, reuse the same commit + verification facts, but tailor the defect/source phrase per thread.
+
 ## Principles
 
 - Every reviewer gets a reply
+- Fix replies must follow the `Addressed ... from ... in ...` pattern with a `Verified:` command list
 - Commit hashes in fix replies must use GitHub commit links
 - Fetch PR/issue context before categorization. No blind review triage.
 - Linked issue discovery comes from PR body, PR comments, review bodies, review threads, and closing-keyword forms. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and forms like `closes`, `fixes`, `resolves`.
