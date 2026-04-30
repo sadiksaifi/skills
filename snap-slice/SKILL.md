@@ -48,6 +48,8 @@ Draft slice set in chat first. Review merges, splits, blockers, and HITL edges. 
 ## Principles
 
 - Vertical slices only
+- Slice around deep-module seams: narrow interfaces; owned internal behavior; no layer-only wrapper work
+- Preserve hexagonal boundaries: business logic owns local ports; adapters translate external shapes
 - Coverage complete: every `FR-*` and `NFR-*` lands somewhere
 - AFK by default
 - Use `HITL` only for irreducible product/policy ambiguity. If PRD + repo truth already pin semantics tightly enough to implement, keep slices `AFK`

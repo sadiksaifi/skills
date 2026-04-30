@@ -49,7 +49,8 @@ Draft in chat first. Iterate until approved. Discover labels and milestones. Cre
 - Product doc, not tech spec
 - Specificity beats adjectives
 - Artifact prose stays token-thin: dense nouns, low glue
-- Deep modules beat shallow sprawl
+- Deep modules, narrow interfaces: small capability APIs with rich internal ownership
+- Hexagonal boundaries: business logic owns local ports; adapters translate database, framework, transport, vendor shapes
 - Explore first. Interview on gaps, not discoverable facts
 - User stories stay outcome-led. Docs/tests/maintainer chores belong in requirements or testing decisions, not as primary capability
 - Do not invent net-new behavior to close ambiguity. Put unresolved policy in `Open Questions` or `Out of Scope`

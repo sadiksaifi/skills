@@ -75,4 +75,6 @@ Rules:
 - `Resolved Threads` lists fix threads actually addressed. Do not auto-list pure explain/rationale threads there unless explicitly resolved in tool state.
 - One push, then replies
 - TDD for substance, not cosmetics
+- Fix toward deep modules, narrow interfaces: owned behavior over pass-through glue
+- Preserve hexagonal boundaries: domain avoids database, framework, transport, vendor shapes; adapters translate
 - Resolve what you addressed

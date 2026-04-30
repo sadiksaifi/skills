@@ -40,7 +40,8 @@ Do not claim `Implemented #N`, `completed slice`, or equivalent unless every sel
 
 - Vertical TDD only
 - Public-interface tests
-- Deep modules over shallow glue
+- Deep modules, narrow interfaces: small public APIs; owned internals over pass-through glue
+- Hexagonal boundaries: domain owns local interfaces; adapters translate database, framework, transport, vendor shapes
 - Refactor after signal appears, not before
 - Mock only at system boundaries
 - Conventional commits mandatory for completed behaviors, not optional polish

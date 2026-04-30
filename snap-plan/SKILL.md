@@ -43,6 +43,8 @@ Draft in chat. Review granularity, blockers, coverage. Update existing plan comm
 - Vertical phases over layer slices
 - Forge-ready phases over milestone blobs
 - Durable nouns over volatile file names
+- Deep modules, narrow interfaces: plan owned behavior behind small public APIs, not pass-through wrappers
+- Hexagonal boundaries: business logic owns local ports; adapters translate database, framework, transport, vendor shapes
 - Fixed shape. Light prose
 - Artifact prose stays token-thin: dense nouns, low glue
 - `Acceptance` describes public-interface behavior, not internal tasks

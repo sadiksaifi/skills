@@ -29,6 +29,8 @@ Read-only only. No code changes. No documents produced.
 ## Principles
 
 - Ask the next irrecoverable question, not a nice-to-have question
+- Probe deep-module seams: narrow public APIs, owned validation/behavior, no pass-through layer
+- Probe hexagonal boundaries: domain ports local; database, framework, transport, vendor shapes outside domain
 - Prefer unresolved contract or policy over docs/tests/chore sequencing
 - If code/docs answer it, do not ask it
 - If source explicitly omits thresholds, derivation rules, response-shape semantics, or ownership boundaries, ask one of those before implementation trivia

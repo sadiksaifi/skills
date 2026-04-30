@@ -13,6 +13,10 @@ Missing Tests
 
 [material coverage gaps, or `None`]
 
+Architecture
+
+[optional: architectural drift, boundary violations, shallow wrappers, or future-change risk; omit when none]
+
 Risks / Unknowns
 
 [merge risks, validation notes, inaccessible/conflicting context, or `None`]
