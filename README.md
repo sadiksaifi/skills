@@ -1,17 +1,16 @@
 # SNAP — SNAP's Not A Prompt
 
-Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: scope it, spec it, plan it, slice it, forge it, ship it, review it, resolve it.
+Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: scope it, spec it, slice it, forge it, PR it, review it, resolve it.
 
 ## Skills
 
 | Skill | Purpose |
 |-------|---------|
 | `snap-scope` | Relentless design interview — stress-test plans and architectures |
-| `snap-prd` | Write PRDs through interview + codebase exploration → GitHub issue |
-| `snap-plan` | Turn any GitHub issue into a phased implementation plan → issue comment |
+| `snap-prd` | Write PRDs from scoped context + codebase exploration → GitHub issue |
 | `snap-slice` | Break a PRD into vertical slice issues with FR/NFR coverage mapping |
 | `snap-forge` | Strict TDD execution — RED-GREEN-VERIFY-COMMIT, refactor at end |
-| `snap-ship` | Create and update GitHub PRs from diff analysis |
+| `snap-pr` | Create GitHub PRs from current branch commits; update with `--update` |
 | `snap-review` | Read-only PR review — findings-first bugs, regressions, missing tests |
 | `snap-resolve` | Resolve PR feedback — TDD fixes, reviewer replies, CI failures |
 
@@ -32,21 +31,21 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
     snap-prd         |            |
     (write PRD)      |            |
         |            |            |
-   +----+----+       |            |
-   |         |       |            |
-   v         v       |            |
-snap-plan  snap-slice |            |
-(phases)  (issues)   |            |
-   |         |       |            |
-   +---------+-------+------------+
+        +----+       |            |
+        |    |       |            |
+        |    v       |            |
+        | snap-slice |            |
+        |  (issues)  |            |
+        |    |       |            |
+        +----+-------+------------+
                      |
                      v
                 snap-forge
-              (TDD execute)
+          (from PRD, slice, or issue)
                      |
                      v
-                 snap-ship
-               (create PR)
+                 snap-pr
+             (create/update PR)
                      |
                      v
                snap-review
@@ -59,19 +58,19 @@ snap-plan  snap-slice |            |
              (fix + reply)
                      |
                      v
-              back to snap-ship
-            (update PR description)
+               back to snap-pr
+              (update PR body)
 ```
 
 **Enter wherever your clarity starts:**
 
 ```
-Vague idea:             snap-scope → snap-prd → snap-slice → snap-forge → snap-ship → snap-review
-Have PRD, need slices:  snap-slice → snap-forge → snap-ship → snap-review
-Have PRD, need plan:    snap-plan → snap-forge → snap-ship → snap-review
-Have issue, ready:      snap-forge → snap-ship → snap-review
+Vague idea:             snap-scope → snap-prd → snap-slice → snap-forge → snap-pr → snap-review
+Have PRD, ready:        snap-forge → snap-pr → snap-review
+Have PRD, need slices:  snap-slice → snap-forge → snap-pr → snap-review
+Have issue, ready:      snap-forge → snap-pr → snap-review
 Need PR reviewed:       snap-review
-PR got feedback:        snap-resolve → snap-ship
+PR got feedback:        snap-resolve → snap-pr
 ```
 
 ## Install

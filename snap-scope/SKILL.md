@@ -2,21 +2,21 @@
 name: snap-scope
 description: >
   Relentless design interview — walk every branch of the decision tree until
-  shared understanding. Use when user wants to stress-test a plan, challenge an
+  shared understanding. Use when user wants to stress-test an idea, challenge an
   architecture, poke holes in a design, validate an approach, or resolve
-  ambiguity before PRD, planning, or build work.
+  ambiguity before PRD, slicing, or build work.
 ---
 
 # Snap Scope
 
 Read-only thinking space. Relentless design interview. Walk the tree branch-by-branch until ambiguity collapses or becomes explicit.
 
-If given GitHub issue/comment/PR, fetch body and all comments/review threads. Extract refs/URLs from body + comments. Read parent PRD/epic, breakdown comments, plan comments, referenced issues/PRs/discussions/docs that affect goals, scope, acceptance, blockers, or decisions. Recurse through material links; normalize + dedupe canonical refs; keep inaccessible/conflicting context as explicit ambiguity.
+Use current session context first. If given GitHub issue/comment/PR and needed body/comments are not already in session context, fetch them. Extract refs/URLs from available context. Read only missing parent PRD/epic, breakdown comments, referenced issues/PRs/discussions/docs that affect goals, scope, acceptance, blockers, or decisions. Recurse through material links; normalize + dedupe canonical refs; keep inaccessible/conflicting context as explicit ambiguity. Do not refetch artifacts already available in session unless freshness is required or the user asks.
 If code or docs can answer a question, explore before asking.
 
 Interrogate every material branch: goals, constraints, interfaces, boundaries, failure modes, sequencing, tradeoffs. For each question: ask one material thing, attach one recommended answer, stop and wait before the next branch.
 
-Keep going until handoff into PRD, plan, or build work no longer hides material ambiguity.
+Keep going until handoff into PRD, slicing, or build work no longer hides material ambiguity.
 
 Read-only only. No code changes. No documents produced.
 

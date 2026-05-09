@@ -10,29 +10,23 @@ description: >
 
 # Snap PRD
 
-Blueprint first. Explore architecture, interview for intent, publish a PRD another agent can plan from without guesswork.
+Blueprint from existing scope. Explore architecture, publish a PRD another agent can plan from without guesswork.
 
 ## Workflow
 
-1. `Intake:` Infer product area from conversation. If source includes an existing issue/comment/PR/doc, fetch body and all comments/review threads where available. Extract refs/URLs from body + comments. Read parent PRD/epic, related issues/PRs/discussions/docs that affect product intent, scope, users, requirements, blockers, or open questions. Recurse through material links; normalize + dedupe canonical refs. Ask only for missing intent exploration cannot recover.
-2. `Explore:` Read relevant code, tests, routes, schemas, contracts, prior art. Find deep modules, seams, constraints, test patterns.
-3. `Interview:` Resolve problem, users, outcomes, scope, requirements, metrics, durable implementation decisions. Recommend an answer with each question. Keep moving branch-by-branch until ambiguity is explicit, not hidden.
-4. `Draft:` Read `references/contract.md`, then draft with `references/template.md`. Adapt depth to complexity. Apply repo artifact style: terse, technical-dense, label-first. Keep ids stable.
+1. `Source:` Use scoped product context already present in the session. If a GitHub issue/comment/PR/doc is explicitly provided and the needed body/comments are not already in session context, fetch them. If neither session context nor a source ref exists, stop: tell the user to run `snap-scope` first, then rerun `snap-prd` with that context.
+2. `Context:` Extract refs/URLs from available context. Read only missing material links that affect product intent, scope, users, requirements, blockers, or open questions. Recurse as needed; normalize + dedupe canonical refs. Do not refetch artifacts already available in session unless freshness is required or the user asks.
+3. `Explore:` Read relevant code, tests, routes, schemas, public interfaces, prior art. Find deep modules, seams, constraints, test patterns.
+4. `Draft:` Read `references/template.md`, then draft. Adapt depth to complexity. Apply repo artifact style: terse, technical-dense, label-first. Keep ids stable.
 
-## Contract
+## Artifact Rules
 
-Artifact = one GitHub issue shaped by `references/contract.md` and `references/template.md`.
-
-Required:
-- Stable ids: `US-*`, `FR-*`, `NFR-*`
-- Explicit `Implementation Decisions`
-- Explicit `Out of Scope`
-- Explicit `Open Questions`
-
-Default syntax:
-- Headings
-- Label lines
-- Bullets
+- Artifact = one GitHub issue shaped by `references/template.md`.
+- Template owns exact Markdown. `SKILL.md` owns workflow, invariants, and gotchas.
+- Stable ids after publish: `US-*`, `FR-*`, `NFR-*`.
+- User stories stay outcome-led; docs/tests/maintainer chores stay out.
+- Requirements include only requested or repo-grounded public behavior.
+- Missing policy branches go to `Open Questions` or `Out of Scope`, not invented `FR-*`.
 
 ## Lifecycle
 
@@ -51,7 +45,7 @@ Draft in chat first. Iterate until approved. Discover labels and milestones. Cre
 - Artifact prose stays token-thin: dense nouns, low glue
 - Deep modules, narrow interfaces: small capability APIs with rich internal ownership
 - Hexagonal boundaries: business logic owns local ports; adapters translate database, framework, transport, vendor shapes
-- Explore first. Interview on gaps, not discoverable facts
+- Scope interview belongs to `snap-scope`; `snap-prd` does not run its own interview
 - User stories stay outcome-led. Docs/tests/maintainer chores belong in requirements or testing decisions, not as primary capability
 - Do not invent net-new behavior to close ambiguity. Put unresolved policy in `Open Questions` or `Out of Scope`
 - If brief/repo omit thresholds, error payload shape, tie-breakers, normalization policy, keep them out of `FR-*`; recommend in `Open Questions`
@@ -61,4 +55,4 @@ Draft in chat first. Iterate until approved. Discover labels and milestones. Cre
 - When source introduces opt-in params like `include=summary`, do not infer extra absence/presence rules into `FR-*` unless explicitly stated
 - Keep implementation grounding abstract: interfaces, data, boundaries. Skip file paths, helper names, shell commands
 - When repo is mostly docs/no implementation, say that explicitly in `Problem` instead of inferring hidden seams
-- Shape for downstream handoff: `snap-plan`, `snap-slice`, `snap-forge`
+- Shape for downstream handoff: `snap-slice`, `snap-forge`

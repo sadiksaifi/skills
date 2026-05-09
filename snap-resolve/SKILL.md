@@ -13,7 +13,7 @@ Triage, fix, explain, close loop.
 
 ## Workflow
 
-1. `Fetch:` Gather PR title, PR body, PR comments, review threads, review bodies, unresolved thread ids, CI failures. Extract linked refs/URLs from PR body + comments/reviews. For each resolvable issue ref, fetch title/body/comments. Read parent PRD/epic, breakdown comments, plan comments, and referenced issues/PRs/discussions/docs that affect fix scope. Recurse through material scope/acceptance/blocker links. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and closing-keyword forms like `closes`, `fixes`, `resolves`. Normalize + dedupe refs by canonical identity. Route unreadable, invalid, or conflicting refs to `Unsure`.
+1. `Fetch:` Reuse PR/issue context already present in the session. Gather missing PR title, PR body, PR comments, review threads, review bodies, unresolved thread ids, and CI failures. Extract linked refs/URLs from PR body + comments/reviews + session context. For each resolvable issue ref, fetch title/body/comments only when not already available. Read only missing parent PRD/epic, breakdown comments, and referenced issues/PRs/discussions/docs that affect fix scope. Recurse through material scope/acceptance/blocker links as needed. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and closing-keyword forms like `closes`, `fixes`, `resolves`. Normalize + dedupe refs by canonical identity. Route unreadable, invalid, or conflicting refs to `Unsure`.
 2. `Explore:` Read fetched PR/issue context first, then affected code, tests, patterns before touching fixes.
 3. `Categorize:` Split into `[FIX]` and `[EXPLAIN]`. Scope decisions against PR intent + linked issue context. Use TDD for substantive fixes. Use direct fixes for trivia.
 
@@ -31,7 +31,7 @@ Checkpoint shape:
 - `[EXPLAIN]` = rationale-only decisions, scope calls, or reviewer answers with no code-change promise. May cite PR or linked issue scope.
 - `Unsure` = unreadable/invalid/conflicting issue refs, linked issues with inaccessible bodies, PR↔issue scope conflicts, or reviewer asks whose fit cannot be resolved from fetched context.
 
-After approval: execute fixes, push once, reply to every reviewer using the fix/explain reply patterns, resolve addressed threads, suggest `/snap-ship`.
+After approval: execute fixes, push once, reply to every reviewer using the fix/explain reply patterns, resolve addressed threads, suggest `/snap-pr`.
 
 ## GitHub Hash Links
 
@@ -66,7 +66,7 @@ Rules:
 - Every reviewer gets a reply
 - Fix replies must follow the `Addressed ... from ... in ...` pattern with a `Verified:` command list
 - Commit hashes in fix replies must use GitHub commit links
-- Fetch PR/issue context before categorization. No blind review triage.
+- Load PR/issue context before categorization, reusing session context before fetching. No blind review triage.
 - Linked issue discovery comes from PR body, PR comments, review bodies, review threads, and closing-keyword forms. Support `#123`, `owner/repo#123`, full GitHub issue URLs, and forms like `closes`, `fixes`, `resolves`.
 - Normalize + dedupe linked issues by canonical `owner/repo#number`.
 - Invalid, unreadable, or conflicting linked issue context goes to `Unsure`, not silent skip.

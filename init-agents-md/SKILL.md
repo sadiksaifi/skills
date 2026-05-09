@@ -18,19 +18,16 @@ Bootstrap repo intelligence. Explore first. Interview on gaps. Emit a dense, low
 
 2. Interview Ask only for missing philosophy, contradictory signals, or intent code cannot reveal. Recommend defaults from evidence.
 
-3. Draft Read `references/contract.md`, then draft with `references/template.md`. Write the artifact in repo style: terse, technical-dense, label-first.
+3. Read `references/template.md`, then draft. Write the artifact in repo style: terse, technical-dense, label-first.
 
-## Contract
+## Artifact Rules
 
-Artifact = one project-level AGENTS.md shaped by `references/contract.md` and `references/template.md`.
-
-Default sections:
-- `## Commands`
-- `## Architecture`
-- `## Design Principles`
-- `## Sharp Edges` when the repo has non-obvious traps worth front-loading
-
-Use fewer when repo is tiny. Use more only for a truly orthogonal concern.
+- Artifact = one project-level AGENTS.md shaped by `references/template.md`.
+- Template owns exact Markdown. `SKILL.md` owns workflow, invariants, and gotchas.
+- Keep only information that helps future agents act inside the repo.
+- Use fewer sections when enough; add one only for an orthogonal concern.
+- Prefer stable repo patterns over volatile snapshot detail.
+- Use `Sharp Edges` for high-cost gotchas only.
 
 ## Lifecycle
 

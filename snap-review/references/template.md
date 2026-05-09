@@ -1,10 +1,9 @@
 # Snap Review PR Comment Template
 
-Use for GitHub PR review body/comment after user approval.
+Use the exact Markdown inside `<template>` for a GitHub PR review body/comment after user approval.
 
-## Body
+<template>
 
-```markdown
 Findings
 
 [ordered findings, or `No Findings`]
@@ -22,7 +21,8 @@ Risks / Unknowns
 [merge risks, validation notes, inaccessible/conflicting context, or `None`]
 
 *Reviewed by [agent-name](agent-url) using [skill:snap-review](skill-url)*
-```
+
+</template>
 
 ## Attribution
 

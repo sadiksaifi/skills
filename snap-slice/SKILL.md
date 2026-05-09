@@ -14,26 +14,28 @@ Work-packet generator. Read PRD, cut thin vertical slices, map every requirement
 
 ## Workflow
 
-1. `Source:` Read PRD issue body and all comments. Pull parent context from conversation when available. Extract refs/URLs from body + comments. Read parent PRD/epic, breakdown comments, plan comments, referenced issues/PRs/discussions/docs that affect slicing, coverage, blockers, or acceptance. Recurse through material scope/acceptance/blocker links; normalize + dedupe canonical refs; route inaccessible/conflicting context to `Open Questions` or explicit blockers.
-2. `Explore:` Read seams, module boundaries, integration points, prior art. Slice along architecture, not by layer. Recover implied semantics from current code, fixtures, tests before declaring ambiguity.
-3. `Draft:` Read `references/contract.md`, then draft with `references/template.md`. Prefer AFK slices. Keep titles stable. Assign stable `Slice N` staging ids. Cover every `FR-*` and `NFR-*`. Write in repo style: terse, technical-dense, label-first.
+1. `Source:` Use PRD/slicing context already present in the session. If a PRD issue/comment/doc is explicitly provided and the needed body/comments are not already in session context, fetch them. If neither session context nor source ref exists, stop and ask for PRD context or a PRD issue; do not discover scope from scratch.
+2. `Context:` Extract refs/URLs from available context. Read only missing material links that affect slicing, coverage, blockers, or acceptance. Recurse as needed; normalize + dedupe canonical refs; route inaccessible/conflicting context to `Open Questions` or explicit blockers. Do not refetch artifacts already available in session unless freshness is required or the user asks.
+3. `Explore:` Read seams, module boundaries, integration points, prior art. Slice along architecture, not by layer. Recover implied semantics from current code, fixtures, tests before declaring ambiguity.
+4. `Draft:` Read only the needed template: `references/breakdown-initial-template.md`, `references/breakdown-final-template.md`, or `references/slice-issue-template.md`. Prefer AFK slices. Keep titles stable. Assign stable `Slice N` staging ids. Cover every `FR-*` and `NFR-*`. Write in repo style: terse, technical-dense, label-first.
 
 ## Decision Gate
 
-- If source PRD has no `Open Questions`, do not create `HITL` contract-ratification slices.
-- If source PRD says a contract point is undecided, do not resolve it from fixtures/tests/code. Keep that branch blocked behind `HITL`.
+- If source PRD has no `Open Questions`, do not create `HITL` ratification slices.
+- If source PRD says a policy point is undecided, do not resolve it from fixtures/tests/code. Keep that branch blocked behind `HITL`.
 - Repo truth can fill gaps only when PRD leaves no explicit uncertainty signal.
 
-## Contract
+## Artifact Rules
 
-Artifacts = PRD breakdown comment + slice issues shaped by `references/contract.md` and `references/template.md`.
-
-Shared nouns:
-- `US-*`, `FR-*`, `NFR-*`
-- `Type: AFK | HITL`
-- `Size: S | M | L`
-- `Blocked by:`
-- `Best after:`
+- Artifacts = PRD breakdown comment + slice issues shaped by topic-specific templates.
+- Template files own exact Markdown. `SKILL.md` owns workflow, invariants, and gotchas.
+- Initial breakdown: `references/breakdown-initial-template.md`.
+- Final breakdown: `references/breakdown-final-template.md`.
+- Slice issue: `references/slice-issue-template.md`.
+- `Slice N` ids are staging/display metadata before issue creation; GitHub `#N` refs are canonical after creation.
+- `Blocked by:` is hard execution prerequisite; `Best after:` is soft sequencing and never a graph edge.
+- Final blocker fields use issue refs only: `#N`, `[#N](<url>)`, or `none`.
+- Before final publish/update, validate every issue-local `Blocked By` set against final graph incoming edges by issue ref; fail on mismatch.
 
 ## Lifecycle
 
@@ -53,11 +55,11 @@ Draft slice set in chat first. Review merges, splits, blockers, and HITL edges. 
 - Coverage complete: every `FR-*` and `NFR-*` lands somewhere
 - AFK by default
 - Use `HITL` only for irreducible product/policy ambiguity. If PRD + repo truth already pin semantics tightly enough to implement, keep slices `AFK`
-- Closed PRD beats repo omission. If prompt defines enums/behavior and does not expose `Open Questions`, first slice should encode the seam and implementation contract, not ask for ratification
-- Unresolved product or contract policy becomes `HITL` slice or explicit blocker, not silent assumption inside AFK work
-- Localize ambiguity. Only slices that consume the unresolved contract should block on it; unrelated behaviors stay `AFK` and parallel
+- Closed PRD beats repo omission. If prompt defines enums/behavior and does not expose `Open Questions`, first slice should encode the seam and implementation policy, not ask for ratification
+- Unresolved product or API policy becomes `HITL` slice or explicit blocker, not silent assumption inside AFK work
+- Localize ambiguity. Only slices that consume the unresolved policy should block on it; unrelated behaviors stay `AFK` and parallel
 - `Open Questions` outrank fixture hints. Do not turn an explicitly unresolved rule into an AFK seam because current data suggests one implementation
-- When filter and summary share only an upstream classifier/contract seam, block both on that seam. Do not make summary wait for filter implementation
+- When filter and summary share only an upstream classifier seam, block both on that seam. Do not make summary wait for filter implementation
 - Do not create standalone AFK seam/foundation slices. Fold seam work into the earliest user-visible behavior slice unless the slice is `HITL` or itself the user-visible deliverable
 - `Blocked by:` means real execution dependency, not shared file touch. Independent query params and orthogonal behaviors stay parallel
 - `Best after:` means sequencing preference only. Never treat it as a blocker or graph edge
@@ -65,8 +67,8 @@ Draft slice set in chat first. Review merges, splits, blockers, and HITL edges. 
 - Slice issue `Blocked By` uses only `#N`/issue links or `none`; never `Slice N`, title-only labels, or stale parent graph prose
 - Before publishing final slice issues or breakdown edits, compare every issue-local `Blocked By` set against the final PRD dependency graph by issue ref. Fail on mismatch
 - Use label lines + bullets. No markdown tables
-- Put shared derivation/contract guardrails in earliest slice; downstream slices block on that seam
-- Do not invent contract-ratification slices for standard cases with no open questions
+- Put shared derivation/policy guardrails in earliest slice; downstream slices block on that seam
+- Do not invent ratification slices for standard cases with no open questions
 - Docs/tests ride with the behavior slice they validate. Do not create chores-only slices unless the doc artifact itself is the user-visible deliverable
 - Artifact prose stays token-thin: dense nouns, low glue
 - Thin over thick

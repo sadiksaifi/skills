@@ -1,8 +1,9 @@
 # AGENTS Template
 
-Three sections by default. Dense. Field-oriented. No preamble.
+Use the exact Markdown inside `<template>` as the default AGENTS.md shape. Omit irrelevant bullets and `## Sharp Edges` when no real traps exist.
 
-```markdown
+<template>
+
 ## Commands
 
 - `<run> dev` — [main dev loop]
@@ -31,6 +32,11 @@ Three sections by default. Dense. Field-oriented. No preamble.
 - [high-cost gotcha]
 - [ordering constraint or brittle workflow]
 - [unsafe path, hidden invariant, or flaky flow]
-```
 
-Use actual commands only. Omit empty lines. Collapse irrelevant bullets. Use `## Sharp Edges` only when the repo has real traps worth front-loading.
+</template>
+
+Rules:
+- Use actual commands only.
+- Omit empty lines.
+- Collapse irrelevant bullets.
+- Use `## Sharp Edges` only when the repo has real traps worth front-loading.
