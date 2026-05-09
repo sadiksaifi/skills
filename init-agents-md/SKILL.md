@@ -1,43 +1,39 @@
 ---
 name: init-agents-md
 description: >
-  Create, regenerate, or refine a project AGENTS.md. Use when user wants
-  project-level agent instructions, repo context for future agents, or a stale
-  AGENTS.md rewritten into a denser, more useful form. Trigger on
+  Create, regenerate, or refine AGENTS.md repo instruction scopes. Use for
+  project agent instructions, monorepo instruction layouts, stale AGENTS.md
+  rewrites, instruction aliases, or bootstrap agent context. Trigger on
   "/init-agents-md", "write AGENTS.md", "fix AGENTS.md", "project AI
-  instructions", "bootstrap agent context", or equivalent phrasing.
+  instructions", or equivalent phrasing.
 ---
 
 # init-agents-md
 
-Bootstrap repo intelligence. Explore first. Interview on gaps. Emit a dense, low-noise AGENTS.md future agents can work from.
+`AGENTS.md` is canonical: root = repo defaults, nested = subtree deltas; parent applies unless local overrides, nearest wins, user wins. Add scopes for behavior splits, not folder taxonomy; `CLAUDE.md` is inventory context/optional alias.
 
-## Workflow
+## Flow
 
-1. Explore Read manifests, task runners, lockfiles, top-level docs, existing agent files, repo layout, tests, and deploy/tooling seams. Derive as much as code can tell. Use subagents for large repos.
+1. Inventory
+   - Find all `AGENTS.md`/`CLAUDE.md` with available search tools (`fd`, `find`, `rg`, glob); include symlinks/hidden paths when relevant.
+   - For each path: record link target and resolved realpath.
+   - Same realpath = aliases; read once. Distinct real files = read both as context.
 
-2. Interview Ask only for missing philosophy, contradictory signals, or intent code cannot reveal. Recommend defaults from evidence.
+2. Explore
+   - Read manifests, workspace config, lockfiles, scripts, docs, tests, deploy seams, generated paths, domain seams.
 
-3. Read `references/template.md`, then draft. Write the artifact in repo style: terse, technical-dense, label-first.
+3. Decide files
+   - Classify: single-root, multi-scope, domain-scoped, divergent monorepo.
+   - Show before drafting: `path | purpose | template | action`.
+   - Ask only for missing intent, conflicts, or risky overwrite.
 
-## Artifact Rules
+4. Draft AGENTS.md
+   - `references/single-root-template.md` — one repo-wide scope.
+   - `references/multi-scope-root-template.md` — root defaults plus nested scopes.
+   - `references/scoped-template.md` — subtree deltas.
 
-- Artifact = one project-level AGENTS.md shaped by `references/template.md`.
-- Template owns exact Markdown. `SKILL.md` owns workflow, invariants, and gotchas.
-- Keep only information that helps future agents act inside the repo.
-- Use fewer sections when enough; add one only for an orthogonal concern.
-- Prefer stable repo patterns over volatile snapshot detail.
-- Use `Sharp Edges` for high-cost gotchas only.
-
-## Lifecycle
-
-Show draft in chat first. Iterate until right. If project already has AGENTS, show diff before overwrite.
-
-## Principles
-
-- Explore-first. Ask on gaps.
-- Positive protocol over defensive prose.
-- Dense nouns over tutorial glue.
-- Document stable working rules, not config trivia.
-- Surface costly gotchas explicitly when they change agent behavior.
-- Shape for future agent handoff, not human onboarding prose.
+5. Apply
+   - Show draft first; diff before overwrite; write AGENTS.md only.
+   - After writes, show final AGENTS.md paths.
+   - Ask: “Do you want cleanup: create CLAUDE.md symlinks beside these AGENTS.md files and remove old AGENTS.md/CLAUDE.md files?”
+   - Before removing or replacing any real file, show the exact path and require explicit yes.
