@@ -1,48 +1,38 @@
 # SNAP Skills Repo
 
-SNAP = SNAP's Not A Prompt. Repo holds self-contained agent units.
+SNAP = SNAP's Not A Prompt. Portable, self-contained Agent Skills.
 
-## Repo Rules
+Spec: https://agentskills.io/specification
 
-- Keep this file evergreen. No inventories of current units, paths, or named workflows.
-- Put volatile detail near the unit it governs, not here.
-- Local instructions nearest the change own the truth.
-- Keep units self-contained. Small intentional duplication beats brittle cross-unit coupling.
-- Write rules for future unknown units too, not only current repo shape.
+## Repo Contract
 
-## Writing Style
+Follow Agent Skills spec unless local repo rules override. Keep this file evergreen: repo invariants only; no skill inventories, path indexes, workflow lists, or volatile detail. Local skill files own task semantics, activation triggers, output contracts, templates, examples, scripts, references, assets, and gotchas. Nearest instruction wins. Prefer self-contained skills; small intentional duplication beats cross-skill coupling.
 
-- Dense technical wording. Fewer tokens, more signal.
-- Sacrifice grammar for precision.
-- Heavy nouns over filler.
-- Positive protocol: define right shape; skip anti-shape prose.
-- Headings, label lines, bullets over paragraph mass.
-- Wrap frontmatter at about 80 chars. Do not force 80-char wrapping elsewhere.
+## Skill Layout
 
-## Artifact Style
+`skill-name/` contains required `SKILL.md`; optional `scripts/`, `references/`, `assets/`, and skill-local files. `SKILL.md` contains YAML frontmatter followed by Markdown instructions.
 
-When an agent produces a durable artifact, apply same style inside the artifact:
+| Field | Constraints |
+| --- | --- |
+| `name` | Required. 1–64 chars. Lowercase letters, numbers, hyphens. No leading/trailing hyphen. No `--`. Must match parent directory. |
+| `description` | Required. 1–1024 chars. What the skill does, when to use it, concrete trigger terms. |
 
-- terse
-- token-thin
-- concrete
-- implementation-aware
-- handoff-ready
+Keep `SKILL.md` activation-critical: frontmatter, core procedure, resource map, execution-critical gotchas. Move long docs to `references/`, reusable output material to `assets/`, deterministic helpers to `scripts/`. Budget `<500` lines, `<5k` tokens preferred. Use skill-root-relative paths. Keep references one-level deep; avoid nested reference chains.
 
-Default:
-- technical nouns over narrative glue
-- fields, ids, enums, interfaces over broad prose
-- constraints, non-goals, out-of-scope only when they are task semantics
+## Authoring Contract
 
-Avoid:
-- broad adjectives
-- motivational filler
-- tutorial prose
-- repeated caveats
-- defensive prohibition lists unless safety-critical
+Dense technical handoff: high signal/low token, terse concrete nouns, implementation-aware steps, fields/ids/enums/interfaces, explicit scope, constraints, gotchas, templates. Prefer headings, labels, bullets, tables, positive protocol. Skip tutorial prose, motivational filler, broad adjectives, repeated caveats, redundant restatement, defensive prohibition lists unless safety-critical. Wrap frontmatter near 80 chars; do not force 80-char wrapping elsewhere.
 
-## Editing Guidance
+## Output Contract
 
-- Before editing any unit, read its local instructions, contracts, and templates.
-- If a behavior should persist for future agents, encode it in the local unit instructions, not only in conversation.
-- Keep repo-level guidance generic; push schemas, templates, and examples downward.
+Skill outputs follow owning skill contract. Artifact language matches consumer: machine-bound artifacts are structured, deterministic, parseable; human-reviewed artifacts are reviewer-ready, natural, concise, and technically exact. Preserve exact ids, paths, commands, diffs, risks, decisions, and next actions. Durable repo artifacts inherit this style unless local skill defines another format.
+
+## Script + Eval Contract
+
+Scripts: non-interactive, deterministic where practical, flag/stdin/env driven, useful `--help`, clear failure, structured stdout, diagnostics stderr, dependency-light or dependency-documented, safe from repo-root and skill-root execution contexts.
+
+Eval: behavior-sensitive skills may keep curated eval definitions near the skill. Do not commit eval run artifacts, traces, model outputs, temp files, secrets, or generated eval results. Never push generated eval results to git/GitHub.
+
+## Editing Contract
+
+Before skill edits, read nearest local instructions, contracts, templates, and referenced procedures required by the change. Persistent behavior belongs in local skill instructions, not chat context. Repo-level guidance stays generic; skill-specific schemas, examples, workflows, fixtures, and volatile rules live near the skill.
