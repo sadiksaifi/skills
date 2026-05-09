@@ -1,15 +1,2 @@
 node_modules/
 **/evals/**
-
-*
-
-!.gitignore
-!README.md
-!AGENTS.md
-!CLAUDE.md
-!bun.lock
-!package.json
-!scripts
-
-!snap-*
-!init-agents-md
