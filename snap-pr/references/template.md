@@ -1,26 +1,38 @@
 # PR Template
 
-Use the exact Markdown inside `<template>` when the repo has no PR template. Replace placeholders from diff truth only.
+Use the Markdown inside `<template>` as the fallback PR body.
+Always include `## QA`, even when the repo PR template does not have one.
+Omit `## Closes` when no closing issue refs are known.
+
+<qa-guidance>
+Write QA as a manual reviewer walkthrough, not a test transcript.
+
+Good QA:
+- Open the settings page, turn email notifications off, save, then refresh. The toggle should stay off and no confirmation email should be sent.
+
+Bad QA:
+- Run `pnpm test`.
+- Verify `expect(response.status).toBe(200)`.
+- Check that `POST /api/settings` returns `{ "ok": true }`.
+</qa-guidance>
 
 <template>
 
 ## Summary
 
-- [what changed]
+- [brief outcome-focused summary]
 
 ## Changes
 
-- [behavior or subsystem delta]
+- [behavior or subsystem change]
 
 ## Test Plan
 
-- [automated verification]
+- [automated verification performed]
 
 ## QA
 
-- [manual reviewer flow: context -> action -> visible result]
-- [review docs or UX surface manually; avoid tests/test execution, `expect`, raw payload snapshots, or copied endpoint matrices]
-- [for CLI/API-only work, describe scenario/result, not imperative rerun commands]
+- [manual reviewer scenario: start here, do this, expect this result]
 
 ## Closes
 
