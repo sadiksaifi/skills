@@ -1,12 +1,12 @@
 # SNAP — SNAP's Not A Prompt
 
-Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: scope it, spec it, slice it, forge it, PR it, review it, resolve it.
+Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: shape the idea, spec it, slice it, forge it, PR it, review it, resolve it.
 
 ## Skills
 
 | Skill | Purpose |
 |-------|---------|
-| `snap-scope` | Relentless design interview — stress-test plans and architectures |
+| `snap-idea` | Relentlessly interview ideas, plans, and designs until shared understanding |
 | `snap-prd` | Write PRDs from scoped context + codebase exploration → GitHub issue |
 | `snap-slice` | Break a PRD into vertical slice issues with FR/NFR coverage mapping |
 | `snap-forge` | Strict TDD execution — RED-GREEN-VERIFY-COMMIT, refactor at end |
@@ -24,7 +24,7 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
    Need a PRD?   Have issue?   Small fix?
         |            |            |
         v            |            |
-   snap-scope        |            |
+   snap-idea         |            |
    (stress-test)     |            |
         |            |            |
         v            |            |
@@ -65,7 +65,7 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
 **Enter wherever your clarity starts:**
 
 ```
-Vague idea:             snap-scope → snap-prd → snap-slice → snap-forge → snap-pr → snap-review
+Vague idea:             snap-idea → snap-prd → snap-slice → snap-forge → snap-pr → snap-review
 Have PRD, ready:        snap-forge → snap-pr → snap-review
 Have PRD, need slices:  snap-slice → snap-forge → snap-pr → snap-review
 Have issue, ready:      snap-forge → snap-pr → snap-review
