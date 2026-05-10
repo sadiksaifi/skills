@@ -73,7 +73,7 @@ Route reference files own execution steps, templates, examples, and route-local 
 ## Examples
 
 ```text
-/skill:snap-scope topic="agent skill arguments" deep
+/skill:snap-idea topic="agent skill arguments" deep
 ```
 
 ```json

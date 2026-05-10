@@ -1,14 +1,14 @@
 # SNAP — SNAP's Not A Prompt
 
-Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: shape the idea, spec it, slice it, forge it, PR it, review it, resolve it.
+Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: shape ideas, write PRDs, create issues, forge changes, open PRs, review, and resolve feedback.
 
 ## Skills
 
 | Skill | Purpose |
 |-------|---------|
 | `snap-idea` | Relentlessly interview ideas, plans, and designs until shared understanding |
-| `snap-prd` | Write PRDs from scoped context + codebase exploration → GitHub issue |
-| `snap-slice` | Break a PRD into vertical slice issues with FR/NFR coverage mapping |
+| `snap-prd` | Turn current context and repo understanding into an implementation-ready PRD GitHub issue |
+| `snap-issues` | Turn conversation, PRD, or spec context into independently grabbable vertical GitHub issues |
 | `snap-forge` | Strict TDD execution — RED-GREEN-VERIFY-COMMIT, refactor at end |
 | `snap-pr` | Create GitHub PRs from current branch commits; update with `--update` |
 | `snap-review` | Read-only PR review — findings-first bugs, regressions, missing tests |
@@ -16,61 +16,55 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
 
 ## Workflow
 
-```
-              You have an idea
-                     |
-        +------------+------------+
-        |            |            |
-   Need a PRD?   Have issue?   Small fix?
-        |            |            |
-        v            |            |
-   snap-idea         |            |
-   (stress-test)     |            |
-        |            |            |
-        v            |            |
-    snap-prd         |            |
-    (write PRD)      |            |
-        |            |            |
-        +----+       |            |
-        |    |       |            |
-        |    v       |            |
-        | snap-slice |            |
-        |  (issues)  |            |
-        |    |       |            |
-        +----+-------+------------+
-                     |
-                     v
-                snap-forge
-          (from PRD, slice, or issue)
-                     |
-                     v
-                 snap-pr
-             (create/update PR)
-                     |
-                     v
-               snap-review
-            (read-only review)
-                     |
-                 feedback?
-                     |
-                     v
-               snap-resolve
-             (fix + reply)
-                     |
-                     v
-               back to snap-pr
-              (update PR body)
+Use the skills independently or chain them when useful. Enter wherever your context is already clear.
+
+```text
+                    Any starting context
+        (conversation / PRD / spec / GitHub issue)
+                              |
+        +---------------------+---------------------+
+        |                     |                     |
+  Unclear idea           Need a PRD          Need issues
+        |                     |                     |
+        v                     v                     v
+   snap-idea ------------> snap-prd ----------> snap-issues
+        |                     |                     |
+        +---------------------+---------------------+
+                              |
+                         Ready issue
+                              |
+                              v
+                         snap-forge
+                         (TDD build)
+                              |
+                              v
+                           snap-pr
+                     (create/update PR)
+                              |
+                              v
+                        snap-review
+                              |
+                         feedback?
+                         /       \
+                       no         yes
+                       |           |
+                       v           v
+                     done    snap-resolve
+                                   |
+                                   v
+                              snap-pr
+                            (update PR)
+                                   |
+                                   +------ back to snap-review
 ```
 
-**Enter wherever your clarity starts:**
+Common paths:
 
-```
-Vague idea:             snap-idea → snap-prd → snap-slice → snap-forge → snap-pr → snap-review
-Have PRD, ready:        snap-forge → snap-pr → snap-review
-Have PRD, need slices:  snap-slice → snap-forge → snap-pr → snap-review
-Have issue, ready:      snap-forge → snap-pr → snap-review
-Need PR reviewed:       snap-review
-PR got feedback:        snap-resolve → snap-pr
+```text
+Idea to implementation: snap-idea → snap-prd → snap-issues → snap-forge → snap-pr
+PRD/spec to issues:     snap-issues → snap-forge → snap-pr
+Issue to PR:            snap-forge → snap-pr → snap-review
+Feedback loop:          snap-review → snap-resolve → snap-pr → snap-review
 ```
 
 ## Install
