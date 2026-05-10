@@ -8,11 +8,9 @@ description: >
   instructions", or equivalent phrasing.
 ---
 
-# init-agents-md
-
 `AGENTS.md` is canonical: root = repo defaults, nested = subtree deltas; parent applies unless local overrides, nearest wins, user wins. Add scopes for behavior splits, not folder taxonomy; `CLAUDE.md` is inventory context/optional alias.
 
-## Flow
+## Process
 
 1. Inventory
    - Find all `AGENTS.md`/`CLAUDE.md` with available search tools (`fd`, `find`, `rg`, glob); include symlinks/hidden paths when relevant.
