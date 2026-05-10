@@ -1,56 +1,59 @@
 # PRD Template
 
-Use the exact Markdown inside `<template>` as the PRD issue body. Adapt bracketed placeholders; keep section order unless the feature is tiny and omission improves clarity.
+Use the Markdown inside `<template>` as the GitHub issue body.
 
 <template>
 
-# [Feature Title]
+## Problem Statement
 
-## Problem
-- Who is blocked
-- What is missing or broken
-- Why now
-- [if repo is docs-only or lacks implementation, say so plainly]
+The problem that the user is facing, from the user's perspective.
 
 ## Solution
-- User-visible change
-- Core system behavior
+
+The solution to the problem, from the user's perspective.
 
 ## User Stories
-- `US-1:` As a [user], I want [capability], so that [outcome]
-- [keep docs/tests/maintainer chores out of primary stories]
 
-## Functional Requirements
-- `FR-1:` [specific, testable behavior]
-- [only requested or repo-grounded behavior; leave missing policy in `Open Questions`]
-- [do not encode inferred setup rules, derivation formulas, zero-count semantics, or argument-count policy without source proof]
-- [do not invent `total` semantics, line-oriented output rules, or network/file-write constraints without source proof]
-- [do not infer extra response-presence rules for opt-in params unless source states them]
+A long, numbered list of user stories. Each user story should be in the format:
 
-## Non-Functional Requirements
-- `NFR-1:` [latency, security, reliability, auditability, cost, etc.]
+1. As an <actor>, I want a <feature>, so that <benefit>
+
+<user-story-example>
+1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending.
+</user-story-example>
+
+This list should be extensive and cover all aspects of the feature.
 
 ## Implementation Decisions
-- `Interfaces:` [routes, commands, events, APIs]
-- `Data:` [models, schemas, ids]
-- `Boundaries:` [modules, services, integrations]
-- [keep repo grounding abstract; skip file paths/helpers/command transcripts]
+
+A list of implementation decisions that were made. This can include:
+
+- The modules that will be built or modified
+- The interfaces of those modules
+- Technical clarifications from the user
+- Architectural decisions
+- Schema changes
+- API contracts
+- Specific interactions
+
+Do not include specific file paths or code snippets. They may become outdated.
+
+Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can, inline only the decision-rich part and note that it came from a prototype.
 
 ## Testing Decisions
-- Public-interface test shape
-- Modules to exercise
-- Prior art worth copying
 
-## Success Metrics
-- `Metric:` [name]
-  `Current:` [baseline]
-  `Target:` [goal]
-  `Measure:` [how to measure]
+A list of testing decisions that were made. Include:
+
+- What external behavior should be tested
+- Which modules should be tested
+- Prior art for tests in the codebase
 
 ## Out of Scope
-- Deferred work
 
-## Open Questions
-- Owner + unresolved decision; keep unchosen policy branches here, not in `FR-*`
+Things intentionally excluded from this PRD.
+
+## Further Notes
+
+Anything important that does not fit elsewhere.
 
 </template>
