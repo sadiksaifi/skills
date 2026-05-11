@@ -34,6 +34,8 @@ Create or update a GitHub pull request from the current branch's committed work.
 4. Write PR:
    - create: use session context first; inspect `base...HEAD` only when context is missing
    - update: inspect `base...HEAD`
+   - use commits as evidence only; do not list commit subjects, hashes, or counts in the PR body unless the user explicitly asks
+   - describe `## Changes` by user-visible behavior, subsystem, or review area rather than by commit chronology
    - use the repo PR template when present; always include the QA section from `references/template.md`; if no repo PR template exists, use `references/template.md` as the fallback template
 
 5. Publish:
