@@ -36,4 +36,4 @@ Resolve GitHub PR feedback and failing checks. One checkpoint before execution u
 
 5. Execute approved fixes. Use `references/tdd-cycle.md` for substantive fixes and direct edits for trivial fixes. Commit each fix atomically.
 
-6. Reply inline and resolve addressed threads using `references/thread-resolution.md`. Push once, then report commits, verification, replies, and remaining unresolved items.
+6. Reply using `references/thread-resolution.md`: use true review-thread inline replies when a thread endpoint exists; for top-level PR comments, post a quote-reply comment that quotes the relevant original feedback. Resolve addressed review threads only after replying. Push once, then report commits, verification, replies, and remaining unresolved items.
