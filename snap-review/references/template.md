@@ -1,49 +1,40 @@
-# Snap Review PR Comment Template
+# Review Template
 
-Use the exact Markdown inside `<template>` for a GitHub PR review body/comment after user approval.
+Use the Markdown inside `<template>` as the GitHub PR review body after user approval.
+Any review finding — bug, test, architecture, security, performance — goes under `Findings` if it has concrete impact.
+Use `No Findings` only when no material issue is found.
+
+Priority:
+- `P0` — blocks merge: data loss, security/privacy exposure, broken core path, or unrecoverable failure
+- `P1` — likely user-visible regression, contract violation, or important missing test
+- `P2` — edge-case regression, brittle behavior, architecture drift, or maintainability risk with plausible impact
+- `P3` — minor issue worth fixing; no style-only findings
+
+Finding shape:
+
+```md
+### P1 — [short finding title]
+
+- `Location:` [file:line or area]
+- `Issue:` [what is wrong]
+- `Impact:` [why it matters]
+- `Evidence:` [how to reproduce or verify the issue from diff, code path, test, command, or linked context]
+```
 
 <template>
 
-Findings
+## Findings
 
-[ordered findings, or `No Findings`]
+[priority-labeled findings, or `No Findings`]
 
-Missing Tests
+## Missing Tests
 
 [material coverage gaps, or `None`]
 
-Architecture
+## Risks / Unknowns
 
-[optional: architectural drift, boundary violations, shallow wrappers, or future-change risk; omit when none]
+[merge risks, inaccessible/conflicting context, or `None`]
 
-Risks / Unknowns
-
-[merge risks, validation notes, inaccessible/conflicting context, or `None`]
-
-*Reviewed by [agent-name](agent-url) using [skill:snap-review](skill-url)*
+*Reviewed using [skill:snap-review](https://github.com/sadiksaifi/skills/blob/main/snap-review/SKILL.md)*
 
 </template>
-
-## Attribution
-
-Harness identity is self-detected by the running agent/harness. Do not ask user.
-Prefer known harness URL when identity is clear:
-
-- Pi: `[pi](https://pi.dev)`
-- Claude Code: `[Claude Code](https://code.claude.com/docs/en/quickstart)`
-- Codex: `[Codex](https://developers.openai.com/codex/cli)`
-- OpenCode: `[OpenCode](https://opencode.ai)`
-
-Skill URL:
-
-- `[skill:snap-review](https://github.com/sadiksaifi/skills/blob/refactor/skills/snap-review/SKILL.md)`
-
-## Posting
-
-- Ask user before posting: `Post this review to the PR?`
-- If yes, post as a GitHub PR review/comment body.
-- Preserve the exact reviewed findings. Do not add new findings while posting.
-- Append attribution as final line.
-- Capture the new review/comment `html_url` in the posting call or query it immediately after posting.
-- Final chat response after a successful post: `Posted review: <review/comment URL>`.
-- Do not report posting complete without the link unless GitHub API retrieval fails.

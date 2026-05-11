@@ -1,64 +1,34 @@
 ---
 name: snap-review
 description: >
-  Read-only PR review. Use when user wants a pull request reviewed for bugs,
-  regressions, missing tests, or merge risk before asking humans to review or
-  before resolving feedback. Trigger on "snap-review", "review this PR",
-  "review the PR", "PR review", "check this pull request".
+  Review a GitHub pull request in read-only mode for material bugs,
+  regressions, missing tests, architecture drift, security/privacy risk,
+  performance risk, and merge blockers. Use when the user wants a PR reviewed
+  before merge or before posting feedback.
 ---
 
-# Snap Review
+Review a GitHub pull request in read-only mode. Findings first; no code edits.
 
-Deep reviewer pass from diff truth. Read-only. Findings first. Bias toward negative discovery: bugs, regressions, broken contracts, missing tests, bad patterns, maintainability traps, architectural drift, security/privacy risk, performance risk, and merge blockers.
+## Process
 
-## Workflow
+1. Find the PR from current branch/session context, or ask for one.
 
-1. `Source:` Use PR context already present in the session, current branch, or ask. Prefer `gh pr view` for missing title, body, base/head refs, changed files, commits, status checks, review state, comments, review bodies, and review threads. Use `gh pr diff` or `git diff base...head` for patch truth. Parse linked refs/URLs from PR body + comments/reviews + session context, including `#123`, `owner/repo#123`, full GitHub issue URLs, and closing-keyword forms like `closes`, `fixes`, `resolves`. Fetch linked issue bodies/comments and parent PRD/epic links only when not already available. Recurse through material scope/acceptance/blocker links as needed; normalize + dedupe canonical refs; route inaccessible/conflicting context to `Risks / Unknowns`.
-2. `Explore:` Read PR/issue intent first, then changed code, adjacent contracts, tests, fixtures, docs, and runtime seams. Run read-only validation commands only when they sharpen review confidence.
-3. `Review:` Run an in-depth negative review, not a skim. Hunt defects, regressions, bad patterns, missing tests, brittle seams, architectural drift, security/privacy risk, performance risk, and maintainability debt with concrete impact. Check behavior against PR intent + linked issues + existing contracts + repo instructions (`AGENTS.md`, `CLAUDE.md`, local conventions). Trace changed paths through callers, data shape, validation, errors, persistence, concurrency, auth, compatibility, deployment/runtime behavior, tests, and architectural boundaries.
-4. `Architecture pass:` Explicitly inspect deep-module shape and hexagonal boundaries before reporting. Look for shallow wrappers, pass-through layers, anemic public APIs, domain leakage into adapters, adapter/vendor/framework/database shapes crossing into business logic, duplicated policy, and seams that make future changes harder. File findings when the drift creates maintainability, correctness, testability, or future-change risk.
-5. `Report:` Output findings first. No code edits. No commits. No pushes. After the review is complete, ask: `Post this review to the PR?`
-6. `Post:` If user approves, read `references/template.md`, self-detect harness identity, append attribution, then post the same review body to the GitHub PR. Capture the posted review/comment URL and return it to the user. Do not change findings while posting.
+2. Gather full review context: PR title/body, base/head refs, changed files, commits, checks, diff, comments, reviews, review threads, and all comment replies. Follow linked issues, specs, PRDs, breakdown comments, parent issues, and links found inside their bodies/comments/replies recursively when they affect scope, acceptance, blockers, or intent.
 
-## Output
+3. Review deeply:
 
-Findings-first review shape. For GitHub posting, use `references/template.md`.
+   - Compare the diff against gathered intent, linked context, existing contracts, and repo conventions.
+   - Account for prior review state. Do not duplicate findings already raised in PR reviews, comments, or threads unless the issue is still present and unresolved. If a prior finding was replied to or addressed, verify the current diff before repeating it.
+   - Trace changed paths through callers, inputs, validation, errors, auth, permissions, persistence, concurrency, migrations, compatibility, runtime behavior, docs, and tests.
+   - Inspect tests for real regression value. Good tests verify public behavior and would fail if the bug returned. Flag shallow tests, implementation-detail tests, excessive internal mocks, coverage padding, and tests that assert code shape instead of user-visible behavior.
+   - Inspect architecture as a first-class review surface. Look for shallow wrappers, pass-through services, anemic public APIs, leaky adapter/domain coupling, vendor/framework/database shapes crossing into business logic, duplicated policy, local-port violations, brittle seams, and interfaces that make future changes harder.
+   - File architecture findings when they create concrete future-change, correctness, testability, or maintainability risk.
+   - Bad-pattern findings need evidence: violated local convention, repeated brittle shape, avoidable coupling, wrong abstraction boundary, or runtime/tooling mismatch.
+   - Cite file/line refs where possible. If exact line refs are unavailable, cite file + changed function/section.
+   - Do not invent findings. If impact is speculative, put it in `Risks / Unknowns`.
+   - One finding per root cause. Deduplicate symptoms across files, tests, and CI.
+   - Produce priority-labeled review findings with concrete impact and evidence. Look for material bugs, regressions, missing tests, security/privacy risk, performance risk, and merge blockers.
 
-- `Findings` — ordered by severity. Each item includes `Severity`, `Location`, `Issue`, `Impact`, `Evidence`, `Recommendation`.
-- `Missing Tests` — only coverage gaps that would catch a material regression.
-- `Risks / Unknowns` — merge risks not provable from local context.
-- `No Findings` — use only when no material issue found. Include one sentence on what was checked.
+4. Report findings first using `references/template.md`. Use `No Findings` only when no material issue is found.
 
-Severity vocab:
-- `Blocker` = breaks core path, data loss, security/privacy exposure, or cannot merge.
-- `High` = likely user-visible regression or contract violation.
-- `Medium` = edge-case regression, missing validation, brittle behavior with plausible production impact.
-- `Low` = minor risk worth noting; never style-only.
-
-## GitHub Hash Links
-
-- Any Git commit hash/SHA shown to the user or written to GitHub comments, issues, PR bodies, review bodies, or durable artifacts must be clickable in GitHub.
-- Use Markdown `[abcdef0](https://github.com/<owner>/<repo>/commit/<full-sha>)`; if Markdown is unsupported, paste the commit URL.
-- Resolve short hashes to full SHAs before linking. Derive `<owner>/<repo>` from `gh repo view --json nameWithOwner`, PR context, or `origin` remote.
-
-## Principles
-
-- Read-only means no file edits, no commits, no pushes, no thread resolution. GitHub PR review/comment posting is allowed only after explicit user approval.
-- Findings first. No summary before defects.
-- Depth over speed. Treat the PR as guilty until evidence clears the changed surface.
-- Negative findings over balance. Do not add praise, pros, or neutral observations unless needed to explain scope.
-- Linked PR description/issues define review intent. Treat closing-linked issue acceptance criteria as contract truth.
-- Repo instruction violations count as findings when they create concrete consistency, maintenance, runtime, or future-change risk.
-- Architecture review is mandatory, not optional polish. Review must protect future codebase shape, not only current runtime behavior.
-- Treat architectural drift as a first-class finding when it creates concrete future-change, correctness, testability, or maintainability risk.
-- Bad-pattern findings need evidence: violated local convention, repeated brittle shape, avoidable coupling, wrong abstraction boundary, or runtime/tooling mismatch.
-- Architectural findings include shallow wrappers, pass-through services, anemic public APIs, leaky adapter/domain coupling, vendor/framework/persistence shapes in business logic, duplicated policy, and local-port violations.
-- Bugs over polish. Ignore formatting, naming, and preference unless correctness, maintainability, reviewability, or future-change risk is concrete.
-- Cite file/line refs where possible. If exact line refs are unavailable, cite file + changed function/section.
-- Do not invent findings. If impact is speculative, route to `Risks / Unknowns`.
-- One finding per root cause. Deduplicate symptoms across files, tests, and CI.
-- Verify before accusing when a quick read-only command can settle it.
-- Existing tests passing does not neutralize a contract violation.
-- If no findings, say so directly; do not pad with praise.
-- After presenting the review, ask whether to post it to the PR. If approved, post with the attribution footer from `references/template.md` and return the posted review/comment link.
-- If asked to fix findings, hand off to `snap-resolve`.
+5. Ask before posting. If approved, post the same review body to GitHub and show the review/comment URL.
