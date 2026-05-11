@@ -1,60 +1,65 @@
 # TDD Cycle for PR Fixes
 
-Each substantive [FIX] follows a strict vertical RED → GREEN → VERIFY → COMMIT cycle. Trivial fixes (typos, imports, renames) skip RED — direct fix → VERIFY → COMMIT.
+Use for substantive `[FIX]` items. Trivial fixes like typos, imports, or renames may use direct edit → verify → commit.
+
+## Philosophy
+
+Tests should verify behavior through public interfaces, not implementation details. A fix test should fail when the bug exists and pass when the behavior is corrected.
+
+Do not write all fix tests first and then all fixes. Work vertically: one failing test, one minimal fix, verify, commit, repeat.
 
 ## Per-Fix Cycle
 
-### RED — Write the Test
+### RED
 
-- Exactly ONE test capturing the fix
-- Describes **observable behavior**, not implementation details
-- Public interface only
-- Must FAIL — confirms the bug/issue exists
+Write one test for one fix.
 
-### GREEN — Minimal Implementation
+- Test observable behavior, not private implementation.
+- Use the public interface when possible.
+- Confirm the test fails for the current bug or missing behavior.
 
-- **Minimum code** to pass the failing test
-- Don't anticipate other fixes
-- Don't add speculative features
-- Don't refactor yet
-- Must PASS
+### GREEN
+
+Write the minimum code to pass the failing test.
+
+- Do not anticipate other fixes.
+- Do not add speculative behavior.
+- Do not refactor while red.
 
 ### VERIFY
 
-1. Full test suite — all tests, not just the new one
-2. Lint check
-3. Format check
+Run the relevant checks for the fix. Prefer targeted checks during the cycle and broader checks before push.
 
-If anything fails, stop and fix before proceeding.
+If a check fails, fix it before committing.
 
 ### COMMIT
 
-One atomic conventional commit:
+Commit the completed fix with a small, atomic Conventional Commits v1.0.0 message.
+
+```text
+fix(scope): address [review/CI issue]
 ```
-fix(scope): [description matching the PR feedback]
-```
 
-Store the GitHub commit link — referenced in the reply to the reviewer.
+Store the full commit SHA or GitHub commit link for reviewer replies.
 
-## After All Fixes: Refactor
+## Refactor
 
-If multiple fixes touched overlapping code, single refactor pass. Candidates:
-- Duplication → extract
-- Shallow modules → deepen
-- What new code reveals about existing code
+After all approved fixes pass, do one refactor pass if the fixes reveal duplication, shallow modules, brittle seams, or awkward interfaces.
 
-Run tests after each refactor step. Commit separately:
-```
+Run checks after each refactor step. Commit refactoring separately when it changes code.
+
+```text
 refactor(scope): [what was improved]
 ```
 
-## Per-Cycle Checklist
+## Checklist
 
-- [ ] Test describes behavior, not implementation
-- [ ] Test uses public interface only
-- [ ] Test would survive internal refactor
-- [ ] Code is minimal for this fix
-- [ ] No speculative features added
-- [ ] Full suite + lint + format pass
-- [ ] Atomic conventional commit
-- [ ] GitHub commit link stored for reply
+```text
+[ ] Test describes behavior, not implementation
+[ ] Test fails before the fix
+[ ] Fix is minimal for the current item
+[ ] No speculative behavior added
+[ ] Relevant checks pass
+[ ] Fix is committed atomically
+[ ] Commit link is available for replies
+```

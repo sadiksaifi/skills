@@ -12,7 +12,7 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
 | `snap-forge` | Strict TDD execution — red-green cycles, atomic commits, refactor at end |
 | `snap-pr` | Create or update GitHub PRs from current branch work |
 | `snap-review` | Read-only PR review — priority-labeled findings, risks, missing tests |
-| `snap-resolve` | Resolve PR feedback — TDD fixes, reviewer replies, CI failures |
+| `snap-resolve` | Resolve PR feedback and CI failures — checkpointed or `auto` |
 
 ## Workflow
 
