@@ -1,6 +1,6 @@
 # Review Template
 
-Use the Markdown inside `<template>` as the GitHub PR review body after user approval.
+Use the Markdown inside `<template>` as the local review report body. For GitHub posting, use `references/posting.md` so inlineable findings become review threads instead of duplicated top-level text.
 Any review finding — bug, test, architecture, security, performance — goes under `Findings` if it has concrete impact.
 Use `No Findings` only when no material issue is found.
 
@@ -10,7 +10,7 @@ Priority:
 - `P2` — edge-case regression, brittle behavior, architecture drift, or maintainability risk with plausible impact
 - `P3` — minor issue worth fixing; no style-only findings
 
-Finding shape:
+Finding shape for local reports and non-inlineable top-level findings:
 
 ```md
 ### P1 — [short finding title]
