@@ -1,18 +1,19 @@
 #!/usr/bin/env bun
 
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
-import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, join, resolve } from "node:path";
+import { cp, mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { prepareFixture, type FixtureName } from "./snap-eval-fixtures";
 
 type Variant = "with_skill" | "without_skill";
 
 type EvalCase = {
-  id: string;
+  id: string | number;
   fixture?: FixtureName;
   prompt: string;
   expected_output: string;
-  assertions: string[];
+  files?: string[];
+  assertions?: string[];
   verify_commands?: string[];
 };
 
@@ -21,7 +22,7 @@ type Manifest = {
   evals: EvalCase[];
 };
 
-type CodexRun = {
+type PiRun = {
   exitCode: number;
   durationMs: number;
   stdout: string;
@@ -31,7 +32,7 @@ type CodexRun = {
     input_tokens: number;
     cached_input_tokens: number;
     output_tokens: number;
-} | null;
+  } | null;
 };
 
 type AssertionResult = {
@@ -296,22 +297,92 @@ async function readIfExists(path: string) {
   }
 }
 
-function buildPrompt(
-  skillName: string,
+async function stageInputFiles(
+  files: string[] | undefined,
   skillPath: string,
-  variant: Variant,
+  fixtureDir: string,
+) {
+  if (!files || files.length === 0) {
+    return [];
+  }
+
+  const staged: string[] = [];
+
+  for (const file of files) {
+    const source = resolve(skillPath, file);
+    const target = join(fixtureDir, "input-files", file.replace(/^\.\//, ""));
+    await ensureDir(dirname(target));
+    await cp(source, target, { recursive: true });
+    staged.push(target);
+  }
+
+  return staged;
+}
+
+function buildPrompt(
   promptTemplate: string,
   repoDir: string,
+  fixtureDir: string,
+  outputsDir: string,
+  stagedFiles: string[],
 ) {
-  const prefix =
-    variant === "with_skill" ? `Use $${skillName} at ${skillPath}.\n\n` : "";
+  const prompt = promptTemplate
+    .replaceAll("{{repo_path}}", repoDir)
+    .replaceAll("{{fixture_path}}", fixtureDir)
+    .replaceAll("{{output_path}}", outputsDir);
 
-  return `${prefix}${promptTemplate.replaceAll("{{repo_path}}", repoDir)}`;
+  if (stagedFiles.length === 0) {
+    return prompt;
+  }
+
+  return [
+    prompt,
+    "Input files staged for this eval:",
+    ...stagedFiles.map((path) => `- ${path}`),
+  ].join("\n");
+}
+
+function textFromContent(content: unknown) {
+  if (typeof content === "string") {
+    return content;
+  }
+
+  if (!Array.isArray(content)) {
+    return "";
+  }
+
+  return content
+    .map((part) => {
+      if (!part || typeof part !== "object") {
+        return "";
+      }
+
+      const record = part as Record<string, unknown>;
+      return record.type === "text" && typeof record.text === "string"
+        ? record.text
+        : "";
+    })
+    .join("");
+}
+
+function usageFromMessage(message: Record<string, unknown>): PiRun["usage"] {
+  const rawUsage = message.usage as Record<string, number> | undefined;
+  if (!rawUsage) {
+    return null;
+  }
+
+  return {
+    input_tokens: rawUsage.input ?? rawUsage.input_tokens ?? 0,
+    cached_input_tokens:
+      rawUsage.cacheRead ?? rawUsage.cached_input_tokens ?? rawUsage.cache_read_input_tokens ?? 0,
+    output_tokens: rawUsage.output ?? rawUsage.output_tokens ?? 0,
+  };
 }
 
 function extractFinalMessage(lines: string[]) {
   let finalMessage = "";
-  let usage: CodexRun["usage"] = null;
+  let streamedMessage = "";
+  let usage: PiRun["usage"] = null;
 
   for (const line of lines) {
     if (!line.startsWith("{")) {
@@ -320,62 +391,60 @@ function extractFinalMessage(lines: string[]) {
 
     const parsed = JSON.parse(line) as Record<string, unknown>;
 
-    if (parsed.type === "item.completed") {
-      const item = parsed.item as Record<string, unknown>;
-      if (item.type === "agent_message") {
-        finalMessage = String(item.text ?? "");
+    if (parsed.type === "message_update") {
+      const event = parsed.assistantMessageEvent as Record<string, unknown> | undefined;
+      if (event?.type === "text_delta" && typeof event.delta === "string") {
+        streamedMessage += event.delta;
       }
     }
 
-    if (parsed.type === "turn.completed") {
-      const rawUsage = parsed.usage as Record<string, number> | undefined;
-      if (rawUsage) {
-        usage = {
-          input_tokens: rawUsage.input_tokens ?? 0,
-          cached_input_tokens: rawUsage.cached_input_tokens ?? 0,
-          output_tokens: rawUsage.output_tokens ?? 0,
-        };
+    if (parsed.type === "message_end" || parsed.type === "turn_end") {
+      const message = parsed.message as Record<string, unknown> | undefined;
+      if (message?.role === "assistant") {
+        const text = textFromContent(message.content);
+        if (text) {
+          finalMessage = text;
+        }
+        usage = usageFromMessage(message) ?? usage;
       }
     }
   }
 
-  return { finalMessage, usage };
+  return { finalMessage: finalMessage || streamedMessage, usage };
 }
 
-async function runCodex(prompt: string, cwd: string, extraArgs: string[] = []) {
+type RunPiOptions = {
+  skillPath?: string;
+  extraArgs?: string[];
+};
+
+async function runPi(prompt: string, cwd: string, options: RunPiOptions = {}) {
   const startedAt = Date.now();
   const signal = AbortSignal.timeout(10 * 60 * 1000);
-  const proc = Bun.spawn(
-    [
-      "codex",
-      "-a",
-      "never",
-      "exec",
-      "--json",
-      "--color",
-      "never",
-      "--ephemeral",
-      "--sandbox",
-      "workspace-write",
-      "--add-dir",
-      SKILLS_ROOT,
-      "-C",
-      cwd,
-      ...extraArgs,
-      "-",
-    ],
-    {
-      cwd,
-      stdin: "pipe",
-      stdout: "pipe",
-      stderr: "pipe",
-      env: process.env,
-      signal,
-    },
-  );
+  const args = [
+    "pi",
+    "--no-extensions",
+    "--no-session",
+    "--no-skills",
+    "--no-prompt-templates",
+    "--no-themes",
+    "--mode",
+    "json",
+  ];
 
-  proc.stdin?.write(prompt);
-  proc.stdin?.end();
+  if (options.skillPath) {
+    args.push("--skill", options.skillPath);
+  }
+
+  args.push(...(options.extraArgs ?? []), prompt);
+
+  const proc = Bun.spawn(args, {
+    cwd,
+    stdout: "pipe",
+    stderr: "pipe",
+    env: process.env,
+    signal,
+  });
 
   const [stdout, stderr] = await Promise.all([
     new Response(proc.stdout).text(),
@@ -394,7 +463,7 @@ async function runCodex(prompt: string, cwd: string, extraArgs: string[] = []) {
     stderr,
     finalMessage,
     usage,
-  } satisfies CodexRun;
+  } satisfies PiRun;
 }
 
 async function captureGitArtifacts(
@@ -492,8 +561,9 @@ async function readArtifactsForJudge(outputsDir: string) {
   return parts.join("\n");
 }
 
-function failingGrade(assertions: string[], reason: string): Grading {
-  const assertion_results = assertions.map((text) => ({
+function failingGrade(assertions: string[] | undefined, reason: string): Grading {
+  const assertionTexts = assertions ?? [];
+  const assertion_results = assertionTexts.map((text) => ({
     text,
     passed: false,
     evidence: reason,
@@ -503,12 +573,31 @@ function failingGrade(assertions: string[], reason: string): Grading {
     assertion_results,
     summary: {
       passed: 0,
-      failed: assertions.length,
-      total: assertions.length,
+      failed: assertionTexts.length,
+      total: assertionTexts.length,
       pass_rate: 0,
     },
     notes: reason,
   };
+}
+
+function parseJsonObject(text: string) {
+  try {
+    return JSON.parse(text);
+  } catch {
+    const fenced = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+    if (fenced) {
+      return JSON.parse(fenced[1]);
+    }
+
+    const start = text.indexOf("{");
+    const end = text.lastIndexOf("}");
+    if (start >= 0 && end > start) {
+      return JSON.parse(text.slice(start, end + 1));
+    }
+
+    throw new Error("no JSON object found");
+  }
 }
 
 async function gradeRun(
@@ -518,39 +607,38 @@ async function gradeRun(
   schemaPath: string,
 ) {
   const artifacts = await readArtifactsForJudge(outputsDir);
+  const schema = await readFile(schemaPath, "utf8");
+  const assertions = evalCase.assertions ?? [];
   const prompt = [
     "Grade one skill evaluation run.",
     "Use only provided artifacts. Be strict. If evidence is absent, fail the assertion.",
+    "Return only JSON matching the provided schema.",
     "",
     `Skill: ${skillName}`,
     `Expected output: ${evalCase.expected_output}`,
     "Assertions:",
-    ...evalCase.assertions.map((assertion, index) => `${index + 1}. ${assertion}`),
+    ...assertions.map((assertion, index) => `${index + 1}. ${assertion}`),
+    "",
+    "JSON schema:",
+    schema,
     "",
     "Artifacts:",
     artifacts,
   ].join("\n");
 
-  const result = await runCodex(prompt, outputsDir, [
-    "--skip-git-repo-check",
-    "--output-schema",
-    schemaPath,
-  ]);
+  const result = await runPi(prompt, outputsDir, { extraArgs: ["--no-tools"] });
 
   await writeFile(join(outputsDir, "grading-raw.stdout.jsonl"), result.stdout);
   await writeFile(join(outputsDir, "grading-raw.stderr.txt"), result.stderr);
 
   if (result.exitCode !== 0 || !result.finalMessage.trim()) {
-    return failingGrade(
-      evalCase.assertions,
-      `grading run failed: exit=${result.exitCode}`,
-    );
+    return failingGrade(assertions, `grading run failed: exit=${result.exitCode}`);
   }
 
   try {
-    return JSON.parse(result.finalMessage) as Grading;
+    return parseJsonObject(result.finalMessage) as Grading;
   } catch {
-    return failingGrade(evalCase.assertions, "grading output was not valid JSON");
+    return failingGrade(assertions, "grading output was not valid JSON");
   }
 }
 
@@ -600,7 +688,7 @@ function buildTasks(
     for (const evalCase of manifest.evals) {
       for (const variant of ["with_skill", "without_skill"] as const) {
         for (let repetition = 1; repetition <= repetitions; repetition += 1) {
-          const baseDir = join(skillRoot, `eval-${slug(evalCase.id)}`, variant);
+          const baseDir = join(skillRoot, `eval-${slug(String(evalCase.id))}`, variant);
           const runDir = repeatLabel(repetition, repetitions)
             ? join(baseDir, repeatLabel(repetition, repetitions))
             : baseDir;
@@ -644,24 +732,31 @@ async function executeTask(
   const sourceContext = await buildSourceContext(task.repoDir);
   await writeFile(join(task.outputsDir, "source-context.txt"), sourceContext);
 
+  const stagedFiles = await stageInputFiles(
+    task.evalCase.files,
+    task.skillPath,
+    task.fixtureDir,
+  );
   const baseCommit = (await runCommand("git rev-parse HEAD", task.repoDir)).stdout.trim();
   const prompt = buildPrompt(
-    task.skillName,
-    task.skillPath,
-    task.variant,
     task.evalCase.prompt,
     task.repoDir,
-  ).replaceAll("{{fixture_path}}", task.fixtureDir);
+    task.fixtureDir,
+    task.outputsDir,
+    stagedFiles,
+  );
 
   await writeFile(join(task.outputsDir, "prompt.txt"), prompt);
 
-  const run = await runCodex(prompt, task.repoDir);
+  const run = await runPi(prompt, task.repoDir, {
+    skillPath: task.variant === "with_skill" ? task.skillPath : undefined,
+  });
 
   await writeFile(join(task.outputsDir, "agent-raw.stdout.jsonl"), run.stdout);
   await writeFile(join(task.outputsDir, "agent-raw.stderr.txt"), run.stderr);
   await writeFile(join(task.outputsDir, "final-response.md"), run.finalMessage);
   await writeFile(
-    join(task.outputsDir, "timing.json"),
+    join(task.runDir, "timing.json"),
     JSON.stringify(
       {
         duration_ms: run.durationMs,
@@ -685,11 +780,11 @@ async function executeTask(
       ? await gradeRun(task.skillName, task.evalCase, task.outputsDir, schemaPath)
       : failingGrade(task.evalCase.assertions, `agent run failed: exit=${run.exitCode}`);
 
-  await writeFile(join(task.outputsDir, "grading.json"), JSON.stringify(grading, null, 2));
+  await writeFile(join(task.runDir, "grading.json"), JSON.stringify(grading, null, 2));
 
   const summary: RunSummary = {
     skill: task.skillName,
-    eval_id: task.evalCase.id,
+    eval_id: String(task.evalCase.id),
     variant: task.variant,
     repetition: task.repetition,
     duration_ms: run.durationMs,
