@@ -13,6 +13,7 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
 | `snap-pr` | Create or update GitHub PRs from current branch work |
 | `snap-review` | Read-only PR review — priority-labeled findings, risks, missing tests |
 | `snap-resolve` | Resolve PR feedback and CI failures — checkpointed or `auto` |
+| `snap-agents-md` | Create, regenerate, or refine AGENTS.md repo instruction scopes |
 
 ## Workflow
 

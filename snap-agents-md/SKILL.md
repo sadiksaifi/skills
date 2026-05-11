@@ -1,11 +1,11 @@
 ---
-name: init-agents-md
+name: snap-agents-md
 description: >
   Create, regenerate, or refine AGENTS.md repo instruction scopes. Use for
   project agent instructions, monorepo instruction layouts, stale AGENTS.md
   rewrites, instruction aliases, or bootstrap agent context. Trigger on
-  "/init-agents-md", "write AGENTS.md", "fix AGENTS.md", "project AI
-  instructions", or equivalent phrasing.
+  "/snap-agents-md", "snap agents md", "write AGENTS.md", "fix AGENTS.md",
+  "project AI instructions", or equivalent phrasing.
 ---
 
 `AGENTS.md` is canonical: root = repo defaults, nested = subtree deltas; parent applies unless local overrides, nearest wins, user wins. Add scopes for behavior splits, not folder taxonomy; `CLAUDE.md` is inventory context/optional alias.
