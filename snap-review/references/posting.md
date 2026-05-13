@@ -2,6 +2,8 @@
 
 Use this file when posting an approved PR review to GitHub.
 
+Only post when the review contains at least one priority-labeled finding or one material `Missing Tests` item. Never post `No Findings` reviews, risks-only reviews, pending-check notes, or summaries-only reviews, regardless of `auto`.
+
 ## Rules
 
 - Prefer real review threads over top-level review text for findings.
@@ -9,9 +11,8 @@ Use this file when posting an approved PR review to GitHub.
 - Use the top-level review body only for:
   - findings that cannot be anchored to a current diff line
   - `Missing Tests`
-  - `Risks / Unknowns`
+  - `Risks / Unknowns`, only when the review also has a finding or material missing-test item
   - a short note that inline findings were posted
-  - `No Findings`
 - Do not duplicate a full finding both inline and in the top-level review body.
 - If an exact cited line is outside the current diff, choose the nearest changed line for the same root cause. If no honest changed-line anchor exists, keep the finding in the top-level review body.
 - One finding per inline review comment.
@@ -32,13 +33,13 @@ Use the Markdown inside `<template>` as each inline review comment body. Omit `L
 
 ## Top-level review body
 
-Use the Markdown inside `<template>` as the review body when at least one finding is posted inline. Include non-inlineable findings under `Findings`; otherwise use the inline note.
+Use the Markdown inside `<template>` as the review body for a qualifying posted review. Include non-inlineable findings under `Findings`; if all findings are inline, use the inline note. If posting material missing tests only, use `None` under `Findings`.
 
 <template>
 
 ## Findings
 
-[Posted inline on the relevant diff lines, non-inlineable priority-labeled findings, or `No Findings`]
+[Posted inline on the relevant diff lines, non-inlineable priority-labeled findings, or `None` when posting material missing tests only]
 
 ## Missing Tests
 
@@ -86,7 +87,7 @@ Use `side: "RIGHT"` for added/modified head lines and `side: "LEFT"` for removed
 
 ## Post a top-level-only review
 
-Use this only when there are no inlineable findings or the user explicitly asks for a top-level review.
+Use this only when there are no inlineable findings or the user explicitly asks for a top-level review, and the body contains at least one priority-labeled finding or one material `Missing Tests` item.
 
 ```bash
 gh pr review {pr} --repo {owner}/{repo} --comment --body "$body"

@@ -1,8 +1,9 @@
 # Review Template
 
-Use the Markdown inside `<template>` as the local review report body. For GitHub posting, use `references/posting.md` so inlineable findings become review threads instead of duplicated top-level text.
+Use the Markdown inside `<template>` as the local review report body only when there is at least one priority-labeled finding or one material `Missing Tests` item. If there are no findings and no material missing tests, output exactly `No Findings` as a single line instead of this template.
+For GitHub posting, use `references/posting.md` so inlineable findings become review threads instead of duplicated top-level text.
 Any review finding — bug, test, architecture, security, performance — goes under `Findings` if it has concrete impact.
-Use `No Findings` only when no material issue is found.
+Use `No Findings` only as the full local response when no material issue or missing-test item is found; never post it to GitHub.
 
 Priority:
 - `P0` — blocks merge: data loss, security/privacy exposure, broken core path, or unrecoverable failure
@@ -25,7 +26,7 @@ Finding shape for local reports and non-inlineable top-level findings:
 
 ## Findings
 
-[priority-labeled findings, or `No Findings`]
+[priority-labeled findings, or `None` when reporting material missing tests only]
 
 ## Missing Tests
 

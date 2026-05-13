@@ -16,9 +16,9 @@ Syntax: `/skill:snap-review [auto]`
 | Key | Values | Default | Notes |
 | --- | --- | --- | --- |
 | `help` | bool | false | show usage |
-| `auto` | bool | false | post the review after generating it without asking for confirmation |
+| `auto` | bool | false | post the review after generating it without asking for confirmation, only when it contains findings or material missing tests |
 
-Review a GitHub pull request in read-only mode. Findings first; no code edits. Ask before posting unless `auto` is provided.
+Review a GitHub pull request in read-only mode. Findings first; no code edits. Ask before posting unless `auto` is provided. Never post a no-finding review to GitHub.
 
 ## Process
 
@@ -40,6 +40,6 @@ Review a GitHub pull request in read-only mode. Findings first; no code edits. A
    - One finding per root cause. Deduplicate symptoms across files, tests, and CI.
    - Produce priority-labeled review findings with concrete impact and evidence. Look for material bugs, regressions, missing tests, security/privacy risk, performance risk, and merge blockers.
 
-4. Report findings first using `references/template.md`. Use `No Findings` only when no material issue is found.
+4. Report findings first. If there are no priority-labeled findings and no material `Missing Tests` items, output exactly `No Findings` as a single line and stop. Do not include template sections, pending-check notes, risks-only commentary, summaries, or posting offers in this case.
 
-5. Ask before posting unless `auto` is provided. If approved or `auto` is provided, post using `references/posting.md`: prefer inline PR review comments for findings that can be anchored to current diff lines, and keep the top-level review body for non-inlineable findings, missing tests, risks, and summary. Show the review/comment URL.
+5. Otherwise report using `references/template.md`. Ask before posting unless `auto` is provided. A review qualifies for GitHub posting only when it contains at least one priority-labeled finding or one material `Missing Tests` item. `Risks / Unknowns`, pending checks, summaries, or `No Findings` alone never qualify. If approved or `auto` is provided for a qualifying review, post using `references/posting.md`: prefer inline PR review comments for findings that can be anchored to current diff lines, and keep the top-level review body for non-inlineable findings, missing tests, risks, and summary. Show the review/comment URL.
