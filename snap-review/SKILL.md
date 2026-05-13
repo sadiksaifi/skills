@@ -7,7 +7,18 @@ description: >
   before merge or before posting feedback.
 ---
 
-Review a GitHub pull request in read-only mode. Findings first; no code edits.
+## Invocation
+
+Syntax: `/skill:snap-review [auto]`
+
+## Args
+
+| Key | Values | Default | Notes |
+| --- | --- | --- | --- |
+| `help` | bool | false | show usage |
+| `auto` | bool | false | post the review after generating it without asking for confirmation |
+
+Review a GitHub pull request in read-only mode. Findings first; no code edits. Ask before posting unless `auto` is provided.
 
 ## Process
 
@@ -31,4 +42,4 @@ Review a GitHub pull request in read-only mode. Findings first; no code edits.
 
 4. Report findings first using `references/template.md`. Use `No Findings` only when no material issue is found.
 
-5. Ask before posting. If approved, post using `references/posting.md`: prefer inline PR review comments for findings that can be anchored to current diff lines, and keep the top-level review body for non-inlineable findings, missing tests, risks, and summary. Show the review/comment URL.
+5. Ask before posting unless `auto` is provided. If approved or `auto` is provided, post using `references/posting.md`: prefer inline PR review comments for findings that can be anchored to current diff lines, and keep the top-level review body for non-inlineable findings, missing tests, risks, and summary. Show the review/comment URL.
