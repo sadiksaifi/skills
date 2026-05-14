@@ -12,13 +12,7 @@ Filter for `bucket: "fail"`. Ignore `pass`, `skipping`, `cancel`.
 
 ## Handle pending checks
 
-If any checks have `bucket: "pending"`, wait briefly:
-
-```bash
-timeout 60 gh pr checks <number> --watch --fail-fast --interval 10
-```
-
-If the timeout expires, proceed with available results. Pending checks that haven't completed are not blockers — note them in the checkpoint summary.
+Do not wait for pending GitHub checks. CI can take too long and should not block review resolution work. Use only currently failed checks/logs as `CI` items. Pending checks are not blockers — note them in the checkpoint summary and continue.
 
 ## Fetch failed logs
 

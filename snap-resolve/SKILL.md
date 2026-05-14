@@ -34,6 +34,6 @@ Resolve GitHub PR feedback and failing checks. One checkpoint before execution u
 
 4. Show one checkpoint with `[FIX]`, `[EXPLAIN]`, `CI`, `Already addressed`, and `Unsure`. Wait for approval unless `auto` is provided. Never auto-run `Unsure`.
 
-5. Execute approved fixes. Use `references/tdd-cycle.md` for substantive fixes and direct edits for trivial fixes. Commit each fix atomically.
+5. Execute approved fixes. Use `references/tdd-cycle.md` for substantive fixes and direct edits for trivial fixes. Verify locally with targeted tests/checks for touched code. Do not wait for GitHub CI to turn green. Commit each fix atomically.
 
-6. Reply using `references/thread-resolution.md`: use true review-thread inline replies when a thread endpoint exists; for top-level PR comments, post a quote-reply comment that quotes the relevant original feedback. Resolve addressed review threads only after replying. Push once, then report commits, verification, replies, and remaining unresolved items.
+6. Reply using `references/thread-resolution.md`: use true review-thread inline replies when a thread endpoint exists; for top-level PR comments, post a quote-reply comment that quotes the relevant original feedback. Resolve addressed review threads only after replying. Push once, then report commits, local verification, replies, pending CI if any, and remaining unresolved items. Do not watch or wait for GitHub CI after pushing.
