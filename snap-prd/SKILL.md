@@ -23,4 +23,4 @@ Take the current conversation context and codebase understanding and produce an 
 
 4. Before writing, resolve only PRD-changing decisions with the user. Show a small decision checkpoint: proposed title, 3-5 key product decisions, module shape, and tests to write. Wait for approval.
 
-5. Write the PRD using `references/template.md`, create one GitHub issue with a `[PRD]` title prefix, and show the URL.
+5. Write the PRD using `references/template.md`, create one GitHub issue with a `[PRD]` title prefix, assign it to the invoking GitHub user (`--assignee @me` when using `gh issue create`), and show the URL.

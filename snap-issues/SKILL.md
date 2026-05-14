@@ -52,6 +52,7 @@ Iterate until the user approves the breakdown.
 5. Publish the issues to GitHub
 
 For each approved slice, publish a new issue to GitHub using `references/issue-template.md`.
+Assign every created issue to the invoking GitHub user (`--assignee @me` when using `gh issue create`).
 
 Publish issues in dependency order, blockers first, so later issues can reference real GitHub issue identifiers in the `Blocked by` field.
 
