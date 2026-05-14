@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>__TITLE__</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // The Tailwind config reads the design tokens from the :root block below —
+  // the tokens are defined once, in CSS. Don't put literal hex values here.
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg:     'var(--bg)',
+          panel:  'var(--panel)',
+          fg:     'var(--fg)',
+          muted:  'var(--muted)',
+          accent: 'var(--accent)',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  /* DESIGN TOKENS — the single source of truth. The Tailwind config above
+     and every rule below read from these. Don't change the values and don't
+     redefine the palette anywhere else. This is the Tailwind-CDN equivalent
+     of a shadcn globals.css :root block — the CDN can't use v4's @theme. */
+  :root {
+    --bg:     #000000;  /* page background */
+    --panel:  #1F1F1F;  /* the only raised surface — flat, sharp, rare */
+    --fg:     #EDEDED;  /* headings + the words that carry the point */
+    --muted:  #A1A1A1;  /* body text, secondary labels */
+    --accent: #FF9574;  /* emphasis only — kickers, accent rails, one diagram highlight */
+    --hair:   rgba(255,255,255,0.12); /* hairline border colour */
+  }
+  /* Below: only what utility classes genuinely can't express. Don't grow it. */
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .hair { border-color: var(--hair); }                  /* hairline borders */
+  .tag  { font-size: 11px; letter-spacing: .2em; }       /* kickers / uppercase labels */
+  ::selection { background: var(--accent); color: var(--bg); }
+  /* Optional page texture — a faint grid that fades out toward the top.
+     Keep it for richer briefs; delete the .grid-bg div below for a flat page. */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(161,161,161,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(161,161,161,.06) 1px, transparent 1px);
+    background-size: 42px 42px;
+    -webkit-mask-image: linear-gradient(to bottom, #000, transparent 70%);
+            mask-image: linear-gradient(to bottom, #000, transparent 70%);
+  }
+</style>
+</head>
+<body class="bg-bg text-fg antialiased selection:bg-accent selection:text-bg">
+  <div class="grid-bg fixed inset-0 pointer-events-none"></div>
+
+  <main class="relative max-w-5xl mx-auto px-6 py-14 md:py-20">
+
+    <!-- HEADER — always present. The thesis goes BIG; the chrome stays quiet. -->
+    <header class="border-b hair pb-12 md:pb-16">
+      <div class="flex items-center gap-3 tag uppercase text-muted">
+        <span class="h-1.5 w-1.5 bg-accent"></span>__KICKER__
+      </div>
+      <h1 class="mt-10 md:mt-14 max-w-4xl text-4xl md:text-7xl font-black leading-[0.97] md:leading-[0.95] tracking-[-0.04em]">
+        __TITLE__
+      </h1>
+      <p class="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-muted">__STANDFIRST__</p>
+    </header>
+
+    <!-- ============================================================
+         CONTENT — replace this comment with composed sections.
+         Pull blocks from references/patterns.html. Compose, don't invent.
+         Sections are separated by `border-b hair` + vertical padding —
+         never by boxing them. This is a VISUAL brief: every section needs
+         a visual element (diagram, columns, timeline, relation, list),
+         not headings over paragraphs.
+         ============================================================ -->
+
+    <!-- FOOTER — always present; keep it quiet -->
+    <footer class="border-t hair pt-6 text-sm text-muted">__FOOTER__</footer>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>visual-brief — pattern catalog</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: { bg:'var(--bg)', panel:'var(--panel)', fg:'var(--fg)', muted:'var(--muted)', accent:'var(--accent)' },
+    }},
+  };
+</script>
+<style>
+  :root {
+    --bg:#000000; --panel:#1F1F1F; --fg:#EDEDED; --muted:#A1A1A1; --accent:#FF9574;
+    --hair:rgba(255,255,255,0.12);
+  }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .hair { border-color: var(--hair); }
+  .tag  { font-size: 11px; letter-spacing: .2em; }
+  ::selection { background: var(--accent); color: var(--bg); }
+</style>
+</head>
+<body class="bg-bg text-fg antialiased">
+<main class="max-w-5xl mx-auto px-6 py-20">
+
+  <p class="tag uppercase text-accent mb-3">visual-brief</p>
+  <h1 class="text-3xl font-black tracking-[-.03em] mb-3">Pattern catalog</h1>
+  <p class="text-muted leading-relaxed mb-4 max-w-2xl">
+    Copy a block from this file's source, paste it into the <span class="mono">/tmp</span> page, adapt the
+    text. Compose from these — don't invent new layouts. Each block is marked with a
+    <span class="mono">PATTERN:</span> comment in the source.
+  </p>
+  <p class="text-muted leading-relaxed mb-16 max-w-2xl">
+    Two rules carry the whole look: <span class="text-fg">corners stay sharp</span> (no
+    <span class="mono">rounded-*</span> anywhere) and <span class="text-fg">a list is a list</span>
+    (never box its items). Separation comes from hairlines, columns, accent rails, and whitespace —
+    not from cards.
+  </p>
+
+  <!-- ============================================================
+       PATTERN: section-header
+       Numbered opener for a top-level section. The accent number is an
+       EYEBROW — it sits on its own line ABOVE the title, the same way
+       the header's kicker sits above the h1 and closing-statement's
+       kicker sits above its statement. Never shrink it to a tiny thing
+       floating beside the heading; that reads as an afterthought.
+       ============================================================ -->
+  <div class="mb-8">
+    <p class="mono text-sm text-accent mb-3">01</p>
+    <h2 class="text-2xl md:text-3xl font-black tracking-[-.03em]">Section title goes here</h2>
+  </div>
+
+  <!-- ============================================================
+       PATTERN: prose
+       Plain explanatory paragraph — the default. Body text is `muted`;
+       lift the words that carry the point to `fg`, identifiers to `mono`.
+       ============================================================ -->
+  <p class="text-muted leading-relaxed mb-20 max-w-2xl">
+    Most of a brief is well-set prose. Use <span class="text-fg">fg</span> to lift the words that carry
+    the point, and <span class="mono text-fg">mono</span> for identifiers, paths, and code. Reach for
+    this before any box.
+  </p>
+
+  <!-- ============================================================
+       PATTERN: big-statement
+       A loud typographic statement. Use it for the thesis, to open a
+       major section, and once more to close the brief. The argument is
+       the loudest thing on the page — the chrome stays quiet.
+       ============================================================ -->
+  <p class="text-3xl md:text-5xl font-black leading-[1.02] tracking-[-.04em] mb-3 max-w-3xl">
+    State the point in one bold sentence.
+  </p>
+  <p class="text-muted leading-relaxed mb-20 max-w-2xl">A quiet line underneath carries the detail.</p>
+
+  <!-- ============================================================
+       PATTERN: columns-divided
+       Two or three peers side by side, separated by hairline borders —
+       NOT boxed. This replaces "three cards". Use for provider/seam/
+       domain, before/after, or any set of siblings.
+       ============================================================ -->
+  <section class="grid md:grid-cols-3 border-y hair mb-20">
+    <div class="py-8 md:pr-8">
+      <p class="tag uppercase text-muted">01 first</p>
+      <h3 class="mt-4 text-xl font-black tracking-[-.02em]">First peer</h3>
+      <p class="mt-3 leading-relaxed text-muted">What this one is and owns.</p>
+      <p class="mt-4 mono text-sm text-muted"><span class="text-fg">key</span> = detail</p>
+    </div>
+    <div class="py-8 border-y hair md:border-x md:border-y-0 md:px-8">
+      <p class="tag uppercase text-accent">02 middle</p>
+      <h3 class="mt-4 text-xl font-black tracking-[-.02em]">Middle peer</h3>
+      <p class="mt-3 leading-relaxed text-muted">Give the pivotal column the accent kicker.</p>
+      <p class="mt-4 mono text-sm text-muted"><span class="text-fg">key</span> = detail</p>
+    </div>
+    <div class="py-8 md:pl-8">
+      <p class="tag uppercase text-muted">03 third</p>
+      <h3 class="mt-4 text-xl font-black tracking-[-.02em]">Third peer</h3>
+      <p class="mt-3 leading-relaxed text-muted">What this one is and owns.</p>
+      <p class="mt-4 mono text-sm text-muted"><span class="text-fg">key</span> = detail</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PATTERN: accent-subpoints
+       Paired (or more) sub-points under a heading. A 2px accent rail
+       on the left does all the work — no box, no rounding.
+       ============================================================ -->
+  <div class="grid md:grid-cols-2 gap-x-10 gap-y-6 mb-20">
+    <div class="border-l-2 border-accent pl-4">
+      <h3 class="font-black">What is checked?</h3>
+      <p class="mt-2 text-muted leading-relaxed">The question this sub-point answers.</p>
+    </div>
+    <div class="border-l-2 border-accent pl-4">
+      <h3 class="font-black">What is exposed?</h3>
+      <p class="mt-2 text-muted leading-relaxed">The question this sub-point answers.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PATTERN: divided-list
+       For enumerations — enum values, type sets, options. Hairline
+       dividers, no per-item boxes.
+       ============================================================ -->
+  <ul class="text-sm mono divide-y divide-white/[0.10] border-y border-white/[0.10] mb-20">
+    <li class="py-2.5">FirstValue</li>
+    <li class="py-2.5">SecondValue</li>
+    <li class="py-2.5">ThirdValue <span class="text-muted">— inline note in muted</span></li>
+  </ul>
+
+  <!-- ============================================================
+       PATTERN: labelled-list
+       A flat list with a kicker — "hazards", "open questions",
+       "what changed". Accent dots, muted text, no boxes.
+       ============================================================ -->
+  <div class="mb-20">
+    <p class="tag uppercase text-muted mb-3">Open questions</p>
+    <ul class="text-sm text-muted space-y-2 leading-relaxed">
+      <li class="flex gap-2.5"><span class="text-accent">·</span><span>First item, with <span class="mono text-fg">identifiers</span> in mono.</span></li>
+      <li class="flex gap-2.5"><span class="text-accent">·</span><span>Second item.</span></li>
+    </ul>
+  </div>
+
+  <!-- ============================================================
+       PATTERN: timeline
+       Ordered steps — a migration, a process, a sequence. One hairline
+       rail, square accent ticks. Drop `pb-8` on the last item.
+       ============================================================ -->
+  <ol class="border-l hair ml-1.5 mb-20">
+    <li class="ml-7 pb-8 relative">
+      <span class="absolute -left-[35px] top-1.5 h-2 w-2 bg-accent"></span>
+      <p class="mono text-sm text-accent">optional code/route line</p>
+      <h3 class="mt-1.5 text-lg font-black">Step one title</h3>
+      <p class="mt-1.5 text-muted leading-relaxed">What happens here and why it comes first.</p>
+    </li>
+    <li class="ml-7 relative">
+      <span class="absolute -left-[35px] top-1.5 h-2 w-2 bg-accent"></span>
+      <h3 class="text-lg font-black">Step two title</h3>
+      <p class="mt-1.5 text-muted leading-relaxed">The next step.</p>
+    </li>
+  </ol>
+
+  <!-- ============================================================
+       PATTERN: inline-relation
+       A relationship between named things — id mappings, equivalences.
+       Mono text connected by an accent glyph. NO boxes (this is the
+       binding-boxes mistake to avoid). Use a hairline grid only if the
+       relation genuinely needs cells.
+       ============================================================ -->
+  <div class="mb-20 mono text-sm">
+    <div class="flex flex-wrap items-baseline gap-x-4 gap-y-3">
+      <div><span class="text-fg">users.id</span> <span class="text-muted">— local UUID</span></div>
+      <span class="text-accent">↔</span>
+      <div><span class="text-fg">users.provider_user_id</span> <span class="text-muted">— WorkOS user ID</span></div>
+      <span class="text-accent">↔</span>
+      <div><span class="text-fg">jwt.sub</span> <span class="text-muted">— same WorkOS user ID</span></div>
+    </div>
+    <p class="mt-4 text-muted leading-relaxed font-sans">A sentence underneath ties the relation back to the point.</p>
+  </div>
+
+  <!-- ============================================================
+       PATTERN: code-block
+       A snippet. Flat `panel` surface — sharp corners, no rounding,
+       no shadow. It reads as code because it's mono on a panel, not
+       because it's a card.
+       ============================================================ -->
+  <pre class="bg-panel p-5 mb-20 overflow-auto mono text-sm leading-7 text-muted"><code><span class="text-fg">identity.User</span>{
+  ID:           claims.UserID,
+  SessionID:    claims.SessionID,
+  tokenSubject: claims.Subject,
+}</code></pre>
+
+  <!-- ============================================================
+       PATTERN: callout
+       One load-bearing statement to stop the reader on. An accent rail,
+       not a box. Use at most one or two per brief.
+       ============================================================ -->
+  <div class="border-l-2 border-accent pl-5 mb-20 max-w-2xl">
+    <p class="text-muted leading-relaxed">
+      <span class="text-fg font-medium">The rule that makes this work:</span> state the single most
+      important constraint here, with the consequence of breaking it in
+      <span class="mono text-accent">accent mono</span>.
+    </p>
+  </div>
+
+  <!-- ============================================================
+       PATTERN: diagram-panel
+       Only when a relationship is genuinely clearer as boxes-and-arrows
+       than as a sentence. Flat bordered panel, sharp corners. SVG uses
+       the palette: `panel` fill, hairline stroke for normal nodes,
+       accent stroke for the ONE node being emphasised.
+       ============================================================ -->
+  <div class="border hair p-6 mb-20">
+    <p class="tag uppercase text-muted mb-5">Diagram caption / what this shows</p>
+    <svg viewBox="0 0 680 150" class="w-full h-auto">
+      <defs>
+        <marker id="arrow" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#A1A1A1"/>
+        </marker>
+      </defs>
+      <rect x="20" y="55" width="150" height="44" fill="#1F1F1F" stroke="rgba(255,255,255,0.12)"/>
+      <text x="95" y="81" text-anchor="middle" fill="#EDEDED" font-size="12">input</text>
+      <rect x="265" y="55" width="150" height="44" fill="#1F1F1F" stroke="#FF9574"/>
+      <text x="340" y="81" text-anchor="middle" fill="#EDEDED" font-size="12">the key step</text>
+      <rect x="510" y="55" width="150" height="44" fill="#1F1F1F" stroke="rgba(255,255,255,0.12)"/>
+      <text x="585" y="81" text-anchor="middle" fill="#EDEDED" font-size="12">output</text>
+      <line x1="170" y1="77" x2="261" y2="77" stroke="#A1A1A1" stroke-width="1.4" marker-end="url(#arrow)"/>
+      <line x1="415" y1="77" x2="506" y2="77" stroke="#A1A1A1" stroke-width="1.4" marker-end="url(#arrow)"/>
+    </svg>
+    <p class="text-xs text-muted mt-4 leading-relaxed">One line under the diagram stating the takeaway.</p>
+  </div>
+
+  <!-- ============================================================
+       PATTERN: closing-statement
+       End the brief on a big restatement — the same weight as the
+       thesis. Give it the accent kicker.
+       ============================================================ -->
+  <p class="tag uppercase text-accent mb-4">In one sentence</p>
+  <p class="text-3xl md:text-5xl font-black leading-[1.05] tracking-[-.04em] max-w-3xl">
+    Restate the whole brief in one bold line.
+  </p>
+
+</main>
+</body>
+</html>
