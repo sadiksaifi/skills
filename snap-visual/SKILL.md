@@ -9,7 +9,30 @@ Turn an explanation into a single, self-contained HTML page in one consistent vi
 
 The visual language is fixed and opinionated on purpose. The user has tuned it; every brief should look like it came from the same hand. Your job is to compose *content* into that language, not to redesign it.
 
+## Delegation-first execution
+
+HTML generation is context-heavy. When the harness supports sub-agents or task delegation, the invoking agent **must delegate the full HTML build-and-open workflow** to a file-editing sub-agent instead of composing the HTML in the main conversation.
+
+Main agent responsibilities:
+- Gather only the source context needed to explain the topic: goal, audience, key facts, constraints, source paths/URLs, and any user-requested emphasis.
+- Start a sub-agent with that compact brief plus the absolute path to this `snap-visual` skill directory.
+- Instruct the sub-agent to read `SKILL.md`, `references/template.html`, and `references/patterns.html`; create `/tmp/<slug>.html`; open it; and return only the file path plus a one-line tour.
+- Do **not** ask the sub-agent to paste the generated HTML back into the main chat. Do **not** inline large HTML in the main context.
+
+Sub-agent prompt shape:
+
+```text
+Use the snap-visual skill at <skill-dir>. Build a single-file visual brief for:
+<context brief>
+
+Follow the skill exactly: copy references/template.html to /tmp/<slug>.html, compose with references/patterns.html, preserve the design language, open the file, then report only the path and a one-line tour. Do not paste the HTML.
+```
+
+If the harness has no delegation mechanism, perform the workflow directly, but keep the generated HTML confined to file edits/commands and final output; never paste the full HTML into chat.
+
 ## Workflow
+
+These are the worker steps for the sub-agent (or fallback direct execution).
 
 `references/template.html` and `references/patterns.html` are bundled with this skill. Resolve them against **this skill's own directory** — the path your harness gave you when it loaded the skill. Never hardcode an absolute skills path: it differs across harnesses (`~/.claude/skills/…`, `~/.agents/skills/…`, project-local `.claude/skills/…`, and others). If you're unsure of the base directory, locate the skill first (e.g. find the `snap-visual/SKILL.md` you're currently following) and work relative to that.
 
