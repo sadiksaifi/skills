@@ -26,6 +26,8 @@ Review a GitHub pull request in read-only mode. Findings first; no code edits. A
 
 2. Gather full review context: PR title/body, base/head refs, changed files, commits, checks, diff, comments, reviews, review threads, and all comment replies. Follow linked issues, specs, PRDs, breakdown comments, parent issues, and links found inside their bodies/comments/replies recursively when they affect scope, acceptance, blockers, or intent.
 
+   Also read the project's applicable agent instructions before judging the diff: root and nearest-path `AGENTS.md` files, `CLAUDE.md` files, or equivalent repo-local guidance that governs the changed paths. Treat those instructions as authoritative review context for conventions, architecture boundaries, test expectations, and output style. If repo instructions conflict, apply the nearest/path-specific guidance first and call out only conflicts that materially affect the review.
+
 3. Review deeply:
 
    - Compare the diff against gathered intent, linked context, existing contracts, and repo conventions.
