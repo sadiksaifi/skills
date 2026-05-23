@@ -23,9 +23,9 @@ Syntax: `/skill:snap-forge [branch[=name]] [worktree[=path]]`
 
 ## Philosophy
 
-**Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
+**Core principle**: Tests should verify meaningful behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
 
-**Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification - "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
+**Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification - "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure. Write tests because the behavior is important, risky, or complex; do not add low-value tests just to raise coverage.
 
 **Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed. If you rename an internal function and tests fail, those tests were testing implementation, not behavior.
 
@@ -75,7 +75,7 @@ Before writing any code:
 
 Ask: "What should the public interface look like? Which behaviors are most important to test?"
 
-**You can't test everything.** Confirm with the user exactly which behaviors matter most. Focus testing effort on critical paths and complex logic, not every possible edge case.
+**You can't test everything.** Confirm with the user exactly which behaviors matter most. Focus testing effort on critical paths and complex logic, not every possible edge case. Do not write unnecessary coverage-only tests.
 
 ### 2. Tracer Bullet
 
@@ -124,6 +124,7 @@ After all tests pass, look for [refactor candidates](references/refactoring.md):
 [ ] Test describes behavior, not implementation
 [ ] Test uses public interface only
 [ ] Test would survive internal refactor
+[ ] Test covers meaningful behavior, not coverage padding
 [ ] Code is minimal for this test
 [ ] No speculative features added
 [ ] Relevant checks pass

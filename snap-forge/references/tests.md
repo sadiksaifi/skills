@@ -17,6 +17,7 @@ test("user can checkout with valid cart", async () => {
 Characteristics:
 
 - Tests behavior users/callers care about
+- Covers important, risky, or complex behavior rather than padding coverage
 - Uses public API only
 - Survives internal refactors
 - Describes WHAT, not HOW
@@ -37,6 +38,7 @@ test("checkout calls paymentService.process", async () => {
 
 Red flags:
 
+- Existing only to increase coverage without proving meaningful behavior
 - Mocking internal collaborators
 - Testing private methods
 - Asserting on call counts/order

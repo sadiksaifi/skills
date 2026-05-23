@@ -4,7 +4,9 @@ Use for substantive `[FIX]` items. Trivial fixes like typos, imports, or renames
 
 ## Philosophy
 
-Tests should verify behavior through public interfaces, not implementation details. A fix test should fail when the bug exists and pass when the behavior is corrected.
+Tests should verify meaningful behavior through public interfaces, not implementation details. A fix test should fail when the bug exists and pass when the behavior is corrected.
+
+Add tests because the fixed behavior is important, risky, or complex. Do not write unnecessary tests only to increase coverage.
 
 Do not write all fix tests first and then all fixes. Work vertically: one failing test, one minimal fix, verify, commit, repeat.
 
@@ -15,6 +17,7 @@ Do not write all fix tests first and then all fixes. Work vertically: one failin
 Write one test for one fix.
 
 - Test observable behavior, not private implementation.
+- Cover meaningful behavior, not coverage padding.
 - Use the public interface when possible.
 - Confirm the test fails for the current bug or missing behavior.
 
@@ -57,6 +60,7 @@ refactor(scope): [what was improved]
 ```text
 [ ] Test describes behavior, not implementation
 [ ] Test fails before the fix
+[ ] Test covers meaningful behavior, not coverage padding
 [ ] Fix is minimal for the current item
 [ ] No speculative behavior added
 [ ] Relevant checks pass
