@@ -15,6 +15,7 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
 | `snap-resolve` | Resolve PR feedback and CI failures — checkpointed or `auto` |
 | `snap-agents-md` | Create, regenerate, or refine AGENTS.md repo instruction scopes |
 | `snap-visual` | Turn an explanation into a single self-contained HTML visual brief and open it in the browser |
+| `snap-handoff` | Compact the current session into a handoff document for a fresh agent |
 
 ## Workflow
 
@@ -67,6 +68,7 @@ Idea to implementation: snap-idea → snap-prd → snap-issues → snap-forge �
 PRD/spec to issues:     snap-issues → snap-forge → snap-pr
 Issue to PR:            snap-forge → snap-pr → snap-review
 Feedback loop:          snap-review → snap-resolve → snap-pr → snap-review
+Session transfer:       snap-handoff
 ```
 
 ## Install
