@@ -16,7 +16,7 @@ Syntax: `/skill:snap-review [auto]`
 | Key | Values | Default | Notes |
 | --- | --- | --- | --- |
 | `help` | bool | false | show usage |
-| `auto` | bool | false | post the review after generating it without asking for confirmation, only when it contains findings or material missing tests |
+| `auto` | bool | false | post the review after generating it without asking for confirmation, only when it contains priority-labeled findings |
 
 Review a GitHub pull request in read-only mode. Findings first; no code edits. Ask before posting unless `auto` is provided. Never post a no-finding review to GitHub.
 
@@ -41,7 +41,9 @@ Review a GitHub pull request in read-only mode. Findings first; no code edits. A
    - Do not invent findings. If impact is speculative, put it in `Risks / Unknowns`.
    - One finding per root cause. Deduplicate symptoms across files, tests, and CI.
    - Produce priority-labeled review findings with concrete impact and evidence. Look for material bugs, regressions, missing tests, security/privacy risk, performance risk, and merge blockers.
+   - Treat every material missing-test gap as a priority-labeled `Missing regression coverage` finding with a concrete regression risk; do not report it as a separate unprioritized list.
+   - Shape each finding with `Location`, `Reason`, `Impact`, `Evidence`, and `Fix direction`. `Reason` names the concrete failure mechanism; `Fix direction` gives a specific corrective action without supplying a full patch.
 
-4. Report findings first. If there are no priority-labeled findings and no material `Missing Tests` items, output exactly `No Findings` as a single line and stop. Do not include template sections, pending-check notes, risks-only commentary, summaries, or posting offers in this case.
+4. Report findings first. If there are no priority-labeled findings, output exactly `No Findings` as a single line and stop. Do not include template sections, pending-check notes, risks-only commentary, summaries, or posting offers in this case.
 
-5. Otherwise report using `references/template.md`. Ask before posting unless `auto` is provided. A review qualifies for GitHub posting only when it contains at least one priority-labeled finding or one material `Missing Tests` item. `Risks / Unknowns`, pending checks, summaries, or `No Findings` alone never qualify. If approved or `auto` is provided for a qualifying review, post using `references/posting.md`: prefer inline PR review comments for findings that can be anchored to current diff lines, and keep the top-level review body for non-inlineable findings, missing tests, risks, and summary. Show the review/comment URL.
+5. Otherwise report using `references/template.md`. Ask before posting unless `auto` is provided. A review qualifies for GitHub posting only when it contains at least one priority-labeled finding. `Risks / Unknowns`, pending checks, summaries, or `No Findings` alone never qualify. If approved or `auto` is provided for a qualifying review, post using the compact format in `references/posting.md`: prefer inline PR review comments for findings that can be anchored to current diff lines and keep only non-inlineable finding blocks plus the required footer in the top-level review body. Show the review/comment URL.
