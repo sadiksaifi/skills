@@ -1,36 +1,17 @@
-# Thread Reply and Resolution
+# Replies and Thread Resolution
 
-Use this file for reviewer replies and review thread resolution.
+Reply through the feedback's original channel, then resolve eligible review threads.
 
-## Rules
+## Capture targets
 
-- Choose one reply channel per item:
-  - review thread or line comment → reply inline through the review-comment reply endpoint
-  - top-level PR comment → post a top-level quote-reply comment with quoted feedback and source URL
-- Do not post a top-level PR comment when a review-thread reply endpoint is available.
-- Resolve a review thread only after its `[FIX]` or `[EXPLAIN]` response has been posted in the chosen channel.
-- `[FIX]` — fixed, committed, replied in the chosen channel → resolve review thread when applicable.
-- `[EXPLAIN]` — explained in the chosen channel → resolve review thread when applicable.
-- `Unsure`, skipped, or already-addressed items → do not resolve.
-- Already resolved threads → skip.
-- Inline reply failure → report and fall back to a top-level quote-reply comment only if useful.
-- Permission failure while resolving → report and continue.
-
-## Fetch reply targets
-
-Run during context gathering. Keep:
-
-- review thread `id` for GraphQL resolution
-- review comment `databaseId` for inline replies
-- review comment `url` for source links and reporting
-- top-level PR comment `body` and `url` for quote replies
+Fetch thread state and reply identifiers during evidence gathering. Paginate beyond 100 threads.
 
 ```bash
-gh api graphql -f query='
-  query($owner: String!, $repo: String!, $pr: Int!) {
+gh api graphql --paginate -f query='
+  query($owner: String!, $repo: String!, $pr: Int!, $endCursor: String) {
     repository(owner: $owner, name: $repo) {
       pullRequest(number: $pr) {
-        reviewThreads(first: 100) {
+        reviewThreads(first: 100, after: $endCursor) {
           nodes {
             id
             isResolved
@@ -41,76 +22,90 @@ gh api graphql -f query='
                 body
                 url
                 author { login }
+                replyTo { databaseId }
               }
             }
           }
+          pageInfo { hasNextPage endCursor }
         }
       }
     }
   }
-' -f owner='{owner}' -f repo='{repo}' -F pr='{number}'
+' -F owner="$owner" -F repo="$repo" -F pr="$pr"
 ```
 
-## Build reply body
+Keep the thread `id`, root comment `databaseId` (`replyTo: null`), relevant comment `url`, and resolution state. The REST reply endpoint rejects replies to replies. PR-context gathering supplies top-level comment bodies and URLs.
 
-Use the Markdown inside `<template>` as the review comment/thread reply body and as the inner response body for top-level quote replies. Keep only the section that applies: `## FIXED` for code/docs/test changes, `## EXPLANATION` for explain-only replies.
+## Choose one channel
 
-Use clickable commit links for fixes. Include only verification commands actually run.
+| Feedback source | Response |
+| --- | --- |
+| review thread or line comment | inline reply using the root comment `databaseId` |
+| top-level PR comment | top-level quote reply with the source URL |
+| CI only | no reply |
+
+A CI item merged with review feedback uses that feedback's channel.
+
+## Reply bodies
+
+For `[FIX]`, use the exact body below. Link the pushed commit and list only checks actually run.
 
 <template>
 
 ## FIXED
 
-- Fixed [specific reviewer concern] in [commit](https://github.com/OWNER/REPO/commit/SHA).
-- [Observable behavior, guard, or coverage added.]
+- Fixed [specific concern] in [commit](https://github.com/OWNER/REPO/commit/SHA).
+- [Observable result or regression coverage.]
 
 Verified:
 - `[command]`
 
-## EXPLANATION
-
-- [Explanation for why this is the right scope, behavior, or decision.]
-- [Link to PR/issue/spec context if it explains the decision.]
-
 </template>
 
-## Post review-thread inline reply
-
-Reply to the relevant review comment using its `databaseId`:
-
-```bash
-gh api \
-  --method POST \
-  repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies \
-  -f body="$body"
-```
-
-## Build top-level PR quote reply body
-
-For ordinary PR comments from the issue timeline, GitHub has no review-thread reply endpoint. Use the Markdown inside `<template>` as the top-level quote-reply body. Quote only the relevant original feedback, not the whole comment when it is long. Replace `[reply body]` with the applicable `## FIXED` or `## EXPLANATION` body from the reply-body template above.
+For `[EXPLAIN]`, use:
 
 <template>
 
-> [quoted reviewer finding or request]
-> [second quoted line if needed]
->
-> Source: ORIGINAL_COMMENT_URL
+## EXPLANATION
 
-[reply body]
+- [Concise explanation of the behavior, scope, or decision.]
+- [Relevant issue, PR, or specification link when useful.]
 
 </template>
 
-## Post top-level PR quote reply
+Wrap a top-level response with the relevant original excerpt:
 
-Post the quote-reply body with:
+<template>
+
+> [Relevant feedback excerpt.]
+>
+> Source: ORIGINAL_COMMENT_URL
+
+[FIXED or EXPLANATION body]
+
+</template>
+
+## Post replies
+
+Review-thread reply:
 
 ```bash
-gh pr comment {pr} --repo {owner}/{repo} --body "$body"
+gh api --method POST \
+  "repos/$owner/$repo/pulls/$pr/comments/$comment_id/replies" \
+  -f body="$body"
 ```
 
-## Resolve addressed threads
+Top-level quote reply:
 
-One mutation per addressed thread after replies are posted:
+```bash
+gh pr comment "$pr" --repo "$owner/$repo" --body "$body"
+```
+
+If an inline reply fails, report it; use a top-level quote reply only when it still helps the reviewer.
+
+## Resolve threads
+
+Resolve a thread only after its selected `[FIX]` or `[EXPLAIN]` reply succeeds. Leave `Unsure`, skipped, already-addressed, already-resolved, and failed-reply threads unchanged.
 
 ```bash
 gh api graphql -f query='
@@ -119,26 +114,7 @@ gh api graphql -f query='
       thread { id isResolved }
     }
   }
-' -f threadId='{thread_node_id}'
+' -F threadId="$thread_id"
 ```
 
-## Verify
-
-Re-query unresolved threads after mutations:
-
-```bash
-gh api graphql -f query='
-  query($owner: String!, $repo: String!, $pr: Int!) {
-    repository(owner: $owner, name: $repo) {
-      pullRequest(number: $pr) {
-        reviewThreads(first: 100, filterBy: {resolved: false}) {
-          totalCount
-          nodes { id path }
-        }
-      }
-    }
-  }
-' -f owner='{owner}' -f repo='{repo}' -F pr='{number}'
-```
-
-Unexpected open threads mean a reply or resolution was missed.
+Report permission failures and continue. Re-run the capture query after mutations; every unexpected unresolved thread is a missed reply, failed resolution, or reported blocker.

@@ -12,7 +12,7 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
 | `snap-forge` | Strict TDD execution — red-green cycles, atomic commits, refactor at end |
 | `snap-pr` | Create or update GitHub PRs from current branch work |
 | `snap-review` | Read-only PR review — priority-labeled findings, risks, missing tests; optional `auto` posting only for findings or material missing tests |
-| `snap-resolve` | Resolve PR feedback and CI failures — checkpointed or `auto` |
+| `snap-resolve` | Resolve PR feedback and CI failures automatically; optional `ask` approval gate |
 | `snap-agents-md` | Create, regenerate, or refine AGENTS.md repo instruction scopes |
 | `snap-visual` | Turn an explanation into a single self-contained HTML visual brief and open it in the browser |
 | `snap-handoff` | Compact the current session into a handoff document for a fresh agent |

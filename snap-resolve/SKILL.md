@@ -1,39 +1,48 @@
 ---
 name: snap-resolve
 description: >
-  Resolve GitHub PR feedback and failing checks. Use when the user wants review
-  comments addressed, CI failures fixed, reviewer replies posted, or addressed
-  review threads resolved.
+  Resolve GitHub PR feedback and failing checks. Use for requested changes,
+  reviewer replies, broken CI, or unresolved review threads.
 ---
 
 ## Invocation
 
-Syntax: `/skill:snap-resolve [auto]`
+Syntax: `/skill:snap-resolve [ask]`
+
+Parse shell-style arguments; bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments stop with usage.
 
 ## Args
 
-| Key | Values | Default | Notes |
+| Key | Values | Default | Effect |
 | --- | --- | --- | --- |
-| `help` | bool | false | show usage |
-| `auto` | bool | false | skip checkpoint approval for clear `[FIX]`, `[EXPLAIN]`, and `CI` items; never auto-run `Unsure` |
+| `help` | bool | false | print usage; do not execute |
+| `ask` | bool | false | wait for approval before changing anything |
 
-Resolve GitHub PR feedback and failing checks. One checkpoint before execution unless `auto` is provided.
+## Routes
 
-## Process
+| Selector | Behavior |
+| --- | --- |
+| default | execute clear `[FIX]`, `[EXPLAIN]`, and `CI` items automatically; hold `Unsure` |
+| `ask` | present the full ledger; execute only explicitly approved items |
 
-1. Find the PR from current branch/session context, or ask for one.
+## Workflow
 
-2. Gather full PR context: title/body, comments, reviews, review threads, replies, checks, failed logs, and linked issues/specs/PRDs recursively when they affect scope, acceptance, blockers, or intent. Use `references/ci-checks.md` for CI failure parsing.
+1. **Target.** Identify the PR from branch or session context and record its `owner`, `repo`, and `pr` number. Ask only when neither provides one.
 
-3. Classify each current item, accounting for prior replies, resolved threads, commits, and CI reruns:
-   - `[FIX]`: requires code/docs/test change
-   - `[EXPLAIN]`: reply only; no code-change promise
-   - `CI`: failing check or log-derived failure
-   - `Already addressed`: prior reply/fix/CI update shows the item was handled; skip unless it is still failing or explicitly reopened
-   - `Unsure`: missing, conflicting, or inaccessible context
+2. **Evidence.** Gather the PR body, comments, reviews, threads and replies, commits, current checks, failed logs, and linked artifacts that affect intent or acceptance. Follow [`references/ci-checks.md`](references/ci-checks.md) for failed checks.
 
-4. Show one checkpoint with `[FIX]`, `[EXPLAIN]`, `CI`, `Already addressed`, and `Unsure`. Wait for approval unless `auto` is provided. Never auto-run `Unsure`.
+3. **Ledger.** Deduplicate current items and classify each one:
+   - `[FIX]`: code, documentation, or test change
+   - `[EXPLAIN]`: reply only
+   - `CI`: current check failure
+   - `Already addressed`: current evidence proves completion
+   - `Unsure`: evidence is missing, conflicting, or inaccessible
 
-5. Execute approved fixes. Use `references/tdd-cycle.md` for substantive fixes and direct edits for trivial fixes. Add tests only for meaningful behavior affected by the fix; do not add unnecessary coverage-only tests. Verify locally with targeted tests/checks for touched code. Do not wait for GitHub CI to turn green. Commit each fix atomically.
+4. **Gate.** On the default route, run every clear actionable item, skip `Already addressed`, and hold `Unsure`. On `ask`, show the full ledger and wait; clarification is required before selecting `Unsure`.
 
-6. Reply using `references/thread-resolution.md`: use true review-thread inline replies when a thread endpoint exists; for top-level PR comments, post a quote-reply comment that quotes the relevant original feedback. Resolve addressed review threads only after replying. Push once, then report commits, local verification, replies, pending CI if any, and remaining unresolved items. Do not watch or wait for GitHub CI after pushing.
+5. **Resolve.** Process selected items vertically and commit each fix atomically:
+   - Substantive: follow [`references/tdd-cycle.md`](references/tdd-cycle.md).
+   - Trivial: edit, verify, and commit directly.
+   - After local checks pass: push once, then follow [`references/thread-resolution.md`](references/thread-resolution.md). Report pending GitHub CI without waiting.
+
+6. **Report.** List commits, local checks, replies, pending CI, held `Unsure`, and unresolved items. Every ledger item must end as completed, skipped with evidence, held for a decision, or blocked with a concrete reason.

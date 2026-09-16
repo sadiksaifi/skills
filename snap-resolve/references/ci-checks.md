@@ -1,50 +1,37 @@
-# CI Check Failure Resolution
+# CI Failure Triage
 
-How to fetch, parse, and convert GitHub Actions failures into [FIX] items.
+Convert current GitHub Actions failures into deduplicated `CI` ledger items.
 
-## Fetch check status
-
-```bash
-gh pr checks <number> --json name,state,bucket,link,workflow
-```
-
-Filter for `bucket: "fail"`. Ignore `pass`, `skipping`, `cancel`.
-
-## Handle pending checks
-
-Do not wait for pending GitHub checks. CI can take too long and should not block review resolution work. Use only currently failed checks/logs as `CI` items. Pending checks are not blockers — note them in the checkpoint summary and continue.
-
-## Fetch failed logs
-
-Extract the run ID from each failed check's `link` field (the numeric segment after `/actions/runs/`), then:
+## Collect
 
 ```bash
-gh run view <run-id> --log-failed
+gh pr checks "$pr" --repo "$owner/$repo" \
+  --json name,state,bucket,link,workflow
 ```
 
-Use the most recent run only per workflow — ignore superseded runs from earlier pushes. If log output is very large, focus on the first failure in each job rather than ingesting everything.
+- Keep `bucket: "fail"`; ignore `pass`, `skipping`, and `cancel`.
+- Use only the newest run per workflow.
+- Record pending checks for the final report; do not wait for them.
 
-## Parse failure types
+Extract the run ID from `/actions/runs/<run-id>` and fetch failed logs:
 
-Look for these patterns in the log output:
+```bash
+gh run view "$run_id" --repo "$owner/$repo" --log-failed
+```
 
-- **Test failures**: assertion errors, `FAIL` markers, test function names, file:line references from stack traces
-- **Lint failures**: rule names (e.g., `no-unused-vars`), file:line references
-- **Type errors**: type checker output (`TS2345`, `mypy`), file:line references
-- **Build failures**: compilation errors, missing module/import errors
+For large logs, isolate the first root failure in each job. Capture assertion or compiler output, rule/error code, test name, and file/line when present. Report inaccessible logs as blockers.
 
-## Convert to [FIX] items
+## Build ledger items
 
-Each distinct failure becomes one [FIX] item:
+Create one item per independent root cause:
 
-- **Source**: `CI: {check-name}` (e.g., `CI: lint`, `CI: test-unit`)
-- **Error**: the specific failure message from logs
-- **Files**: extracted file paths from log output
+```text
+Type: CI
+Source: <check-name>
+Error: <specific failure>
+Files: <paths, when known>
+```
 
-## Deduplication with review feedback
+Merge a CI failure with reviewer feedback describing the same defect. Preserve the review thread/comment IDs for the reply. CI-only items need no reviewer reply.
 
-A reviewer comment flagging the same issue as a CI failure should be merged into one [FIX] item. Keep the review thread ID so the reviewer gets a reply when fixed. The CI log provides the precise error; the reviewer comment provides the thread to respond to.
-
-## After fixes
-
-CI fixes don't get review replies — passing checks after push are the response. The exception is deduplicated items where a reviewer also flagged the issue — those get a reply via the kept thread ID.
+Completion: every current failed check maps to a ledger item, a deduplicated item, or a concrete log-access blocker.
