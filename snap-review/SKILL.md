@@ -1,49 +1,54 @@
 ---
 name: snap-review
 description: >
-  Review a GitHub pull request in read-only mode for material bugs,
-  regressions, missing tests, architecture drift, security/privacy risk,
-  performance risk, and merge blockers. Use when the user wants a PR reviewed
-  before merge or before posting feedback.
+  Use when a GitHub pull request needs a read-only pre-merge review for material
+  correctness, security, privacy, performance, compatibility, architecture, or
+  regression-test risks, or when the user asks whether a PR is safe to merge.
 ---
+
+Read-only: inspect and report; leave the branch unchanged. Correctness is necessary, not sufficient: architecture is a first-class review surface.
 
 ## Invocation
 
-Syntax: `/skill:snap-review [auto]`
+Syntax: `/skill:snap-review [help] [auto]`
+
+Bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments stop with usage.
 
 ## Args
 
-| Key | Values | Default | Notes |
+| Key | Values | Default | Effect |
 | --- | --- | --- | --- |
-| `help` | bool | false | show usage |
-| `auto` | bool | false | post the review after generating it without asking for confirmation, only when it contains priority-labeled findings |
+| `help` | bool | false | print usage; do not execute |
+| `auto` | bool | false | post qualifying findings without approval |
 
-Review a GitHub pull request in read-only mode. Findings first; no code edits. Ask before posting unless `auto` is provided. Never post a no-finding review to GitHub.
+## Routes
 
-## Process
+| Selector | Posting |
+| --- | --- |
+| default | report locally; ask before posting findings |
+| `auto` | post findings automatically |
 
-1. Find the PR from current branch/session context, or ask for one.
+`No Findings`, unknowns alone, and pending checks never qualify for posting.
 
-2. Gather full review context: PR title/body, base/head refs, changed files, commits, checks, diff, comments, reviews, review threads, and all comment replies. Follow linked issues, specs, PRDs, breakdown comments, parent issues, and links found inside their bodies/comments/replies recursively when they affect scope, acceptance, blockers, or intent.
+## Workflow
 
-   Also read the project's applicable agent instructions before judging the diff: root and nearest-path `AGENTS.md` files, `CLAUDE.md` files, or equivalent repo-local guidance that governs the changed paths. Treat those instructions as authoritative review context for conventions, architecture boundaries, test expectations, and output style. If repo instructions conflict, apply the nearest/path-specific guidance first and call out only conflicts that materially affect the review.
+1. **Target.** Identify the PR from branch or session context. Ask only when neither provides one.
 
-3. Review deeply:
+2. **Context.** Reuse current context, then gather the PR intent, base/head, diff, changed files, checks, commits, reviews, comments, and unresolved threads.
+   Follow linked material only when it changes scope or acceptance. Read repository instructions governing each changed path. Report a blocker when critical context remains inaccessible or conflicting.
 
-   - Compare the diff against gathered intent, linked context, existing contracts, and repo conventions.
-   - Account for prior review state. Do not duplicate findings already raised in PR reviews, comments, or threads unless the issue is still present and unresolved. If a prior finding was replied to or addressed, verify the current diff before repeating it.
-   - Trace changed paths through callers, inputs, validation, errors, auth, permissions, persistence, concurrency, migrations, compatibility, runtime behavior, docs, and tests.
-   - Inspect tests for real regression value. Good tests verify public behavior and would fail if the bug returned. Flag shallow tests, implementation-detail tests, excessive internal mocks, coverage padding, and tests that assert code shape instead of user-visible behavior.
-   - Inspect architecture as a first-class review surface. Look for shallow wrappers, pass-through services, anemic public APIs, leaky adapter/domain coupling, vendor/framework/database shapes crossing into business logic, duplicated policy, local-port violations, brittle seams, and interfaces that make future changes harder.
-   - File architecture findings when they create concrete future-change, correctness, testability, or maintainability risk.
-   - Bad-pattern findings need evidence: violated local convention, repeated brittle shape, avoidable coupling, wrong abstraction boundary, or runtime/tooling mismatch.
-   - Cite file/line refs where possible. If exact line refs are unavailable, cite file + changed function/section.
-   - Do not invent findings. If impact is speculative, put it in `Risks / Unknowns`.
-   - One finding per root cause. Deduplicate symptoms across files, tests, and CI.
-   - Produce priority-labeled review findings with concrete impact and evidence. Look for material bugs, regressions, missing tests, security/privacy risk, performance risk, and merge blockers.
-   - Treat every material missing-test gap as a priority-labeled `Missing regression coverage` finding with a concrete regression risk; do not report it as a separate unprioritized list.
-   - Shape each finding with `Location`, `Reason`, `Impact`, `Evidence`, and `Fix direction`. `Reason` names the concrete failure mechanism; `Fix direction` gives a specific corrective action without supplying a full patch.
+3. **Review.** Apply the behavior, tests, and architecture sections of [`references/lenses.md`](references/lenses.md) to every changed path. Review correctness and architecture independently.
+   For architecture, inspect whether modules hide substantial implementation behind narrow interfaces, seams represent real variation, policy stays local, and callers and tests share the public interface.
+   Trace changed behavior through affected callers and boundaries. Account for prior feedback and current replies; repeat only issues that remain present and unresolved. Keep one finding per root cause and cite the tightest honest changed-line anchor.
 
-4. Report findings first. If there are no priority-labeled findings, output exactly `No Findings` as a single line and stop. Do not include template sections, pending-check notes, risks-only commentary, summaries, or posting offers in this case.
+4. **Finding gate.** A finding must identify a concrete failure path or material engineering risk introduced or left unresolved by the PR, supported by code or context evidence.
+   Put uncertainty without that proof in `Risks / Unknowns`. Deduplicate symptoms before reporting.
 
-5. Otherwise report using `references/template.md`. Ask before posting unless `auto` is provided. A review qualifies for GitHub posting only when it contains at least one priority-labeled finding. `Risks / Unknowns`, pending checks, summaries, or `No Findings` alone never qualify. If approved or `auto` is provided for a qualifying review, post using the compact format in `references/posting.md`: prefer inline PR review comments for findings that can be anchored to current diff lines and keep only non-inlineable finding blocks plus the required footer in the top-level review body. Show the review/comment URL.
+5. **Report.** After every changed path and applicable lens is accounted for:
+   - complete review with no findings: output exactly `No Findings`
+   - findings present: use [`references/template.md`](references/template.md)
+   - incomplete review: report `Review blocked: [reason]`
+
+6. **Post.** A qualifying review contains at least one priority finding. On the default route, wait for approval; on `auto`, post immediately. Follow [`references/posting.md`](references/posting.md) and return the review URL.
+
+Completion: every changed path is reviewed for behavior, meaningful test evidence, architecture, intent, and applicable repository rules; prior feedback is deduplicated, and every finding is material, located, evidence-backed, and actionable.
