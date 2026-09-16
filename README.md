@@ -8,7 +8,7 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
 |-------|---------|
 | `snap-idea` | Relentlessly interview ideas, plans, and designs until shared understanding |
 | `snap-issues` | Turn context into one concise GitHub issue or a dependency-aware set of vertical issues |
-| `snap-forge` | Strict TDD execution — red-green cycles, atomic commits, refactor at end |
+| `snap-forge` | Implement ready work through vertical red-green cycles and atomic commits |
 | `snap-pr` | Publish or refresh a reviewer-ready PR from current branch work |
 | `snap-review` | Read-only PR review — priority-labeled findings, risks, missing tests; optional `auto` posting only for findings or material missing tests |
 | `snap-resolve` | Resolve PR feedback and CI failures automatically; optional `ask` approval gate |
