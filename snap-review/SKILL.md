@@ -10,7 +10,7 @@ Read-only: inspect and report; leave the branch unchanged. Correctness is necess
 
 ## Invocation
 
-Syntax: `/skill:snap-review [help] [auto]`
+Syntax: `/skill:snap-review [help] [ask]`
 
 Bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments stop with usage.
 
@@ -19,14 +19,14 @@ Bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments s
 | Key | Values | Default | Effect |
 | --- | --- | --- | --- |
 | `help` | bool | false | print usage; do not execute |
-| `auto` | bool | false | post qualifying findings without approval |
+| `ask` | bool | false | wait for approval before posting findings |
 
 ## Routes
 
 | Selector | Posting |
 | --- | --- |
-| default | report locally; ask before posting findings |
-| `auto` | post findings automatically |
+| default | post qualifying findings automatically |
+| `ask` | report locally and wait before posting |
 
 `No Findings`, unknowns alone, and pending checks never qualify for posting.
 
@@ -49,6 +49,6 @@ Bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments s
    - findings present: use [`references/template.md`](references/template.md)
    - incomplete review: report `Review blocked: [reason]`
 
-6. **Post.** A qualifying review contains at least one priority finding. On the default route, wait for approval; on `auto`, post immediately. Follow [`references/posting.md`](references/posting.md) and return the review URL.
+6. **Post.** A qualifying review contains at least one priority finding. Post automatically on the default route. On `ask`, report locally and wait. An explicit instruction not to post always stops after the local report. Follow [`references/posting.md`](references/posting.md) and return the review URL when posted.
 
 Completion: every changed path is reviewed for behavior, meaningful test evidence, architecture, intent, and applicable repository rules; prior feedback is deduplicated, and every finding is material, located, evidence-backed, and actionable.
