@@ -1,23 +1,23 @@
 ---
 name: snap-handoff
 description: >
-  Compact the current conversation into a handoff document for another agent to
-  pick up. Use for handoffs, session transfer, resume context, or next-agent
-  continuation.
+  Use when the current session must be transferred to a fresh agent, paused for
+  later resumption, or compacted before a context reset.
 ---
 
-Write a concise handoff document summarizing the current conversation so a fresh agent can continue the work.
+## Workflow
 
-Save it to a temp file path produced by `HANDOFF_FILE="$(mktemp -t snap-handoff).md"; : > "$HANDOFF_FILE"` and read the file before writing to it.
+1. **Gather.** Capture the current goal, exact status, completed work, decisions, constraints, user preferences, repository state, verification, blockers, open questions, and ordered next actions.
 
-Include only continuation-critical context:
-- current goal and status
-- key decisions, constraints, and user preferences
-- referenced artifacts, paths, URLs, branches, commits, issues, or PRs
-- completed work, pending next steps, and open questions
-- suggested skills for the next session, if any
-- verification results or gotchas, if relevant
+2. **Compress.** Keep only continuation-critical facts. Reference durable issues, PRs, commits, diffs, plans, ADRs, paths, and URLs instead of restating them. Preserve exact identifiers and commands.
 
-Do not duplicate content already captured in other artifacts such as PRDs, plans, ADRs, issues, commits, diffs, or generated files. Reference them by path or URL instead.
+3. **Write.** Create a Markdown file in a dedicated temporary directory, then use [`references/template.md`](references/template.md):
 
-After writing, report the handoff path.
+   ```bash
+   HANDOFF_DIR="$(mktemp -d "${TMPDIR:-/tmp}/snap-handoff.XXXXXX")"
+   HANDOFF_FILE="$HANDOFF_DIR/handoff.md"
+   ```
+
+4. **Verify.** Re-read the file. Confirm the state is current, references are exact, verification claims are factual, and the first next action is executable without the original conversation. Report the path in `$HANDOFF_FILE`.
+
+Completion: a fresh agent can identify the goal, current state, governing decisions, evidence, blockers, and next action without rediscovery.
