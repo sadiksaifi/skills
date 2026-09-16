@@ -35,8 +35,6 @@ Bad QA:
 
 - [manual reviewer scenario: start here, do this, expect this result]
 
-## Closes
-
-- [issue refs]
+> Closes [issue refs]
 
 </template>
