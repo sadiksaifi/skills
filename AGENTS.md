@@ -1,46 +1,51 @@
-# SNAP Skills Repo
+# SNAP Skills Repository
 
-SNAP = SNAP's Not A Prompt. Portable, self-contained Agent Skills.
+Portable, self-contained [Agent Skills](https://agentskills.io/specification).
 
-Spec: https://agentskills.io/specification
+## Authority
 
-## Repo Contract
+User instructions override the nearest repository instructions; nearest instructions override the Agent Skills specification. This file owns evergreen repository invariants only. Skill-local files own activation, workflow, schemas, templates, examples, assets, scripts, and gotchas.
 
-Follow Agent Skills spec unless local repo rules override. Keep this file evergreen: repo invariants only; no skill inventories, path indexes, workflow lists, or volatile detail. Local skill files own task semantics, activation triggers, output contracts, templates, examples, scripts, references, assets, and gotchas. Nearest instruction wins. Prefer self-contained skills; small intentional duplication beats cross-skill coupling.
+Persist behavior in repository files, not conversation memory. Keep skills self-contained; prefer small intentional duplication over cross-skill coupling.
 
-## Skill Layout
+## Skill contract
 
-`skill-name/` contains required `SKILL.md`; optional `scripts/`, `references/`, `assets/`, and skill-local files. `SKILL.md` contains YAML frontmatter followed by Markdown instructions.
+Each `skill-name/` requires `SKILL.md` and may contain `references/`, `assets/`, and `scripts/`.
 
-| Field | Constraints |
+| Field | Contract |
 | --- | --- |
-| `name` | Required. 1–64 chars. Lowercase letters, numbers, hyphens. No leading/trailing hyphen. No `--`. Must match parent directory. |
-| `description` | Required. 1–1024 chars. Model-facing activation pointer beginning `Use when...`; name distinct trigger branches, not body identity. |
+| `name` | Required, 1–64 lowercase letters, numbers, and hyphens; no leading/trailing hyphen or `--`; must match the directory. |
+| `description` | Required, 1–1024 characters; model-facing activation pointer beginning `Use when...`; name distinct trigger branches, not body identity. |
 
-Keep `SKILL.md` activation-critical: frontmatter, core procedure, resource map, execution-critical gotchas. Move long docs to `references/`, reusable output material to `assets/`, deterministic helpers to `scripts/`. Budget `<500` lines, `<5k` tokens preferred. Use skill-root-relative paths. Keep references one-level deep; avoid nested reference chains.
+Keep `SKILL.md` activation-critical: route selection, ordered procedure, completion criteria, resource pointers, and execution-critical guardrails. Inline steps every route needs. Move branch-specific detail to one-level-deep references. Prefer fewer than 500 lines and 5,000 tokens.
 
-Templates are lazy-loaded resources. Put exact artifact Markdown in topic-specific `references/<topic>-template.md` files, not aggregated catch-all templates. `SKILL.md` should reference the exact template file needed for each artifact and avoid duplicating template structure. Wrap exact template bodies in plain `<template>` / `</template>` tags with a blank line after the opening tag and before the closing tag; no tag attributes.
+End each step with a checkable completion condition. The final condition must account for every selected item, changed path, finding, or artifact relevant to the skill.
 
-## Invocation Contract
+## Resources and invocation
 
-Argument-taking skills declare `/skill:<name> [key|key=value]...` with `## Invocation`, `## Args`, and `## Routes`. Reserve `help`, document defaults and conflicts, and stop with usage for unsafe unknown arguments.
+- Put exact artifact bodies in focused `references/` files; use topic-specific names when a skill has multiple artifacts. Wrap exact bodies in plain `<template>` / `</template>` tags with a blank line inside.
+- Point from the step to the exact resource it needs. Co-locate definitions, rules, and caveats. Keep reference chains one level deep.
+- Keep deterministic automation in `scripts/`: non-interactive, dependency-light or documented, safe from repository and skill roots, clear on failure, stable on stdout, diagnostic on stderr.
+- Argument-taking skills declare `/skill:<name> [key|key=value]...` with `## Invocation`, `## Args`, and `## Routes`. Bare keys mean `true`. Reserve `help`; document defaults and conflicts; stop with concise usage for unsafe unknown arguments.
 
-## Authoring Contract
+## Authoring
 
-Dense technical handoff: high signal/low token, terse concrete nouns, implementation-aware steps, fields/ids/enums/interfaces, explicit scope, constraints, gotchas, templates. Prefer headings, labels, bullets, tables, positive protocol. Skip tutorial prose, motivational filler, broad adjectives, repeated caveats, redundant restatement, defensive prohibition lists unless safety-critical. Wrap frontmatter near 80 chars; do not force 80-char wrapping elsewhere.
+Write for predictable execution:
 
-## Output Contract
+- clean, concise, brief, high-signal, direct
+- procedure before supporting reference
+- one authoritative home per meaning
+- precise established vocabulary instead of repeated explanation
+- positive protocol; prohibitions only as necessary guardrails
+- exact scope, ids, paths, commands, enums, risks, evidence, and next actions
+- no tutorial prose, motivational filler, broad adjectives, duplicated caveats, or discoverable environment facts
 
-Skill outputs follow owning skill instructions and templates. Artifact language matches consumer: machine-bound artifacts are structured, deterministic, parseable; human-reviewed artifacts are reviewer-ready, natural, concise, and technically exact. Preserve exact ids, paths, commands, diffs, risks, decisions, and next actions. Durable repo artifacts inherit this style unless local skill defines another format.
+Match the consumer. Human-reviewed artifacts are natural and scannable. Machine-bound artifacts are deterministic and parseable. Preserve exact decisions, verification, and unresolved work.
 
-## Script + Eval Contract
+## Work protocol
 
-Scripts: non-interactive, deterministic where practical, flag/stdin/env driven, useful `--help`, clear failure, structured stdout, diagnostics stderr, dependency-light or dependency-documented, safe from repo-root and skill-root execution contexts.
+Before editing, read the nearest instructions and every resource required by the changed branch. Reuse active context before fetching external artifacts; refresh only when missing, stale, or explicitly requested.
 
-Eval: behavior-sensitive skills may keep curated eval definitions near the skill. Do not commit eval run artifacts, traces, model outputs, temp files, secrets, or generated eval results. Never push generated eval results to git/GitHub.
+Treat manifests, scripts, and the filesystem as source of truth rather than copying their contents into instructions.
 
-## Editing Contract
-
-Before skill edits, read nearest local instructions, templates, and referenced procedures required by the change. Persistent behavior belongs in local skill instructions, not chat context. Repo-level guidance stays generic; skill-specific schemas, examples, workflows, fixtures, and volatile rules live near the skill.
-
-When skill context may already exist in the active session, reuse it first. Do not refetch GitHub issues, PRs, comments, review threads, PRDs, or linked artifacts unless the needed content is missing, freshness is required, or the user explicitly asks.
+After edits, verify frontmatter, directory/name agreement, links, template tags, stale references, command syntax, and `git diff --check`. Keep temporary files, traces, generated outputs, and secrets out of git.

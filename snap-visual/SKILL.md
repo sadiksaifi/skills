@@ -1,6 +1,9 @@
 ---
 name: snap-visual
-description: Create a single-page HTML visual brief to explain a concept, plan, architecture, comparison, or proposal — then open it in the browser. Use whenever the user asks to "explain this visually", "show me an HTML page", "make a visual", "diagram this", "visualize X", or wants something rendered as a page instead of prose. Also reach for this proactively when a dense explanation (an architecture, a migration plan, a set of tradeoffs, a design proposal) would clearly land better as a visual document than a wall of text.
+description: >
+  Use when a concept, plan, architecture, comparison, migration, tradeoff, or
+  proposal should be explained as a rendered single-page HTML visual instead of
+  prose; trigger on requests to visualize, diagram, or show an HTML page.
 ---
 
 # Snap Visual
