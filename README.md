@@ -6,7 +6,7 @@ Opinionated [Agent Skills](https://agentskills.io) for building software the way
 
 | Skill | Purpose |
 |-------|---------|
-| `snap-idea` | Relentlessly interview ideas, plans, and designs until shared understanding |
+| `snap-idea` | Resolve consequential ambiguity before specification or implementation |
 | `snap-issues` | Turn context into one concise GitHub issue or a dependency-aware set of vertical issues |
 | `snap-forge` | Implement ready work through vertical red-green cycles and atomic commits |
 | `snap-pr` | Publish or refresh a reviewer-ready PR from current branch work |

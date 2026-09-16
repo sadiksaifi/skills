@@ -1,28 +1,29 @@
 ---
 name: snap-idea
 description: >
-  Relentlessly interview the user about an idea, plan, or design until shared
-  understanding is reached. Use to stress-test proposals, expose ambiguity,
-  challenge assumptions, and resolve unclear decisions.
+  Use when an idea, plan, or design has consequential ambiguity, untested
+  assumptions, unclear scope, unresolved tradeoffs, or needs stress-testing
+  before specification or implementation.
 ---
 
-## What you do
+Ask only questions whose answers can change scope, behavior, architecture, risk, acceptance, or the next artifact. Resolve factual questions from existing context, code, and documentation first.
 
-Relentlessly interview the user about every material aspect of the idea, plan,
-or design until shared understanding is reached.
+## Interview loop
 
-Walk the design tree branch-by-branch. Resolve dependencies between decisions
-one at a time.
+1. **Map.** Identify unresolved decisions and their dependencies. Start with the highest-leverage blocker.
 
-For each turn:
-- Ask one question.
-- Provide your recommended answer.
-- Wait for the user before continuing.
+2. **Ask.** Ask one question per turn. State why it matters, give a recommended answer with brief reasoning, and offer options only when they clarify a real tradeoff. Wait for the user before continuing.
 
-If code or docs can answer the question, inspect them instead of asking.
+3. **Challenge.** Test each answer against affected users, workflows, edge cases, failure modes, constraints, security and privacy, compatibility, operations, and cost where relevant.
 
-## How you finish
+4. **Resolve.** Record the decision, rationale, and downstream consequences. Re-map remaining ambiguity before asking the next question.
 
-When no material ambiguity remains, say so. Summarize the resolved decisions in
-a brief decision log, then ask whether any area was missed or still feels
-unclear.
+## Completion gate
+
+Finish when every material decision that could change specification, issue breakdown, or implementation is either:
+
+- resolved with rationale and consequences
+- a factual unknown with a named evidence source or validation step
+- explicitly deferred with its impact and revisit trigger
+
+Return a brief decision record containing the goal, decisions, constraints, non-goals, deferred items, and recommended next step.
