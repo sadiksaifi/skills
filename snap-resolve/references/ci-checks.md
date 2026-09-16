@@ -1,6 +1,6 @@
 # CI Failure Triage
 
-Convert current GitHub Actions failures into deduplicated `CI` ledger items.
+Convert current GitHub Actions failures into deduplicated `CI` work items.
 
 ## Collect
 
@@ -21,7 +21,7 @@ gh run view "$run_id" --repo "$owner/$repo" --log-failed
 
 For large logs, isolate the first root failure in each job. Capture assertion or compiler output, rule/error code, test name, and file/line when present. Report inaccessible logs as blockers.
 
-## Build ledger items
+## Build CI items
 
 Create one item per independent root cause:
 
@@ -34,4 +34,4 @@ Files: <paths, when known>
 
 Merge a CI failure with reviewer feedback describing the same defect. Preserve the review thread/comment IDs for the reply. CI-only items need no reviewer reply.
 
-Completion: every current failed check maps to a ledger item, a deduplicated item, or a concrete log-access blocker.
+Completion: every current failed check maps to a work item, a deduplicated item, or a concrete log-access blocker.

@@ -1,63 +1,38 @@
 ---
 name: snap-issues
 description: >
-  Turn current context, source references, and repo understanding into
-  independently grabbable GitHub issues. Use when the user wants to break down a
-  PRD, plan, spec, idea discussion, or implementation conversation into vertical
-  issues agents can pick up.
+  Use when a conversation, feature brief, plan, spec, PRD, or repo context must
+  become one concise GitHub issue or a dependency-aware set of
+  implementation-ready vertical issues.
 ---
 
-Take conversation/PRD/spec context and codebase understanding and produce independently grabbable GitHub issues.
+Default to one issue. Split only when one fresh agent context cannot implement, verify, and merge the outcome. Preserve only decisions that prevent rediscovery.
 
-## Process
+## Workflow
 
-1. Gather context:
+1. **Source.** Reuse current context. Fetch cited issues, PRs, docs, URLs, or files only when their content is missing; follow links only when they change scope or intent.
 
-Work from whatever is already in the conversation context. If the user passes an issue reference, PR, URL, or path as an argument, fetch it recursively and read the relevant body, comments, and linked context.
+2. **Ground.** Inspect enough of the repo to use its domain language and respect current behavior, ADRs, interfaces, tests, and tracker conventions.
 
-2. Explore the codebase:
+3. **Shape.** Resolve decisions that change scope, outcome, or dependencies. Keep one issue when possible. An explicit single-issue request is binding. Otherwise create independently mergeable vertical slices; each delivers a narrow end-to-end result and fits one fresh context.
 
-If you have not already explored the codebase, do so to understand the current state of the code. Issue titles and descriptions should use the project's domain vocabulary, and respect ADRs, tests, interfaces, and prior art in the area you're touching.
+   Use hard blockers only; otherwise keep issues parallel. For a wide mechanical refactor that cannot stay green as vertical slices, sequence expand, migration batches, then contract.
 
-3. Draft vertical slices
+4. **Publish gate.** Apply this decision table:
+   - One issue is sufficient, or the user explicitly requested one issue: proceed automatically.
+   - Multiple issues are needed and the user explicitly authorized multiple issues or publication without questions: proceed automatically.
+   - Multiple issues are needed without that authorization: show only proposed titles, one-line outcomes, and blockers, then stop. Continue only after explicit approval.
 
-Break the plan into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
+5. **Write.** Use [`references/issue-template.md`](references/issue-template.md). Make the summary easy to scan and the acceptance criteria precise enough to execute. Keep intent self-contained and link canonical background instead of copying it.
 
-Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an architectural decision or a design review. AFK slices can be implemented and merged without human interaction. Prefer AFK over HITL where possible.
+6. **Publish.** Create issues blocker-first so later issues can use GitHub's native `--blocked-by` relationships:
 
-<vertical-slice-rules>
-- Each slice delivers a narrow but COMPLETE path through every relevant layer (schema, API, UI, tests), with enough public contract detail to implement the user-facing behavior
-- A completed slice is demoable or verifiable on its own
-- Prefer many thin slices over few thick ones
-</vertical-slice-rules>
+   ```bash
+   gh issue create --repo "$owner/$repo" \
+     --title "$title" --body-file "$body_file" \
+     --blocked-by "$blocker_numbers"
+   ```
 
-4. Quiz the user
+   Omit `--blocked-by` when empty. Follow existing label, assignee, milestone, issue-type, and parent conventions; leave unset metadata unset. Preserve source or parent issues unless the user requests an update.
 
-Present the proposed breakdown as a numbered list. For each slice, show:
-
-- **Title**: short descriptive name
-- **Type**: HITL / AFK
-- **Blocked by**: which other slices, if any, must complete first
-- **User stories covered**: which user stories this addresses, if the source material has them
-
-Ask the user:
-
-- Does the granularity feel right? Too coarse or too fine?
-- Are the dependency relationships correct?
-- Should any slices be merged or split further?
-- Are the correct slices marked as HITL and AFK?
-
-Iterate until the user approves the breakdown.
-
-5. Publish the issues to GitHub
-
-For each approved slice, publish a new issue to GitHub using `references/issue-template.md`.
-Assign every created issue to the invoking GitHub user (`--assignee @me` when using `gh issue create`).
-
-Publish issues in dependency order, blockers first, so later issues can reference real GitHub issue identifiers in the `Blocked by` field.
-
-Do not close or modify any parent issue.
-
-6. Post the breakdown (optional)
-
-If the source context includes a GitHub issue, post the final breakdown as a comment on that issue using `references/breakdown-template.md`.
+7. **Report.** Return created issue links, blocking edges, and the current frontier: issues with no open blockers.

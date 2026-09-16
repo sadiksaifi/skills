@@ -1,14 +1,13 @@
 # SNAP — SNAP's Not A Prompt
 
-Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: shape ideas, write PRDs, create issues, forge changes, open PRs, review, and resolve feedback.
+Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: shape ideas, create issues, forge changes, open PRs, review, and resolve feedback.
 
 ## Skills
 
 | Skill | Purpose |
 |-------|---------|
 | `snap-idea` | Relentlessly interview ideas, plans, and designs until shared understanding |
-| `snap-prd` | Turn current context and repo understanding into an implementation-ready PRD GitHub issue |
-| `snap-issues` | Turn conversation, PRD, or spec context into independently grabbable vertical GitHub issues |
+| `snap-issues` | Turn context into one concise GitHub issue or a dependency-aware set of vertical issues |
 | `snap-forge` | Strict TDD execution — red-green cycles, atomic commits, refactor at end |
 | `snap-pr` | Create or update GitHub PRs from current branch work |
 | `snap-review` | Read-only PR review — priority-labeled findings, risks, missing tests; optional `auto` posting only for findings or material missing tests |
@@ -23,18 +22,20 @@ Use the skills independently or chain them when useful. Enter wherever your cont
 
 ```text
                     Any starting context
-        (conversation / PRD / spec / GitHub issue)
+        (conversation / plan / spec / GitHub issue)
                               |
-        +---------------------+---------------------+
-        |                     |                     |
-  Unclear idea           Need a PRD          Need issues
-        |                     |                     |
-        v                     v                     v
-   snap-idea ------------> snap-prd ----------> snap-issues
-        |                     |                     |
-        +---------------------+---------------------+
+                 +------------+------------+
+                 |                         |
+             unclear                     clear
+                 |                         |
+                 v                         |
+             snap-idea                     |
+                 |                         |
+                 +------------+------------+
                               |
-                         Ready issue
+                              v
+                        snap-issues
+                    (one issue or a set)
                               |
                               v
                          snap-forge
@@ -64,8 +65,8 @@ Use the skills independently or chain them when useful. Enter wherever your cont
 Common paths:
 
 ```text
-Idea to implementation: snap-idea → snap-prd → snap-issues → snap-forge → snap-pr
-PRD/spec to issues:     snap-issues → snap-forge → snap-pr
+Idea to implementation: snap-idea → snap-issues → snap-forge → snap-pr
+Plan/spec to issues:    snap-issues → snap-forge → snap-pr
 Issue to PR:            snap-forge → snap-pr → snap-review
 Feedback loop:          snap-review → snap-resolve → snap-pr → snap-review
 Session transfer:       snap-handoff
