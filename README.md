@@ -1,88 +1,51 @@
-# SNAP — SNAP's Not A Prompt
+# SNAP
 
-Opinionated [Agent Skills](https://agentskills.io) for building software the way strong teams actually work: shape ideas, create issues, forge changes, open PRs, review, and resolve feedback.
+> **SNAP's Not A Prompt**
+
+Portable, opinionated [Agent Skills](https://agentskills.io) for shaping work, implementing it, publishing it, and closing the review loop.
+
+## Flow
+
+```mermaid
+flowchart LR
+    U[Unclear idea] --> I[snap-idea]
+    R[Ready context] --> S[snap-issues]
+    I --> S
+    S --> F[snap-forge]
+    F --> P[snap-pr]
+    P --> V[snap-review]
+    V -->|feedback| X[snap-resolve]
+    X --> P
+    V -->|clean| D[Done]
+```
+
+`snap-visual` can explain work at any stage. `snap-handoff` can transfer any stage to a fresh agent.
 
 ## Skills
 
-| Skill | Purpose |
-|-------|---------|
-| `snap-idea` | Resolve consequential ambiguity before specification or implementation |
-| `snap-issues` | Turn context into one concise GitHub issue or a dependency-aware set of vertical issues |
-| `snap-forge` | Implement ready work through vertical red-green cycles and atomic commits |
-| `snap-pr` | Publish or refresh a reviewer-ready PR from current branch work |
-| `snap-review` | Review PRs read-only for correctness, architecture, and material risk |
-| `snap-resolve` | Resolve PR feedback and CI failures automatically; optional `ask` approval gate |
-| `snap-visual` | Turn an explanation into a single self-contained HTML visual brief and open it in the browser |
-| `snap-handoff` | Preserve continuation-critical session state for a fresh agent |
-
-## Workflow
-
-Use the skills independently or chain them when useful. Enter wherever your context is already clear.
-
-```text
-                    Any starting context
-        (conversation / plan / spec / GitHub issue)
-                              |
-                 +------------+------------+
-                 |                         |
-             unclear                     clear
-                 |                         |
-                 v                         |
-             snap-idea                     |
-                 |                         |
-                 +------------+------------+
-                              |
-                              v
-                        snap-issues
-                    (one issue or a set)
-                              |
-                              v
-                         snap-forge
-                         (TDD build)
-                              |
-                              v
-                           snap-pr
-                     (create/update PR)
-                              |
-                              v
-                        snap-review
-                              |
-                         feedback?
-                         /       \
-                       no         yes
-                       |           |
-                       v           v
-                     done    snap-resolve
-                                   |
-                                   v
-                              snap-pr
-                            (update PR)
-                                   |
-                                   +------ back to snap-review
-```
-
-Common paths:
-
-```text
-Idea to implementation: snap-idea → snap-issues → snap-forge → snap-pr
-Plan/spec to issues:    snap-issues → snap-forge → snap-pr
-Issue to PR:            snap-forge → snap-pr → snap-review
-Feedback loop:          snap-review → snap-resolve → snap-pr → snap-review
-Session transfer:       snap-handoff
-```
+| Stage | Skill | Use it when |
+| --- | --- | --- |
+| Shape | `snap-idea` | Consequential ambiguity or tradeoffs must be resolved before work starts. |
+| Shape | `snap-issues` | Context must become one concise issue or an approved set of vertical issues. |
+| Build | `snap-forge` | Substantial work should be implemented with meaningful tests and atomic commits. |
+| Publish | `snap-pr` | Relevant changes must be staged, committed, pushed, and published as a reviewer-ready PR. |
+| Review | `snap-review` | A PR needs read-only review for correctness, architecture, test quality, and material risk. |
+| Resolve | `snap-resolve` | Review feedback or failing CI must be fixed, answered, and resolved. |
+| Explain | `snap-visual` | A concept, plan, architecture, or comparison will land better as a visual brief. |
+| Transfer | `snap-handoff` | Continuation-critical session state must move to a fresh agent. |
 
 ## Install
 
-**All skills:**
+All skills:
+
 ```bash
 npx skills add sadiksaifi/skills
 ```
 
-**Individual skill:**
+One skill:
+
 ```bash
 npx skills add sadiksaifi/skills --skill snap-forge
 ```
 
-## License
-
-MIT
+After installation, ask naturally or invoke a skill by name where the harness supports explicit skill invocation.
