@@ -15,9 +15,7 @@ Follow Agent Skills spec unless local repo rules override. Keep this file evergr
 | Field | Constraints |
 | --- | --- |
 | `name` | Required. 1–64 chars. Lowercase letters, numbers, hyphens. No leading/trailing hyphen. No `--`. Must match parent directory. |
-| `description` | Required. 1–1024 chars. What the skill does, when to use it, concrete trigger terms. |
-
-Argument-taking skills use portable Markdown sections per `docs/skill-invocation.md`.
+| `description` | Required. 1–1024 chars. Model-facing activation pointer beginning `Use when...`; name distinct trigger branches, not body identity. |
 
 Keep `SKILL.md` activation-critical: frontmatter, core procedure, resource map, execution-critical gotchas. Move long docs to `references/`, reusable output material to `assets/`, deterministic helpers to `scripts/`. Budget `<500` lines, `<5k` tokens preferred. Use skill-root-relative paths. Keep references one-level deep; avoid nested reference chains.
 
@@ -25,7 +23,7 @@ Templates are lazy-loaded resources. Put exact artifact Markdown in topic-specif
 
 ## Invocation Contract
 
-Argument-taking skills follow `docs/skill-invocation.md`. Put `## Invocation`, `## Args`, and `## Routes` in `SKILL.md` when inputs affect behavior.
+Argument-taking skills declare `/skill:<name> [key|key=value]...` with `## Invocation`, `## Args`, and `## Routes`. Reserve `help`, document defaults and conflicts, and stop with usage for unsafe unknown arguments.
 
 ## Authoring Contract
 

@@ -1,43 +1,27 @@
 ---
 name: snap-pr
 description: >
-  Create or update a GitHub pull request from the current branch's committed
-  work. Use when the user wants to open a PR, refresh the current branch PR,
-  push committed work, or prepare a reviewer-ready PR title and body.
+  Use when current branch work must be staged, committed, pushed, and opened as
+  a GitHub pull request, or when the existing branch PR needs its title, body,
+  base, or reviewer verification refreshed.
 ---
 
-## Invocation
+Route automatically: update an existing branch PR; otherwise create one. A direct PR request or manual invocation authorizes relevant stage, commit, push, and publish operations.
 
-Syntax: `/skill:snap-pr [update]`
+## Workflow
 
-## Args
+1. **State.** Inspect branch/default/upstream, worktree, base diff, unpushed commits, and branch PR. For a detached/default branch, stop with one next action. Resolve one create or update route.
 
-| Key | Values | Default | Notes |
-| --- | --- | --- | --- |
-| `help` | bool | false | show usage |
-| `update` | bool | false | update the current branch PR instead of creating one |
+2. **Commit.** Without direct or manual authorization, ask before mutation. Infer scope from the request and session, stage only relevant paths, and create atomic Conventional Commits.
+   For mixed scope, show candidate paths and ask one question. Stop when no publishable diff exists or the requested route is unavailable.
 
-Create or update a GitHub pull request from the current branch's committed work.
+3. **Evidence.** Reuse session context. Read `base...HEAD` and linked sources only to account for every material change, intent decision, and verification result. Treat commits as evidence, not narrative.
 
-## Process
+4. **Body.** Use the repository PR template when present; otherwise use [`references/template.md`](references/template.md).
+   Give each fact one home: summary for motivation and scope, changes for delivered behavior, verification for evidence, related links for traceability.
 
-1. Inspect git state: current branch, default branch, working tree, unpushed commits, and current-branch PR.
+5. **Publish.** Push, then create or update. Preserve accurate content and metadata; change stale or explicitly requested fields. Honor draft, base, reviewer, label, assignee, and milestone requests.
 
-2. Choose mode:
-   - default: create a PR; if one already exists, stop and ask whether to update
-   - `update`: update the current-branch PR; if none exists, stop
+6. **Verify.** Re-read title, body, base, head, state, and URL. Report the URL, route, pushed branch, verification, and blockers. Pending GitHub CI is acceptable.
 
-3. Ensure branch truth:
-   - uncommitted relevant work: ask whether to commit it
-   - unpushed commits: push them
-
-4. Write PR:
-   - create: use session context first; inspect `base...HEAD` only when context is missing
-   - update: inspect `base...HEAD`
-   - use commits as evidence only; do not list commit subjects, hashes, or counts in the PR body unless the user explicitly asks
-   - describe `## Changes` by user-visible behavior, subsystem, or review area rather than by commit chronology
-   - use the repo PR template when present; always include the QA section from `references/template.md`; if no repo PR template exists, use `references/template.md` as the fallback template
-
-5. Publish:
-   - create or update the PR
-   - show the PR URL
+Completion: the remote branch contains the relevant work, the PR matches the full branch diff and intent, and every body claim is evidence-backed.

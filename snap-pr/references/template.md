@@ -1,40 +1,35 @@
-# PR Template
+# PR Body Template
 
-Use the Markdown inside `<template>` as the fallback PR body.
-Always include `## QA`, even when the repo PR template does not have one.
-Omit `## Closes` when no closing issue refs are known.
-Write `## Changes` as grouped review notes, not a commit log. Do not include commit subjects, hashes, or commit counts unless the user explicitly asks.
+Fallback for repositories without a PR template. Optimize for reviewer scan without requiring branch-history reconstruction.
 
-<qa-guidance>
-Write QA as a manual reviewer walkthrough, not a test transcript.
+Use an outcome title, a one- or two-sentence summary, two to six change bullets, and only verification that ran. If none ran, state the reason.
 
-Good QA:
-- Open the settings page, turn email notifications off, save, then refresh. The toggle should stay off and no confirmation email should be sent.
+Each section has one owner:
 
-Bad QA:
-- Run `pnpm test`.
-- Verify `expect(response.status).toBe(200)`.
-- Check that `POST /api/settings` returns `{ "ok": true }`.
-</qa-guidance>
+- `Summary`: motivation and scope boundary
+- `Changes`: delivered behavior
+- `Verification`: observed automated and manual evidence
+- `Related`: issue or specification links
 
 <template>
 
 ## Summary
 
-- [brief outcome-focused summary]
+[Explain why this PR exists and where its scope ends.]
 
 ## Changes
 
-- [behavior or subsystem change]
+- [Reviewer-relevant change and observable effect.]
 
-## Test Plan
+## Verification
 
-- [automated verification performed]
+- Automated: `[command]` - [result]
+- Manual: [action] -> [observed result]
 
-## QA
+## Related
 
-- [manual reviewer scenario: start here, do this, expect this result]
-
-> Closes [issue refs]
+- Closes [issue reference]
 
 </template>
+
+Omit unused verification lines and `## Related`. With no verification, use `Not run: [reason]`.
