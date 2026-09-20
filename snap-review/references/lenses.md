@@ -11,13 +11,19 @@ Apply each relevant lens to changed behavior and affected call paths. Findings r
 - **Performance:** hot paths, query or network amplification, blocking work, memory, and unbounded growth
 - **Operations:** failure visibility, recovery, configuration, and deployment assumptions
 
+## Change economy
+
+Ask yourself: "Can this be solved correctly with less code?" Every added abstraction, wrapper, helper, layer, file, defensive branch, and test must serve a concrete present requirement, invariant, or variation point. Prefer deletion, simplification, reuse, or inlining when it preserves correctness, clarity, locality, and module depth.
+
+Treat a large or diffuse diff as a signal to inspect scope and necessity, never as a finding by itself. Report excess structure only when it creates concrete maintenance, correctness, testability, or future-change cost.
+
 ## Tests
 
-Tests buy confidence where owned behavior can regress. Review both missing evidence and low-value additions.
+Tests buy confidence where owned behavior can regress. Account for every added or materially changed test by identifying the distinct owned behavior or regression it protects and a realistic production-code change that would make it fail.
 
 Flag missing regression coverage only when owned behavior has a plausible regression, lacks durable public-interface evidence, and justifies maintenance. Name the exact regression. For a bug fix, the test must exercise the former failure path rather than merely pass with the new implementation.
 
-Low-value tests restate third-party library behavior, types, compiler checks, static declarations, obvious wiring, constants, trivial accessors, or coverage totals. Flag implementation-detail assertions and internal mocks when they create concrete false confidence or maintenance risk.
+A test is low-value when it duplicates existing behavioral evidence; adds input permutations without reaching a different branch, boundary, or failure mode; restates third-party behavior, types, compiler checks, static declarations, obvious wiring, constants, trivial accessors, or coverage totals; or would keep passing when its claimed behavior breaks. Flag implementation-detail assertions and internal mocks when they create false confidence or maintenance risk. Consolidate low-value additions into one root-cause finding and direct the fix toward deletion or the smallest set that preserves distinct evidence.
 
 Strong tests enter and verify through public interfaces, keep owned modules real, and use doubles only at uncontrolled system boundaries.
 

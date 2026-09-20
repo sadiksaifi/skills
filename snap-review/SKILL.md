@@ -37,7 +37,7 @@ Bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments s
 2. **Context.** Reuse current context, then gather the PR intent, base/head, diff, changed files, checks, commits, reviews, comments, and unresolved threads.
    Follow linked material only when it changes scope or acceptance. Read repository instructions governing each changed path. Report a blocker when critical context remains inaccessible or conflicting.
 
-3. **Review.** Apply the behavior, tests, and architecture sections of [`references/lenses.md`](references/lenses.md) to every changed path. Review correctness and architecture independently.
+3. **Review.** Apply the behavior, change economy, tests, and architecture sections of [`references/lenses.md`](references/lenses.md) to every changed path. Review correctness and architecture independently.
    For architecture, inspect whether modules hide substantial implementation behind narrow interfaces, seams represent real variation, policy stays local, and callers and tests share the public interface.
    Trace changed behavior through affected callers and boundaries. Account for prior feedback and current replies; repeat only issues that remain present and unresolved. Keep one finding per root cause and cite the tightest honest changed-line anchor.
 
@@ -51,4 +51,4 @@ Bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments s
 
 6. **Post.** A qualifying review contains at least one priority finding. Post automatically on the default route. On `ask`, report locally and wait. An explicit instruction not to post always stops after the local report. Follow [`references/posting.md`](references/posting.md) and return the review URL when posted.
 
-Completion: every changed path is reviewed for behavior, meaningful test evidence, architecture, intent, and applicable repository rules; prior feedback is deduplicated, and every finding is material, located, evidence-backed, and actionable.
+Completion: every changed path is reviewed for behavior, change economy, architecture, intent, and applicable repository rules; every added or materially changed test is mapped to distinct behavioral or regression evidence or classified as low-value; prior feedback is deduplicated; and every finding is material, located, evidence-backed, and actionable.
