@@ -49,6 +49,6 @@ Bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments s
    - findings present: use [`references/template.md`](references/template.md)
    - incomplete review: report `Review blocked: [reason]`
 
-6. **Post.** A qualifying review contains at least one priority finding. Post automatically on the default route. On `ask`, report locally and wait. An explicit instruction not to post always stops after the local report. Follow [`references/posting.md`](references/posting.md) and return the review URL when posted.
+6. **Post.** A qualifying review contains at least one priority finding. Post its inlineable findings automatically on the default route. On `ask`, report locally and wait. An explicit instruction not to post always stops after the local report. Follow [`references/posting.md`](references/posting.md) and return each posted comment URL.
 
 Completion: every changed path is reviewed for behavior, change economy, architecture, intent, and applicable repository rules; every added or materially changed test is mapped to distinct behavioral or regression evidence or classified as low-value; prior feedback is deduplicated; and every finding is material, located, evidence-backed, and actionable.

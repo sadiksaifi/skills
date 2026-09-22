@@ -1,53 +1,51 @@
 # GitHub Review Posting
 
-Post only reviews with at least one priority finding. Use the local finding shape without `Risks / Unknowns`.
+Post findings only as inline review comments. A finding without an honest changed-line anchor stays in the local report.
+
+## Comment
+
+<template>
+
+**P1: [concise title]**
+
+[Trigger, mechanism, evidence, and impact.]
+
+**Fix:** [corrective direction.]
+
+Reviewed by {agent-harness} using {model-slug}.
+
+</template>
+
+Write the shortest comment that proves the problem and gives a corrective direction. Use concrete facts, active voice, plain words, and one idea per sentence. Cut filler, hedging, repetition, stock AI phrases, and decorative formatting. Keep only the trigger, mechanism, evidence, impact, and fix. Before posting, remove every sentence that does not change what the reader knows or should do.
+
+`{agent-harness}` is the exact product name of the coding tool running the skill, such as `Claude Code` or `Pi`. `{model-slug}` is the exact model identifier. Read both from explicit system or runtime metadata. If either is unavailable, ask before posting; never infer it.
 
 ## Placement
 
-- Anchor a finding inline when a current diff line honestly represents its root cause.
-- Use one inline comment per finding.
-- Put non-inlineable findings in the top-level review body.
-- Keep each finding in one place.
-- Use `RIGHT` for added or modified head lines and `LEFT` for removed base lines.
-- For a rejected anchor, retry once on the nearest changed line for the same root cause; then move the finding to the top-level body.
+- Post one comment per root cause.
+- Anchor on a changed root-cause line: `RIGHT` for head lines, `LEFT` for removed base lines.
+- Retry a rejected anchor once on the nearest honest changed line; otherwise keep the finding local.
+- Multi-line anchors require `start_line` and `start_side`; both endpoints must be in the diff.
 
-## Inline review
+## Post
 
-Create one `COMMENT` review containing all inline comments and any non-inlineable findings. Pin it to the reviewed head SHA.
-
-`review.json`:
+Create each comment through the pull-request review comments API, pinned to the reviewed head SHA.
 
 ```json
 {
-  "event": "COMMENT",
+  "body": "<comment>",
   "commit_id": "<head-sha>",
-  "body": "<non-inline findings, or: See inline findings.>",
-  "comments": [
-    {
-      "path": "path/to/file.ts",
-      "line": 42,
-      "side": "RIGHT",
-      "body": "### P1: Incorrect behavior\n\n- Location: `path/to/file.ts:42`\n- Failure: [trigger, mechanism, and evidence]\n- Impact: [consequence]\n- Fix: [corrective direction]"
-    }
-  ]
+  "path": "path/to/file.ts",
+  "line": 42,
+  "side": "RIGHT"
 }
 ```
 
-For a multi-line anchor, add `start_line` and `start_side`; both endpoints must be in the current diff.
-
 ```bash
 gh api --method POST \
-  "repos/$owner/$repo/pulls/$pr/reviews" \
-  --input review.json
+  "repos/$owner/$repo/pulls/$pr/comments" \
+  --input comment.json \
+  --jq .html_url
 ```
 
-## Top-level review
-
-Use only when no finding has an honest inline anchor or the user explicitly requests top-level feedback. Join finding blocks with one blank line.
-
-```bash
-gh pr review "$pr" --repo "$owner/$repo" \
-  --comment --body "$body"
-```
-
-After posting, confirm the review and comments exist and return the review URL. A posting failure leaves the local report authoritative and must be reported.
+Confirm every posted comment exists and return its URL. On failure, report it and keep the local report authoritative.
