@@ -7,7 +7,7 @@ description: >
 
 # Test audit
 
-Audit existing tests after they have accumulated. This skill does not gate new tests; implementation and review skills handle that. Default to read-only findings. Edit only when the user requests cleanup. Scope the audit to the requested project, subsystem, or files; do not silently sample a requested full audit.
+Audit existing tests after they have accumulated. Default to read-only findings. Edit only when the user requests cleanup. Scope the audit to the requested project, subsystem, or files; do not silently sample a requested full audit.
 
 1. **Inventory.** Read repository rules and identify every test in scope, its production owner, neighboring suites, and relevant CI routing. For a full audit, record baseline pass/fail results and account for every test declaration, including parameterized rows with distinct assertions. Done when every in-scope test has an owner and baseline status or a stated reason it could not run.
 2. **Judge the proof.** Read each test and its production path. Identify the behavior its assertions actually detect, a credible regression that makes it fail, and the strongest existing suite for that contract. Check history and non-test callers before judging a test-only seam. Classify each test: retain, repair a weak assertion, consolidate into a named owner, or delete with surviving proof or a no-test rationale. Done when every test has an evidence-backed disposition.
