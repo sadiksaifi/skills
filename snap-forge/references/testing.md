@@ -13,13 +13,13 @@ Add a test only when it:
 
 Use direct verification for static declarations, obvious wiring, constants, trivial accessors, and similarly inspectable changes. Existing checks or manual observation are sufficient when a new assertion adds no signal.
 
-Test an integration's contract or adapter behavior, not whether a third-party library works as documented. Coverage alone never justifies a test.
+Test an integration's contract or adapter behavior, not whether a third-party library works as documented. Coverage alone never justifies a test. Before adding one, check the existing owner suite. Extend it for the same contract; add another test only for a failure mode it cannot catch.
 
 ## Test contract
 
 A strong test enters and verifies through public interfaces, covers one meaningful behavior, and survives internal refactoring. Prefer integration-style tests across real controlled code. Keep owned modules real.
 
-Use test doubles only at uncontrolled boundaries: external services, time, randomness, filesystem edges, and databases when a real test database is impractical. Expose a narrow operation-specific interface at that boundary.
+Use test doubles only at uncontrolled boundaries: external services, time, randomness, filesystem edges, and databases when a real test database is impractical. Expose a narrow operation-specific interface at that boundary. Keep tests at the real boundary rather than adding test-only production seams. Derive expected results independently of the helper or mock under test.
 
 ## Red gate
 

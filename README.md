@@ -28,6 +28,7 @@ flowchart LR
 | Shape | `snap-idea` | Consequential ambiguity or tradeoffs must be resolved before work starts. |
 | Shape | `snap-issues` | Context must become one concise issue or an approved set of vertical issues. |
 | Build | `snap-forge` | Substantial work should be implemented with meaningful tests and atomic commits. |
+| Audit | `snap-test-audit` | Periodically inventory existing tests and remove redundant or false coverage without losing contracts. |
 | Publish | `snap-pr` | Relevant changes must be staged, committed, pushed, and published as a reviewer-ready PR. |
 | Review | `snap-review` | A PR needs read-only review for correctness, architecture, test quality, and material risk. |
 | Resolve | `snap-resolve` | Review feedback or failing CI must be fixed, answered, and resolved. |
