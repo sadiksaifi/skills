@@ -23,7 +23,7 @@ Tests buy confidence where owned behavior can regress. Account for every added o
 
 Flag missing regression coverage only when owned behavior has a plausible regression, lacks durable public-interface evidence, and justifies maintenance. Name the exact regression. For a bug fix, the test must exercise the former failure path rather than merely pass with the new implementation.
 
-A test is low-value when it duplicates existing behavioral evidence; adds input permutations without reaching a different branch, boundary, or failure mode; restates third-party behavior, types, compiler checks, static declarations, obvious wiring, constants, trivial accessors, or coverage totals; or would keep passing when its claimed behavior breaks. Flag implementation-detail assertions and internal mocks when they create false confidence or maintenance risk. Consolidate low-value additions into one root-cause finding and direct the fix toward deletion or the smallest set that preserves distinct evidence.
+A test is low-value when it duplicates behavioral evidence; varies inputs without reaching a different branch, boundary, or failure mode; restates third-party behavior or static checks; or still passes when its claimed behavior breaks. Check for self-comparisons, expected results produced by the code under test, mocks that supply the asserted result, and negative cases that pass at the wrong guard. Flag implementation-detail assertions and test-only production seams that create false confidence or maintenance cost. Consolidate findings by root cause; recommend deletion or the smallest set preserving distinct evidence.
 
 Strong tests enter and verify through public interfaces, keep owned modules real, and use doubles only at uncontrolled system boundaries.
 
