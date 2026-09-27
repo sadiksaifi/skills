@@ -19,7 +19,7 @@ flowchart LR
     V -->|clean| D[Done]
 ```
 
-`snap-visual` can explain work at any stage. `snap-handoff` can transfer any stage to a fresh agent.
+`snap-handoff` can transfer work at any stage to a fresh agent.
 
 ## Skills
 
@@ -32,7 +32,6 @@ flowchart LR
 | Publish | `snap-pr` | Relevant changes must be staged, committed, pushed, and published as a reviewer-ready PR. |
 | Review | `snap-review` | A PR needs read-only review for correctness, architecture, test quality, and material risk. |
 | Resolve | `snap-resolve` | Review feedback or failing CI must be fixed, answered, and resolved. |
-| Explain | `snap-visual` | A concept, plan, architecture, or comparison will land better as a visual brief. |
 | Transfer | `snap-handoff` | Continuation-critical session state must move to a fresh agent. |
 
 ## Install
