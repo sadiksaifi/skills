@@ -30,7 +30,7 @@ flowchart LR
 | Build | `snap-forge` | Substantial work should be implemented with meaningful tests and atomic commits. |
 | Audit | `snap-test-audit` | Periodically inventory existing tests and remove redundant or false coverage without losing contracts. |
 | Publish | `snap-pr` | Relevant changes must be staged, committed, pushed, and published as a reviewer-ready PR. |
-| Review | `snap-review` | A PR needs read-only review for correctness, architecture, test quality, and material risk. |
+| Review | `snap-review` | A PR, branch, commit, local diff, or set of files needs read-only review for correctness, architecture, test quality, and material risk. |
 | Resolve | `snap-resolve` | Review feedback or failing CI must be fixed, answered, and resolved. |
 | Transfer | `snap-handoff` | Continuation-critical session state must move to a fresh agent. |
 
