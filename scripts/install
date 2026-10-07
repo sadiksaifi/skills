@@ -4,24 +4,20 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+source "$SCRIPT_DIR/skills-config"
+
 if [[ -n "${AGENTS:-}" ]]; then
   read -r -a AGENT_ARGS <<< "$AGENTS"
 else
   AGENT_ARGS=(claude-code codex hermes-agent)
 fi
 
-shopt -s nullglob
-SKILL_FILES=("$REPO_ROOT"/*/SKILL.md)
+load_skills
 
-if [[ ${#SKILL_FILES[@]} -eq 0 ]]; then
-  echo "No skills found under $REPO_ROOT" >&2
-  exit 1
-fi
-
-for skill_file in "${SKILL_FILES[@]}"; do
-  skill_dir="$(dirname "$skill_file")"
-  skill_name="$(basename "$skill_dir")"
+for index in "${!SKILL_NAMES[@]}"; do
+  skill_name="${SKILL_NAMES[$index]}"
+  skill_source="${SKILL_SOURCES[$index]}"
 
   echo "Installing $skill_name"
-  pnpx skills add -g "$skill_dir" -a "${AGENT_ARGS[@]}" -y
+  npx --yes skills@latest add "$skill_source" --skill "$skill_name" -g -a "${AGENT_ARGS[@]}" -y
 done
