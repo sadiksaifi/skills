@@ -1,27 +1,53 @@
 ---
 name: snap-pr
 description: >
-  Use when current branch work must be staged, committed, pushed, and opened as
-  a GitHub pull request, or when the existing branch PR needs its title, body,
-  base, or reviewer verification refreshed.
+  Use when the user asks to create or update a pull request
 ---
 
-Route automatically: update an existing branch PR; otherwise create one. A direct PR request or manual invocation authorizes relevant stage, commit, push, and publish operations.
+Publish the current branch as a reviewer-ready PR whose body matches the full branch diff:
 
-## Workflow
+```
+# direct PR request or manual invocation authorizes stage, commit, push, publish; otherwise ask first
+state = inspect(branch, default, upstream, worktree, base...HEAD, unpushed, branch_pr)
+if detached or on default: stop with one next action
+route = update if branch_pr else create
 
-1. **State.** Inspect branch/default/upstream, worktree, base diff, unpushed commits, and branch PR. For a detached/default branch, stop with one next action. Resolve one create or update route.
+paths = relevant(request, session)    # mixed scope: show candidate paths, ask once
+commit(paths)                         # atomic Conventional Commits
+if no publishable diff: stop
 
-2. **Commit.** Without direct or manual authorization, ask before mutation. Infer scope from the request and session, stage only relevant paths, and create atomic Conventional Commits.
-   For mixed scope, show candidate paths and ask one question. Stop when no publishable diff exists or the requested route is unavailable.
+evidence = read(base...HEAD, linked sources)   # every material change, decision, and check; commits are evidence, not narrative
+title = outcome of the change
+body = repo PR template or the template below
 
-3. **Evidence.** Reuse session context. Read `base...HEAD` and linked sources only to account for every material change, intent decision, and verification result. Treat commits as evidence, not narrative.
+push
+route(title, body)                    # keep accurate fields; change stale or requested ones
+apply requested draft, base, reviewers, labels, assignees, milestone
 
-4. **Body.** Use the repository PR template when present; otherwise use [`references/template.md`](references/template.md).
-   Give each fact one home: summary for motivation and scope, changes for delivered behavior, verification for evidence, related links for traceability.
+reread(title, body, base, head, state, url)
+report url, route, branch, verification, blockers   # pending CI is fine
+done = remote has the work, PR matches the full diff and intent, every body claim has evidence
+```
 
-5. **Publish.** Push, then create or update. Preserve accurate content and metadata; change stale or explicitly requested fields. Honor draft, base, reviewer, label, assignee, and milestone requests.
+```markdown
+## Summary
 
-6. **Verify.** Re-read title, body, base, head, state, and URL. Report the URL, route, pushed branch, verification, and blockers. Pending GitHub CI is acceptable.
+[1-2 sentences: why this PR exists and where its scope ends.]
 
-Completion: the remote branch contains the relevant work, the PR matches the full branch diff and intent, and every body claim is evidence-backed.
+## Changes
+
+- [2-6 bullets: delivered behavior and its observable effect.]
+
+## Verification
+
+[Only checks that ran; drop unused lines. None ran: `Not run: [reason]`.]
+
+- Automated: `[command]` - [result]
+- Manual: [action] -> [observed result]
+
+## Related
+
+[Drop this section when there are no links.]
+
+- Closes [issue reference]
+```
