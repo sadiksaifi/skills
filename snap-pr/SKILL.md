@@ -16,9 +16,10 @@ paths = relevant(request, session)    # mixed scope: show candidate paths, ask o
 commit(paths)                         # atomic Conventional Commits
 if no publishable diff: stop
 
-evidence = read(base...HEAD, linked sources)   # every material change, decision, and check; commits are evidence, not narrative
+evidence = read(base...HEAD, linked sources)   # read every material change, decision, and check; the body keeps only what a reviewer needs
 title = outcome of the change
 body = repo PR template or the template below
+plain(title, body)    # for a reviewer new to the code: everyday words over internal terms; one short sentence per bullet; cut each sentence the reviewer would not miss
 
 push
 route(title, body)                    # keep accurate fields; change stale or requested ones
@@ -32,17 +33,17 @@ done = remote has the work, PR matches the full diff and intent, every body clai
 ```markdown
 ## Summary
 
-[1-2 sentences: why this PR exists and where its scope ends.]
+[1-2 sentences: what changes, why, and where scope ends.]
 
 ## Changes
 
-- [2-6 bullets: delivered behavior and its observable effect.]
+- [2-6 one-sentence bullets: the changes a reviewer should check.]
 
 ## Verification
 
-[Only checks that ran; drop unused lines. None ran: `Not run: [reason]`.]
+[One line per check that ran. Review and fix history stays in review threads. None ran: `Not run: [reason]`.]
 
-- Automated: `[command]` - [result]
+- `[command]` on [platform]: [result]
 - Manual: [action] -> [observed result]
 
 ## Related
