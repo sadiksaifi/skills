@@ -10,8 +10,9 @@ Review the target read-only. Weigh overbuilding and architecture as heavily as c
 target = PR | branch vs base | commit or range | staged or uncommitted | named paths   # from request, branch, or session; ask only when none
 context = intent, base/head, diff, changed files, commits
 if PR: context += checks, reviews, comments, unresolved threads
+context += walk(target)   # follow linked issues, PRs, specs, and docs, then their links; skip anything already read; stop at items that don't bear on intent
 named paths without a diff count as changed
-read the repo instructions governing each changed path   # follow links only when they change scope or acceptance
+read the repo instructions governing each changed path
 if critical context is missing or conflicting: output "Review blocked: [reason]"; stop
 
 for path in changed paths:

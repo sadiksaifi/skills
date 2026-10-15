@@ -7,7 +7,8 @@ description: >
 Turn the request into one concise GitHub issue, or into vertical issues only when one cannot fit:
 
 ```
-source = current context      # fetch cited issues, PRs, docs, URLs, files only when missing; follow links only when they change scope or intent
+source = current context      # fetch cited issues, PRs, docs, URLs, files only when missing
+source += walk(source)   # follow linked issues, PRs, specs, and docs, then their links; skip anything already read; stop at items that don't bear on intent
 ground in repo: domain language, current behavior, ADRs, interfaces, tests, tracker conventions
 resolve decisions that change scope, outcome, or dependencies
 

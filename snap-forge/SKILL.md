@@ -9,6 +9,7 @@ Build the request one behavior at a time with red-green-refactor, testing only w
 ```
 checkout = current                # branch or worktree only when asked
 keep unrelated changes untouched
+context = walk(request)   # follow linked issues, PRs, specs, and docs, then their links; skip anything already read; stop at items that don't bear on intent
 behaviors = split(request)        # ask only if a gap changes observable behavior or the public interface
 
 for b in behaviors:

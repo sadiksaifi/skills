@@ -14,7 +14,8 @@ if this session reviewed this PR and the reviewed head SHA == PR head:   # warm 
     refresh only: local status and HEAD, PR head SHA, checks, feedback newer than the review, thread state
     # everything else is cached; fetch a source only to fill a specific gap
 else:                                                                     # cold start
-    gather body, comments, reviews, threads and replies, commits, checks, failed logs, linked artifacts that affect intent or acceptance
+    gather body, comments, reviews, threads and replies, commits, checks, failed logs
+    context += walk(pr)   # follow linked issues, PRs, specs, and docs, then their links; skip anything already read; stop at items that don't bear on intent
 # a changed head, other target, failed review post, or conflicting evidence invalidates only the affected evidence; refresh that
 threads = capture query
 ci = ci items
