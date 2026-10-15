@@ -19,8 +19,6 @@ flowchart LR
     V -->|clean| D[Done]
 ```
 
-`snap-handoff` can transfer work at any stage to a fresh agent.
-
 ## Skills
 
 | Stage | Skill | Use it when |
@@ -32,7 +30,6 @@ flowchart LR
 | Publish | `snap-pr` | Relevant changes must be staged, committed, pushed, and published as a reviewer-ready PR. |
 | Review | `snap-review` | A PR, branch, commit, local diff, or set of files needs read-only review for correctness, architecture, test quality, and material risk. |
 | Resolve | `snap-resolve` | Review feedback or failing CI must be fixed, answered, and resolved. |
-| Transfer | `snap-handoff` | Continuation-critical session state must move to a fresh agent. |
 
 ## Install
 
