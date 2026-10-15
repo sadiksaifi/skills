@@ -1,38 +1,54 @@
 ---
 name: snap-issues
 description: >
-  Use when a conversation, feature brief, plan, spec, PRD, or repo context must
-  become one concise GitHub issue or a dependency-aware set of
-  implementation-ready vertical issues.
+  Use when the user asks to turn context, a plan, or a spec into one or more GitHub issues
 ---
 
-Default to one issue. Split only when one fresh agent context cannot implement, verify, and merge the outcome. Preserve only decisions that prevent rediscovery.
+Turn the request into one concise GitHub issue, or into vertical issues only when one cannot fit:
 
-## Workflow
+```
+source = current context      # fetch cited issues, PRs, docs, URLs, files only when missing; follow links only when they change scope or intent
+ground in repo: domain language, current behavior, ADRs, interfaces, tests, tracker conventions
+resolve decisions that change scope, outcome, or dependencies
 
-1. **Source.** Reuse current context. Fetch cited issues, PRs, docs, URLs, or files only when their content is missing; follow links only when they change scope or intent.
+issues = [one]
+if user asked for one: keep one
+elif one fresh agent context cannot implement, verify, and merge it:
+    issues = vertical slices  # each independently mergeable, narrow end-to-end, fits one fresh context
+    # wide mechanical refactor that cannot stay green: expand, migration batches, contract
+blockers = hard blockers only # everything else stays parallel
 
-2. **Ground.** Inspect enough of the repo to use its domain language and respect current behavior, ADRs, interfaces, tests, and tracker conventions.
+if len(issues) > 1 and user has not authorized multiple issues:
+    show titles, one-line outcomes, blockers; stop until approved
 
-3. **Shape.** Resolve decisions that change scope, outcome, or dependencies. Keep one issue when possible. An explicit single-issue request is binding. Otherwise create independently mergeable vertical slices; each delivers a narrow end-to-end result and fits one fresh context.
+for issue in issues, blockers first:
+    title = short, specific outcome
+    body = template below     # self-contained intent; keep only decisions that prevent rediscovery; link background, don't copy it
+    plain(title, body)        # for an implementer new to the code: everyday words over internal terms; one short sentence per bullet; cut each sentence the implementer would not miss
+    gh issue create --repo "$owner/$repo" --title "$title" --body-file "$body_file" --blocked-by "$blocker_numbers"
+    # drop --blocked-by when empty
+    # follow repo label, assignee, milestone, issue-type, parent conventions; leave unset metadata unset
+    # leave source and parent issues unchanged unless asked
 
-   Use hard blockers only; otherwise keep issues parallel. For a wide mechanical refactor that cannot stay green as vertical slices, sequence expand, migration batches, then contract.
+report issue links, blocking edges, frontier   # frontier = issues with no open blockers
+```
 
-4. **Publish gate.** Apply this decision table:
-   - One issue is sufficient, or the user explicitly requested one issue: proceed automatically.
-   - Multiple issues are needed and the user explicitly authorized multiple issues or publication without questions: proceed automatically.
-   - Multiple issues are needed without that authorization: show only proposed titles, one-line outcomes, and blockers, then stop. Continue only after explicit approval.
+```markdown
+## Summary
 
-5. **Write.** Use [`references/issue-template.md`](references/issue-template.md). Make the summary easy to scan and the acceptance criteria precise enough to execute. Keep intent self-contained and link canonical background instead of copying it.
+[1-2 sentences: why this issue exists and where its scope ends. Leave required behavior to the checklist.]
 
-6. **Publish.** Create issues blocker-first so later issues can use GitHub's native `--blocked-by` relationships:
+## Acceptance criteria
 
-   ```bash
-   gh issue create --repo "$owner/$repo" \
-     --title "$title" --body-file "$body_file" \
-     --blocked-by "$blocker_numbers"
-   ```
+[2-5 one-sentence observable checks, precise enough to execute; the single source of required behavior.]
 
-   Omit `--blocked-by` when empty. Follow existing label, assignee, milestone, issue-type, and parent conventions; leave unset metadata unset. Preserve source or parent issues unless the user requests an update.
+- [ ] [Primary externally verifiable behavior.]
+- [ ] [Material error, permission, or edge behavior.]
 
-7. **Report.** Return created issue links, blocking edges, and the current frontier: issues with no open blockers.
+## Context
+
+[Only context that changes implementation. Drop this section when there is none.]
+
+- Source: [Canonical issue, plan, specification, or discussion.]
+- Constraint: [Decision or contract the implementer must preserve.]
+```
