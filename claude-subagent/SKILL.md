@@ -6,7 +6,7 @@ description: >
 
 Run claude headless with a self-contained prompt and a unique log path:
 
-```bash
+```
 claude -p '<prompt>' --model <model> --effort <effort> --dangerously-skip-permissions < /dev/null > "$CLAUDE_LOG" 2>&1
 ```
 

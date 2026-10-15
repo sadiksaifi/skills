@@ -6,7 +6,7 @@ description: >
 
 Run codex headless with a self-contained prompt and a unique log path:
 
-```bash
+```
 codex -m <model> -c model_reasoning_effort="<effort>" --dangerously-bypass-approvals-and-sandbox exec '<prompt>' < /dev/null > "$CODEX_LOG" 2>&1
 ```
 
