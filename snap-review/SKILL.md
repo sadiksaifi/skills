@@ -1,56 +1,120 @@
 ---
 name: snap-review
 description: >
-  Use when code needs a read-only review or adversarial review for material
-  correctness, security, privacy, performance, compatibility, architecture, or
-  regression-test risks: a GitHub pull request, a branch, a commit or commit
-  range, staged or uncommitted changes, or named files; or when the user asks
-  whether a PR or change is safe to merge or ship.
+  Use when the user asks to review a PR, branch, commit, local changes, or files, or whether a change is safe to merge
 ---
 
-Read-only: inspect and report; leave the branch unchanged. Correctness is necessary, not sufficient: architecture is a first-class review surface.
+Review the target read-only. Weigh overbuilding and architecture as heavily as correctness:
 
-## Invocation
+```
+target = PR | branch vs base | commit or range | staged or uncommitted | named paths   # from request, branch, or session; ask only when none
+context = intent, base/head, diff, changed files, commits
+if PR: context += checks, reviews, comments, unresolved threads
+named paths without a diff count as changed
+read the repo instructions governing each changed path   # follow links only when they change scope or acceptance
+if critical context is missing or conflicting: output "Review blocked: [reason]"; stop
 
-Syntax: `/skill:snap-review [help] [ask]`
+for path in changed paths:
+    apply every lens; trace changed behavior through callers and boundaries
+    map each added or changed test to the regression it catches, or mark it low-value
+repeat prior feedback only when still present and unresolved
+findings = issues passing gate(), one per root cause, anchored on the tightest honest changed line
+doubts failing gate() -> Risks / Unknowns
+plain(report, comments)   # everyday words; one idea per sentence; cut each sentence that changes nothing the reader knows or does
 
-Bare keys mean `true`. `help` prints usage and stops. Unsafe unknown arguments stop with usage.
+if no findings: output exactly "No Findings"
+else: findings template, ordered by priority, then path
 
-## Args
+if PR and findings and the user did not ask to hold or skip posting:
+    post each inlineable finding as a comment
+# holding: report locally and wait for approval
+# unknowns alone and pending checks are never posted
 
-| Key | Values | Default | Effect |
-| --- | --- | --- | --- |
-| `help` | bool | false | print usage; do not execute |
-| `ask` | bool | false | wait for approval before posting findings |
+done = every changed path and lens accounted for; every finding passes gate()
+```
 
-## Routes
+`gate(issue)`: present in the diff or still unresolved; reached by a supported input or realistic condition; concrete correctness, security, testability, maintenance, or future-change cost; mechanism proven by cited evidence; fix aimed at the root cause.
 
-| Selector | Posting |
-| --- | --- |
-| default | post qualifying findings automatically |
-| `ask` | report locally and wait before posting |
+## Lenses
 
-`No Findings`, unknowns alone, and pending checks never qualify for posting.
+Behavior
 
-## Workflow
+- correctness: inputs, outputs, validation, errors, state transitions, persistence, edge paths
+- security and privacy: authentication, authorization, trust boundaries, secrets, sensitive data flow
+- concurrency and lifecycle: races, retries, idempotency, cancellation, cleanup, resource ownership
+- compatibility: interfaces, migrations, rollout order, old callers, persisted formats
+- performance: hot paths, query or network amplification, blocking work, memory, unbounded growth
+- operations: failure visibility, recovery, configuration, deployment assumptions
 
-1. **Target.** Identify the review target from the request, branch, or session context: a GitHub PR, a branch against its base, a commit or commit range, staged or uncommitted changes, or named paths. Ask only when none provides one.
+Overbuilding
 
-2. **Context.** Reuse current context, then gather the target's intent, base/head, diff, changed files, and commits. For a PR, also gather checks, reviews, comments, and unresolved threads. For named paths without a diff, treat each named path as changed.
-   Follow linked material only when it changes scope or acceptance. Read repository instructions governing each changed path. Report a blocker when critical context remains inaccessible or conflicting.
+- ask: could less code solve this correctly?
+- every abstraction, wrapper, helper, layer, file, defensive branch, and test serves a present requirement, invariant, or variation point
+- edge-case handling for states no supported input reaches
+- checks the types, callers, or framework already guarantee
+- low-value tests (see Tests)
+- a large diff is a signal to inspect, not a finding by itself
+- fix by deleting, inlining, reusing, or simplifying
 
-3. **Review.** Apply the behavior, change economy, tests, and architecture sections of [`references/lenses.md`](references/lenses.md) to every changed path. Review correctness and architecture independently.
-   For architecture, inspect whether modules hide substantial implementation behind narrow interfaces, seams represent real variation, policy stays local, and callers and tests share the public interface.
-   Trace changed behavior through affected callers and boundaries. Account for prior feedback and current replies; repeat only issues that remain present and unresolved. Keep one finding per root cause and cite the tightest honest changed-line anchor.
+Tests
 
-4. **Finding gate.** A finding must identify a concrete failure path or material engineering risk introduced or left unresolved by the target, supported by code or context evidence.
-   Put uncertainty without that proof in `Risks / Unknowns`. Deduplicate symptoms before reporting.
+- missing coverage: a plausible regression in owned behavior with no durable public-interface evidence; title it `Missing regression coverage` and name the regression
+- a bug-fix test exercises the former failure path
+- low-value: duplicates evidence, varies inputs without reaching a new branch, restates third-party behavior or static checks, or passes when its claimed behavior breaks (self-comparisons, expected values from the code under test, mocks supplying the asserted result, negatives passing at the wrong guard)
+- implementation-detail assertions and test-only production seams
+- fix by deleting down to the smallest set that keeps distinct evidence
 
-5. **Report.** After every changed path and applicable lens is accounted for:
-   - complete review with no findings: output exactly `No Findings`
-   - findings present: use [`references/template.md`](references/template.md)
-   - incomplete review: report `Review blocked: [reason]`
+Architecture
 
-6. **Post.** Posting applies only to PR targets; other targets stop after the local report. A qualifying review contains at least one priority finding. Post its inlineable findings automatically on the default route. On `ask`, report locally and wait. An explicit instruction not to post always stops after the local report. Follow [`references/posting.md`](references/posting.md) and return each posted comment URL.
+- depth: substantial behavior behind a small interface
+- interface: callers learn only necessary invariants, errors, ordering, configuration, and performance
+- seams: only for real variation
+- locality: policy and change stay concentrated, not spread across callers
+- testability: callers and tests share the public interface
+- deletion test: if removing a module makes its complexity vanish rather than reappear in callers, it is a shallow pass-through
+- duplicated policy, leaky adapters, vendor or storage shapes in domain logic, misplaced behavior
 
-Completion: every changed path is reviewed for behavior, change economy, architecture, intent, and applicable repository rules; every added or materially changed test is mapped to distinct behavioral or regression evidence or classified as low-value; prior feedback is deduplicated; and every finding is material, located, evidence-backed, and actionable.
+## Templates
+
+- `P0`: merge blocker: data loss, security or privacy breach, broken core path
+- `P1`: likely user-visible regression, contract break, or important missing coverage
+- `P2`: bounded risk in an edge case, performance, compatibility, architecture, overbuilding, or testability
+
+```markdown
+## Findings
+
+### P1: [defect title]
+
+- Location: `path/to/file.ts:42`
+- Failure: [trigger, mechanism, evidence]
+- Impact: [consequence]
+- Fix: [direction, no patch]
+
+## Risks / Unknowns
+
+- [doubt; drop the section when empty]
+```
+
+Comment, built from one finding:
+
+```markdown
+**P1: [defect title]**
+
+[Failure and Impact as prose.]
+
+**Fix:** [Fix]
+
+Reviewed by {agent-harness} using {model-slug}.
+```
+
+`{agent-harness}` and `{model-slug}`: exact product name and model id from runtime metadata; ask before posting when either is missing.
+
+```
+anchor = root-cause changed line   # RIGHT for head lines, LEFT for removed lines; multi-line needs start_line and start_side inside the diff
+if anchor rejected: retry once on the nearest honest changed line, else keep the finding local
+
+# comment.json = {"body", "commit_id": reviewed head SHA, "path", "line", "side"}
+gh api --method POST "repos/$owner/$repo/pulls/$pr/comments" --input comment.json --jq .html_url
+
+confirm each comment exists; return its URL   # on failure, report it; the local report stays authoritative
+```
