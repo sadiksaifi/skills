@@ -42,7 +42,8 @@ for item in selected:
 refactor while green when fixes exposed duplication, brittle seams, or an awkward interface   # refactor(scope): <improvement>, separate commit
 
 push once
-plain(replies)   # everyday words; one idea per sentence; cut each sentence the reviewer would not miss
+plain(replies)   # everyday words; one idea per sentence; cut each sentence the reviewer would not miss; the shortest reply that closes the item
+# fix notes go in replies; leave the PR body unchanged
 for item in FIX and EXPLAIN: reply through its channel; resolve its thread after the reply succeeds
 rerun the capture query   # every unexpected unresolved thread is a missed reply, failed resolution, or reported blocker
 

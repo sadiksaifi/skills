@@ -25,11 +25,12 @@ if len(issues) > 1 and user has not authorized multiple issues:
 for issue in issues, blockers first:
     title = short, specific outcome
     body = template below     # self-contained intent; keep only decisions that prevent rediscovery; link background, don't copy it
-    plain(title, body)        # for an implementer new to the code: everyday words over internal terms; one short sentence per bullet; cut each sentence the implementer would not miss
+    plain(title, body)        # for an implementer new to the code: everyday words over internal terms; one short sentence per bullet; cut each sentence the implementer would not miss; shorter than the template limits when it can be
     gh issue create --repo "$owner/$repo" --title "$title" --body-file "$body_file" --blocked-by "$blocker_numbers"
     # drop --blocked-by when empty
     # follow repo label, assignee, milestone, issue-type, parent conventions; leave unset metadata unset
     # leave source and parent issues unchanged unless asked
+    # new context for an existing issue goes in one short issue comment, not its body
 
 report issue links, blocking edges, frontier   # frontier = issues with no open blockers
 ```
@@ -48,7 +49,7 @@ report issue links, blocking edges, frontier   # frontier = issues with no open 
 
 ## Context
 
-[Only context that changes implementation. Drop this section when there is none.]
+[0-3 bullets, only context that changes implementation. Drop this section when there is none.]
 
 - Source: [Canonical issue, plan, specification, or discussion.]
 - Constraint: [Decision or contract the implementer must preserve.]

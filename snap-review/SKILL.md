@@ -21,7 +21,7 @@ for path in changed paths:
 repeat prior feedback only when still present and unresolved
 findings = issues passing gate(), one per root cause, anchored on the tightest honest changed line
 doubts failing gate() -> Risks / Unknowns
-plain(report, comments)   # everyday words; one idea per sentence; cut each sentence that changes nothing the reader knows or does
+plain(report, comments)   # everyday words; one idea per sentence; cut each sentence that changes nothing the reader knows or does; the shortest comment that states the failure and fix
 
 if no findings: output exactly "No Findings"
 else: findings template, ordered by priority, then path

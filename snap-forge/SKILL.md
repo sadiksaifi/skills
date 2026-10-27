@@ -20,7 +20,7 @@ for b in behaviors:
         agree verification with user; change
     else:
         change; verify with existing checks or observation
-    commit(b)                     # one Conventional Commit
+    commit(b)                     # one Conventional Commit; subject only unless the why is not obvious
     refactor()                    # while green; separate commit
 
 run checks scoped to the change; read the diff
