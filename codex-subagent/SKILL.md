@@ -2,7 +2,7 @@
 name: codex-subagent
 description: Delegate a task to Codex as a subagent
 disable-model-invocation: true
-argument-hint: [model] [effort] <task>
+argument-hint: "[model] [effort] <task>"
 allowed-tools: Bash(jq *)
 ---
 

@@ -14,7 +14,13 @@ fi
 
 load_skills
 
-for skill_name in "${SKILL_NAMES[@]}"; do
+for index in "${!SKILL_NAMES[@]}"; do
+  skill_name="${SKILL_NAMES[$index]}"
+  skill_agents=("${AGENT_ARGS[@]}")
+  if [[ -n "${SKILL_COMPATIBILITY[$index]}" ]]; then
+    read -r -a skill_agents <<< "${SKILL_COMPATIBILITY[$index]}"
+  fi
+
   echo "Uninstalling $skill_name"
-  npx --yes skills@latest remove -g "$skill_name" -a "${AGENT_ARGS[@]}" -y
+  npx --yes skills@latest remove -g "$skill_name" -a "${skill_agents[@]}" -y
 done

@@ -17,7 +17,11 @@ load_skills
 for index in "${!SKILL_NAMES[@]}"; do
   skill_name="${SKILL_NAMES[$index]}"
   skill_source="${SKILL_SOURCES[$index]}"
+  skill_agents=("${AGENT_ARGS[@]}")
+  if [[ -n "${SKILL_COMPATIBILITY[$index]}" ]]; then
+    read -r -a skill_agents <<< "${SKILL_COMPATIBILITY[$index]}"
+  fi
 
   echo "Installing $skill_name"
-  npx --yes skills@latest add "$skill_source" --skill "$skill_name" -g -a "${AGENT_ARGS[@]}" -y
+  npx --yes skills@latest add "$skill_source" --skill "$skill_name" -g -a "${skill_agents[@]}" -y
 done
