@@ -27,8 +27,10 @@ for each pane:
 
 if a restore changed a grant or macOS requested a relaunch, and the user didn't defer:
     warn of a brief disconnect and restart the service from your machine over SSH
+    check the launcher and configured T3 Connect every 5 seconds for up to 90 seconds
+    if still starting or reconnecting: keep waiting within that window
     if the launcher path changed: repeat the pane checks once for the new path
-    confirm the launcher is running and T3 Connect is reachable if configured
+    report any check still failing after the wait
 
 close via Remora's session cleanup rules
 done = report the launcher, each grant, and any restart or unresolved check
