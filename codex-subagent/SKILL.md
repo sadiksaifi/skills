@@ -8,7 +8,7 @@ allowed-tools: Bash(jq *)
 
 The user invoked this skill explicitly, which authorizes running Codex with full access for this task.
 
-default_model: !`codex debug models | jq -r '[.models[].slug | select(test("^gpt-[0-9]+(\\.[0-9]+)?-sol$"))] | first' || echo gpt-6.1-sol`
+default_model: !`codex debug models | jq -r '[.models[].slug | select(test("^gpt-[0-9]+(\\.[0-9]+)?-sol$"))] | first' || echo gpt-6.2-sol`
 default_effort: high
 default_service_tier: default
 
